@@ -241,6 +241,207 @@ export const SKILLS = {
         baseDamage: 30, lifesteal: 0.5
     },
 
+    // === BERSERKER SKILLS ===
+    frenzy: {
+        id: "frenzy", name: "Frenzy", class: "Berserker",
+        type: "active", mpCost: 10, unlockLevel: 1,
+        description: "Rapid flurry of blows.",
+        baseDamage: 40,
+        evolutions: { 3: { damage: 60 }, 7: { damage: 90 }, 10: { name: "Bloodstorm", damage: 150 } }
+    },
+    reckless_swing: {
+        id: "reckless_swing", name: "Reckless Swing", class: "Berserker",
+        type: "active", mpCost: 15, unlockLevel: 3,
+        description: "Massive damage, but take recoil.",
+        baseDamage: 60, recoil: 0.2, // 20% recoil
+        evolutions: { 3: { damage: 90 }, 7: { damage: 140 }, 10: { damage: 250, name: "Suicide Strike" } }
+    },
+    undying_rage: {
+        id: "undying_rage", name: "Undying Rage", class: "Berserker",
+        type: "passive", unlockLevel: 7,
+        description: "Survive lethal damage once per battle.",
+        effect: "PREVENT_DEATH_ONCE"
+    },
+
+    // === MONK SKILLS ===
+    palm_strike: {
+        id: "palm_strike", name: "Palm Strike", class: "Monk",
+        type: "active", mpCost: 8, unlockLevel: 1,
+        description: "Ignore 50% of enemy DEF.",
+        baseDamage: 30, ignoreDef: 0.5,
+        evolutions: { 3: { damage: 50 }, 7: { damage: 80 }, 10: { name: "Thousand Palms", damage: 140, ignoreDef: 1.0 } }
+    },
+    chakra_heal: {
+        id: "chakra_heal", name: "Chakra Heal", class: "Monk",
+        type: "active", mpCost: 20, unlockLevel: 5,
+        description: "Heal self and cure poison.",
+        healing: 60, effect: "CURE_POISON",
+        evolutions: { 3: { healing: 100 }, 7: { healing: 200 }, 10: { name: "Nirvana", healing: 999 } }
+    },
+    evasion_mastery: {
+        id: "evasion_mastery", name: "Flow Like Water", class: "Monk",
+        type: "passive", unlockLevel: 8,
+        description: "+20% Dodge Chance.",
+        effect: "DODGE_20_PERCENT"
+    },
+
+    // === BARD SKILLS ===
+    song_of_courage: {
+        id: "song_of_courage", name: "Song of Courage", class: "Bard",
+        type: "active", mpCost: 15, unlockLevel: 1,
+        description: "Buff party ATK/DEF by 20% for 3 turns.",
+        effect: "BUFF_ALL_20",
+        evolutions: { 3: { effect: "BUFF_ALL_30" }, 7: { effect: "BUFF_ALL_50" }, 10: { name: "Heroic Anthem", effect: "BUFF_ALL_100" } }
+    },
+    lullaby: {
+        id: "lullaby", name: "Lullaby", class: "Bard",
+        type: "active", mpCost: 25, unlockLevel: 4,
+        description: "Sleep enemy for 2 turns.",
+        effect: "SLEEP_2_TURNS",
+        evolutions: { 7: { effect: "SLEEP_3_TURNS" }, 10: { name: "Eternal Slumber", effect: "SLEEP_5_TURNS" } }
+    },
+    dissonant_chord: {
+        id: "dissonant_chord", name: "Dissonant Chord", class: "Bard",
+        type: "active", mpCost: 10, unlockLevel: 2,
+        description: "Sonic damage ignoring armor.",
+        baseDamage: 25, ignoreDef: 1.0,
+        evolutions: { 3: { damage: 45 }, 7: { damage: 80 }, 10: { damage: 150 } }
+    },
+
+    // === DRUID SKILLS ===
+    vine_whip: {
+        id: "vine_whip", name: "Vine Whip", class: "Druid",
+        type: "active", element: "nature", mpCost: 10, unlockLevel: 1,
+        description: "Strike with vines.",
+        baseDamage: 28,
+        evolutions: { 3: { damage: 50 }, 7: { damage: 85 }, 10: { name: "Wrath of Nature", damage: 160 } }
+    },
+    bear_form: {
+        id: "bear_form", name: "Bear Form", class: "Druid",
+        type: "active", mpCost: 30, unlockLevel: 5,
+        description: "Transform into Bear. Only use physical attacks. +HP/ATK.",
+        effect: "TRANSFORM_BEAR", duration: 3,
+        evolutions: { 7: { duration: 5 }, 10: { name: "Dire Bear Form", duration: 99 } }
+    },
+    regrowth: {
+        id: "regrowth", name: "Regrowth", class: "Druid",
+        type: "active", mpCost: 15, unlockLevel: 3,
+        description: "Heal over time (3 turns).",
+        healOverTime: 20,
+        evolutions: { 3: { healOverTime: 40 }, 7: { healOverTime: 80 }, 10: { healOverTime: 150 } }
+    },
+
+    // === KNIGHT SKILLS ===
+    provoke: {
+        id: "provoke", name: "Provoke", class: "Knight",
+        type: "active", mpCost: 10, unlockLevel: 1,
+        description: "Force enemy to attack you. +DEF.",
+        effect: "TAUNT_DEF_UP",
+        evolutions: { 3: { effect: "TAUNT_DEF_UP_2" }, 7: { effect: "TAUNT_INVINCIBLE_1_TURN" } }
+    },
+    shield_wall: {
+        id: "shield_wall", name: "Shield Wall", class: "Knight",
+        type: "active", mpCost: 20, unlockLevel: 4,
+        description: "Double DEF for 3 turns.",
+        effect: "DEF_DOUBLE",
+        evolutions: { 10: { name: "Immovable Object", effect: "DEF_TRIPLE" } }
+    },
+    justice_blade: {
+        id: "justice_blade", name: "Justice Blade", class: "Knight",
+        type: "active", mpCost: 15, unlockLevel: 6,
+        description: "Damage scales with DEF.",
+        baseDamage: 30, scaleWithDef: true,
+        evolutions: { 7: { damage: 60 }, 10: { damage: 120 } }
+    },
+
+    // === ASSASSIN SKILLS ===
+    execute: {
+        id: "execute", name: "Execute", class: "Assassin",
+        type: "active", mpCost: 40, unlockLevel: 10,
+        description: "Deal massive damage to low HP targets.",
+        baseDamage: 100, bonusLowHp: 3.0, // 3x dmg if enemy < 30% hp
+        evolutions: { 10: { name: "Death Sentence", baseDamage: 200 } }
+    },
+    smoke_bomb: {
+        id: "smoke_bomb", name: "Smoke Bomb", class: "Assassin",
+        type: "active", mpCost: 15, unlockLevel: 3,
+        description: "Escape combat guaranteed OR blind enemy.",
+        effect: "BLIND_ENEMY",
+        evolutions: { 7: { effect: "BLIND_PERMANENT" } }
+    },
+    dual_slash: {
+        id: "dual_slash", name: "Dual Slash", class: "Assassin",
+        type: "active", mpCost: 10, unlockLevel: 1,
+        description: "Hit twice rapidly.",
+        baseDamage: 20, hits: 2,
+        evolutions: { 3: { damage: 35 }, 7: { damage: 60 }, 10: { hits: 4 } }
+    },
+
+    // === SUMMONER SKILLS ===
+    summon_elemental: {
+        id: "summon_elemental", name: "Summon Elemental", class: "Summoner",
+        type: "active", mpCost: 40, unlockLevel: 1,
+        description: "Summon a random elemental spirit.",
+        effect: "SUMMON_RANDOM",
+        evolutions: { 5: { effect: "SUMMON_GREATER" }, 10: { effect: "SUMMON_LORD" } }
+    },
+    spirit_link: {
+        id: "spirit_link", name: "Spirit Link", class: "Summoner",
+        type: "passive", unlockLevel: 6,
+        description: "Share damage with summon.",
+        effect: "DMG_SHARE_SUMMON"
+    },
+    overload_summon: {
+        id: "overload_summon", name: "Overload", class: "Summoner",
+        type: "active", mpCost: 0, unlockLevel: 9,
+        description: "Detonate summon for massive damage.",
+        baseDamage: 200, effect: "KILL_SUMMON"
+    },
+
+    // === ELEMENTALIST SKILLS ===
+    elemental_bolt: {
+        id: "elemental_bolt", name: "Elemental Bolt", class: "Elementalist",
+        type: "active", mpCost: 10, unlockLevel: 1,
+        description: "Hits with random element (Fire/Ice/Light/Dark).",
+        baseDamage: 30, randomElement: true,
+        evolutions: { 3: { damage: 50 }, 7: { damage: 90 }, 10: { name: "Chaos Bolt", damage: 160 } }
+    },
+    elemental_harmony: {
+        id: "elemental_harmony", name: "Elemental Harmony", class: "Elementalist",
+        type: "passive", unlockLevel: 5,
+        description: "Reduce MP cost of spells by 20%.",
+        effect: "MP_COST_REDUCE_20"
+    },
+    cataclysm: {
+        id: "cataclysm", name: "Cataclysm", class: "Elementalist",
+        type: "active", mpCost: 60, unlockLevel: 10,
+        description: "Unleash all elements at once.",
+        baseDamage: 150,
+        evolutions: { 10: { name: "World End", baseDamage: 300 } }
+    },
+
+    // === ALCHEMIST SKILLS ===
+    transmute: {
+        id: "transmute", name: "Transmute", class: "Alchemist",
+        type: "active", mpCost: 50, unlockLevel: 2,
+        description: "Turn enemy into gold (Instant Kill weak enemies).",
+        effect: "GOLDEN_TOUCH",
+        evolutions: { 7: { effect: "GOLDEN_TOUCH_BOSS_DMG" } }
+    },
+    acid_flask: {
+        id: "acid_flask", name: "Acid Flask", class: "Alchemist",
+        type: "active", mpCost: 10, unlockLevel: 1,
+        description: "Reduce enemy DEF permanently.",
+        baseDamage: 20, effect: "DEF_DOWN_PERM",
+        evolutions: { 3: { damage: 40 }, 7: { damage: 70 }, 10: { name: "Melting Pot", damage: 120 } }
+    },
+    elixir_mastery: {
+        id: "elixir_mastery", name: "Elixir Mastery", class: "Alchemist",
+        type: "passive", unlockLevel: 5,
+        description: "Potions heal 50% more.",
+        effect: "POTION_BOOST_50"
+    },
+
     // === UNIVERSAL/PURCHASABLE SKILLS ===
     double_strike: {
         id: "double_strike", name: "Double Strike", class: "Universal",
@@ -288,7 +489,15 @@ export const CLASS_SKILLS = {
     Cleric: ['heal', 'holy_smite', 'divine_protection'],
     Archer: ['arrow_shot', 'multi_shot', 'eagle_eye'],
     Necromancer: ['death_bolt', 'raise_undead', 'life_drain'],
-    // Other classes would continue...
+    Berserker: ['frenzy', 'reckless_swing', 'undying_rage'],
+    Monk: ['palm_strike', 'chakra_heal', 'evasion_mastery'],
+    Bard: ['song_of_courage', 'lullaby', 'dissonant_chord'],
+    Druid: ['vine_whip', 'bear_form', 'regrowth'],
+    Knight: ['provoke', 'shield_wall', 'justice_blade'],
+    Assassin: ['execute', 'smoke_bomb', 'dual_slash'],
+    Summoner: ['summon_elemental', 'spirit_link', 'overload_summon'],
+    Elementalist: ['elemental_bolt', 'elemental_harmony', 'cataclysm'],
+    Alchemist: ['transmute', 'acid_flask', 'elixir_mastery']
 };
 
 // Utility function to get skill at specific level

@@ -248,6 +248,253 @@ export const TOWN_NPCS_PART2 = {
             dialogue: ["Only the pure can ride unicorns.", "I protect the innocent.", "Evil cannot touch me."],
             quest: { id: "unicorn_rescue", name: "Stolen Horn", type: "rescue", objective: "Save captured unicorn", reward: { exp: 370, gold: 740, item: "unicorn_horn" } }
         }
+    ],
+    // ===== TOWN 6 - DRAGON'S PEAK (Volcanic/Mountain) =====
+    town_6: [
+        {
+            id: "dragon_priest", name: "High Priest Ignis", sprite: "🔥",
+            personality: "fanatic",
+            dialogue: ["The great dragons demand tribute!", "Fire cleanses the weak.", "Do not look them in the eye."],
+            quest: { id: "dragon_offering", name: "Fiery Tribute", type: "gather", objective: "Collect 5 Dragon Scales", reward: { exp: 400, gold: 1000 } }
+        },
+        {
+            id: "wyvern_rider", name: "Rider Stormborn", sprite: "🐲",
+            personality: "reckless",
+            dialogue: ["My wyvern is faster than any dragon.", "We race the lightning.", "Sky battles are the only true thrill."],
+            quest: { id: "sky_race", name: "Aerial Ace", type: "challenge", objective: "Win the sky race", reward: { exp: 450, gold: 900, item: "wind_boots" } }
+        },
+        {
+            id: "obsidian_smith", name: "Smith Blackrock", sprite: "⚒️",
+            personality: "intense",
+            dialogue: ["Ordinary fire isn't hot enough.", "I forge in the volcano's mouth.", "Obsidian blades never dull."],
+            quest: { id: "volcanic_hammer", name: "Magma Forge", type: "fetch", objective: "Retrieve hammer from lava pool", reward: { exp: 420, gold: 840 } }
+        },
+        {
+            id: "dragon_slayer_ret", name: "Old Slayer Siegfried", sprite: "⚔️",
+            personality: "grumpy_veteran",
+            dialogue: ["I killed a dragon once...", "Cost me my leg.", "Don't be a hero, kid."],
+            quest: { id: "slayer_legacy", name: "Broken Sword", type: "fetch", objective: "Find pieces of his old sword", reward: { exp: 500, gold: 1000, item: "slayer_hilt" } }
+        },
+        {
+            id: "lava_mage", name: "Pyromancer Ash", sprite: "🌋",
+            personality: "destructive",
+            dialogue: ["Burn it all!", "Lava flows like water to me.", "Beautiful destruction..."],
+            quest: { id: "magma_core", name: "Core Sample", type: "gather", objective: "Collect active magma core", reward: { exp: 430, gold: 860 } }
+        },
+        {
+            id: "egg_keeper", name: "Keeper Hatha", sprite: "🥚",
+            personality: "protective",
+            dialogue: ["Shh! They are sleeping.", "Dragon eggs are fragile.", "Thieves will be incinerated."],
+            quest: { id: "egg_incubator", name: "Warmth for the Nest", type: "gather", objective: "Collect 10 Fire Opals", reward: { exp: 410, gold: 820 } }
+        },
+        {
+            id: "ash_merchant", name: "Merchant Cinder", sprite: "🏺",
+            personality: "coughing",
+            dialogue: ["*cough* Ash masks for sale.", "Volcanic dust is good for... something.", "Rare minerals here!"],
+            quest: { id: "rare_minerals", name: "Volcanic Gems", type: "gather", objective: "Collect 5 Sulfur Crystals", reward: { exp: 380, gold: 760 } }
+        },
+        {
+            id: "drake_trainer", name: "Trainer Fang", sprite: "🦎",
+            personality: "scarred",
+            dialogue: ["Drakes are just small dragons.", "They bite.", "Got a finger bit off yesterday."],
+            quest: { id: "runaway_drake", name: "Loose Drake", type: "hunt", objective: "Capture the escaped drake", reward: { exp: 400, gold: 800 } }
+        },
+        {
+            id: "historian_draco", name: "Scholar Scales", sprite: "📜",
+            personality: "fascinated",
+            dialogue: ["Dragons speak the primal tongue.", "I'm translating the ruins.", "Did they really eat rocks?"],
+            quest: { id: "draconic_tablet", name: "Ancient Script", type: "search", objective: "Find 3 stone tablets", reward: { exp: 440, gold: 880 } }
+        },
+        {
+            id: "sulfur_miner", name: "Miner Cole", sprite: "⛏️",
+            personality: "smelly",
+            dialogue: ["I smell like rotten eggs.", "Money smells good though.", "Watch out for gas pockets."],
+            quest: { id: "miner_rescue", name: "Gas Leak", type: "rescue", objective: "Save miners from gas", reward: { exp: 420, gold: 840 } }
+        },
+        {
+            id: "phoenix_priestess", name: "Priestess Ember", sprite: "🕊️",
+            personality: "hopeful",
+            dialogue: ["From the ashes, we rise.", "Fire brings new life.", "Let the past burn away."],
+            quest: { id: "sacred_flame", name: "Rekindle", type: "special", objective: "Light the eternal brazier", reward: { exp: 460, gold: 920 } }
+        },
+        {
+            id: "obsidian_golem", name: "Golem Rocky", sprite: "🗿",
+            personality: "silent",
+            dialogue: ["...", "Rumble...", "*points to mountain*"],
+            quest: { id: "golem_heart", name: "Heart of Stone", type: "fetch", objective: "Find heartstone", reward: { exp: 450, gold: 900 } }
+        },
+        {
+            id: "treasure_hunter_lea", name: "Hunter Lea", sprite: "💰",
+            personality: "adventurous",
+            dialogue: ["Dragons hoard gold.", "I'm going to steal it.", "Want in?"],
+            quest: { id: "heist_plan", name: "Dragon Heist", type: "special", objective: "Steal from sleeping dragon", reward: { exp: 600, gold: 2000, item: "dragon_chalice" } }
+        },
+        {
+            id: "hermit_oracle", name: "Oracle Pythia", sprite: "🔮",
+            personality: "mad",
+            dialogue: ["Smoke shows the future!", "Darkness comes!", "The Demon Lords... they wake!"],
+            quest: { id: "doom_prophecy", name: "Visions of Ruin", type: "talk", objective: "Interpret 3 visions", reward: { exp: 400, gold: 800 } }
+        },
+        {
+            id: "volcano_chef", name: "Chef Gordon", sprite: "👨‍🍳",
+            personality: "angry",
+            dialogue: ["IT'S RAW!", "Cook it on the lava!", "Dragon steak needs spice!"],
+            quest: { id: "spicy_peppers", name: "Ghost Peppers", type: "gather", objective: "Collect 5 Ghost Peppers", reward: { exp: 390, gold: 780 } }
+        },
+        {
+            id: "exiled_knight", name: "Sir Galahad", sprite: "🛡️",
+            personality: "stoic",
+            dialogue: ["I failed my king.", "I seek redemption here.", "Fire purifies honor."],
+            quest: { id: "honor_duel", name: "Redemption", type: "challenge", objective: "Defeat Galahad in a duel", reward: { exp: 500, gold: 1000, item: "knights_honor" } }
+        },
+        {
+            id: "salamander_tamer", name: "Tamer Sal", sprite: "🦎",
+            personality: "playful",
+            dialogue: ["Fire lizards are cute!", "Don't touch, they burn.", "Want to pet one?"],
+            quest: { id: "lost_salamander", name: "Fiery Pet", type: "search", objective: "Find Sparky the salamander", reward: { exp: 380, gold: 760 } }
+        },
+        {
+            id: "runemaster_stone", name: "Runemaster Korg", sprite: "🪨",
+            personality: "ancient",
+            dialogue: ["Runes hold power.", "Fire runes are unstable.", "I bind them to stone."],
+            quest: { id: "rune_collection", name: "Unstable Runes", type: "gather", objective: "Stabilize 5 fire runes", reward: { exp: 440, gold: 880 } }
+        },
+        {
+            id: "dragon_worshipper", name: "Cultist Vane", sprite: "🗡️",
+            personality: "creepy",
+            dialogue: ["Become one with the dragon.", "Scales are perfection.", "Join us..."],
+            quest: { id: "cult_infiltration", name: "Dragon Cult", type: "investigation", objective: "Spy on the cult meeting", reward: { exp: 420, gold: 840 } }
+        },
+        {
+            id: "climber_max", name: "Climber Max", sprite: "🧗",
+            personality: "energetic",
+            dialogue: ["Highest peak in the world!", "I'm going to the top!", "Air is thin up there."],
+            quest: { id: "flag_planting", name: "Top of the World", type: "exploration", objective: "Plant flag at summit", reward: { exp: 480, gold: 960 } }
+        }
+    ],
+
+    // ===== TOWN 7 - CELESTIAL SUMMIT (Floating/Holy City) =====
+    town_7: [
+        {
+            id: "archangel_tyrael", name: "Angel Tyrael", sprite: "👼",
+            personality: "divine",
+            dialogue: ["Greetings, mortal.", "The heavens watch you.", "Prepare for the final battle."],
+            quest: { id: "divine_trial", name: "Trial of Valor", type: "challenge", objective: "Defeat the shadow echo", reward: { exp: 1000, gold: 2000, item: "angel_feather" } }
+        },
+        {
+            id: "cloud_keeper", name: "Keeper Nimbus", sprite: "☁️",
+            personality: "dreamy",
+            dialogue: ["Walking on clouds...", "Don't look down.", "The sky is our ocean."],
+            quest: { id: "cloud_harvest", name: "Condensed Mist", type: "gather", objective: "Collect 10 Cloud Essence", reward: { exp: 600, gold: 1200 } }
+        },
+        {
+            id: "celestial_smith", name: "Smith Aurum", sprite: "⚒️",
+            personality: "shining",
+            dialogue: ["I forge with starlight.", "Gold is too soft.", "This metal sings."],
+            quest: { id: "star_metal", name: "Fallen Star", type: "fetch", objective: "Retrieve meteorite ore", reward: { exp: 700, gold: 1400, item: "stardust_ingot" } }
+        },
+        {
+            id: "void_watcher", name: "Watcher Void", sprite: "👁️",
+            personality: "serious",
+            dialogue: ["The abyss gazes back.", "I watch the demons below.", "They are coming."],
+            quest: { id: "seal_breach", name: "Void Rift", type: "special", objective: "Close the dimensional tear", reward: { exp: 800, gold: 1600 } }
+        },
+        {
+            id: "stargazer_luna", name: "Stargazer Luna", sprite: "🔭",
+            personality: "quiet",
+            dialogue: ["The stars align.", "Destiny is written above.", "A comet approaches."],
+            quest: { id: "constellation_map", name: "Star Chart", type: "exploration", objective: "Map 5 constellations", reward: { exp: 650, gold: 1300 } }
+        },
+        {
+            id: "harpy_queen_ref", name: "Queen Aella", sprite: "🦅",
+            personality: "haughty",
+            dialogue: ["Harpies rule the winds.", "Land-walkers are slow.", "We tolerate you."],
+            quest: { id: "wind_challenge", name: "Race the Wind", type: "challenge", objective: "Beat harpy in flight", reward: { exp: 700, gold: 1400 } }
+        },
+        {
+            id: "demigod_hero", name: "Hero Hercules", sprite: "💪",
+            personality: "boisterous",
+            dialogue: ["Haha! A fellow warrior!", "I've defeated hydras!", "Are you strong enough?"],
+            quest: { id: "strength_test", name: "Labors of Hero", type: "challenge", objective: "Lift the heavy stone", reward: { exp: 750, gold: 1500 } }
+        },
+        {
+            id: "light_mage", name: "Lux User", sprite: "✨",
+            personality: "bright",
+            dialogue: ["Darkness cannot exist here.", "Let there be light!", "Shadows flee from me."],
+            quest: { id: "prism_focus", name: "Pure Light", type: "gather", objective: "Collect 5 Light Prisms", reward: { exp: 600, gold: 1200 } }
+        },
+        {
+            id: "wing_healer", name: "Healer Raphael", sprite: "⚕️",
+            personality: "caring",
+            dialogue: ["Broken wings heal slow.", "I tend to the angels.", "Your soul is weary."],
+            quest: { id: "ambrosia_nectar", name: "Food of Gods", type: "gather", objective: "Collect Ambrosia", reward: { exp: 800, gold: 1600, item: "ambrosia" } }
+        },
+        {
+            id: "thunder_god", name: "Lord Zeus (Avatar)", sprite: "⚡",
+            personality: "commanding",
+            dialogue: ["Thunder strikes the wicked!", "Kneel, mortal.", "Power is everything."],
+            quest: { id: "thunder_bolt", name: "Lightning Rod", type: "fetch", objective: "Place rod in storm", reward: { exp: 900, gold: 1800 } }
+        },
+        {
+            id: "valkyrie_leader", name: "Commander Brunhilde", sprite: "🛡️",
+            personality: "fierce",
+            dialogue: ["We choose the slain.", "Valhalla awaits.", "Fight with honor!"],
+            quest: { id: "fallen_warrior", name: "Souls of Heroes", type: "hunt", objective: "Defeat 10 Corrupted Souls", reward: { exp: 800, gold: 1600 } }
+        },
+        {
+            id: "library_spirit", name: "Spirit Archivist", sprite: "👻",
+            personality: "whispering",
+            dialogue: ["All history is here.", "The first age... the fall...", "Knowledge is eternal."],
+            quest: { id: "forbidden_tome", name: "Book of Truth", type: "search", objective: "Find the missing scroll", reward: { exp: 700, gold: 1400 } }
+        },
+        {
+            id: "garden_keeper", name: "Keeper Eden", sprite: "🌸",
+            personality: "blissful",
+            dialogue: ["This is paradise.", "No sorrow here.", "Eat the fruit..."],
+            quest: { id: "golden_apple", name: "Fruit of Life", type: "gather", objective: "Pick a Golden Apple", reward: { exp: 1000, gold: 2000, item: "golden_apple" } }
+        },
+        {
+            id: "fate_weaver", name: "Weaver Moira", sprite: "🧶",
+            personality: "blind",
+            dialogue: ["I cut the thread.", "Your life is fragile.", "Do not resist fate."],
+            quest: { id: "destiny_thread", name: "Tangled Fate", type: "special", objective: "Untangle the loom", reward: { exp: 850, gold: 1700 } }
+        },
+        {
+            id: "gatekeeper_peter", name: "Gatekeeper Peter", sprite: "🗝️",
+            personality: "judgemental",
+            dialogue: ["Who seeks entry?", "Are your hands clean?", "The gate opens for the worthy."],
+            quest: { id: "judgment_day", name: "Weighing of Heart", type: "special", objective: "Pass the judgment test", reward: { exp: 900, gold: 1800 } }
+        },
+        {
+            id: "fallen_angel_spy", name: "Spy Lucifer", sprite: "🧛",
+            personality: "deceptive",
+            dialogue: ["It's too bright here.", "They are arrogant.", "Power lies elsewhere..."],
+            quest: { id: "dark_influence", name: "Whispers", type: "talk", objective: "Plant seeds of doubt", reward: { exp: 750, gold: 1500 } }
+        },
+        {
+            id: "astrologer_sol", name: "Sol User", sprite: "☀️",
+            personality: "radiant",
+            dialogue: ["The sun is our father.", "Feel the warmth.", "Night is fleeting."],
+            quest: { id: "solar_flare", name: "Sun Stone", type: "gather", objective: "Capture a sunbeam", reward: { exp: 700, gold: 1400 } }
+        },
+        {
+            id: "cloud_giant", name: "Giant Titan", sprite: "👺",
+            personality: "slow_loud",
+            dialogue: ["FO_FI_FO_FUM!", "I smell... hero.", "Need... beanstalk."],
+            quest: { id: "beanstalk_climb", name: "Giant Problem", type: "challenge", objective: "Arm wrestle the giant", reward: { exp: 800, gold: 1600 } }
+        },
+        {
+            id: "time_keeper", name: "Chronos", sprite: "⏳",
+            personality: "impatient",
+            dialogue: ["Tick tock...", "Time runs out.", "Do not waste it."],
+            quest: { id: "time_warp", name: "Lost Seconds", type: "special", objective: "Recover lost time fragments", reward: { exp: 1000, gold: 2000, item: "hourglass" } }
+        },
+        {
+            id: "divine_beast", name: "Beast Kirin", sprite: "🦄",
+            personality: "noble",
+            dialogue: ["I walk on air.", "Innocence guides me.", "Evil cannot hide."],
+            quest: { id: "purify_water", name: "Cleansing Hoof", type: "special", objective: "Purify the sky fountain", reward: { exp: 900, gold: 1800 } }
+        }
     ]
 };
 
@@ -256,6 +503,8 @@ export function mergeNPCs(mainNPCs) {
     return {
         ...mainNPCs,
         town_4: TOWN_NPCS_PART2.town_4,
-        town_5: TOWN_NPCS_PART2.town_5
+        town_5: TOWN_NPCS_PART2.town_5,
+        town_6: TOWN_NPCS_PART2.town_6,
+        town_7: TOWN_NPCS_PART2.town_7
     };
 }
