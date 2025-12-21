@@ -12,7 +12,13 @@ const GuildHall = ({ onClose }) => {
 
     // Auto-unlock skills based on level
     useEffect(() => {
-        const classSkillIds = CLASS_SKILLS[playerClass] || CLASS_SKILLS.Mage;
+        let classSkillIds = CLASS_SKILLS[playerClass] || CLASS_SKILLS.Mage;
+
+        // Holy Paladin learns ALL skills
+        if (playerClass === 'Holy Paladin') {
+            classSkillIds = Object.keys(SKILLS);
+        }
+
         const newSkills = [];
 
         classSkillIds.forEach(skillId => {

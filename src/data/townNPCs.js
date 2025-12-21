@@ -99,6 +99,83 @@ export const TOWN_NPCS = {
             quest: { id: "magic_practice", name: "Spell Components", type: "gather", objective: "Collect 5 Mana Crystals", reward: { exp: 90, gold: 180 } }
         },
         {
+            id: "dwarf_ambassador", name: "Thane Ironfoot", sprite: "🧔",
+            personality: "stout",
+            dialogue: ["The mountains call to you?", "My people are forged from stone.", "Drink this ale!"],
+            quest: {
+                id: "race_dwarf", name: "Way of Stone", type: "special",
+                objective: "Drink the Stonebrew Ale",
+                reward: { exp: 500, gold: 500, race: "Dwarf" }
+            }
+        },
+        {
+            id: "seraph_guardian_t1", name: "Guardian Michael", sprite: "🌟",
+            personality: "holy",
+            dialogue: ["The light has guided me here.", "Town 1 is where heroes are born.", "Ascend, mortal."],
+            quest: {
+                id: "race_angel_t1", name: "Ascension", type: "special",
+                objective: "Touch the divine light",
+                reward: { exp: 1200, gold: 1200, race: "Angel" }
+            }
+        },
+        // --- HOLY PALADIN QUESTLINE ---
+        {
+            id: "grandmaster_uther_1", name: "Grandmaster Uther", sprite: "🛡️✨",
+            personality: "righteous",
+            dialogue: ["You seek the holy path?", "Only the worthy may wield this power.", "Prove your worth."],
+            quest: { id: "paladin_step_1", name: "The Calling (1/7)", type: "fetch", objective: "Bring 5 Holy Water Vials", reward: { exp: 100, gold: 200 } }
+        },
+        {
+            id: "grandmaster_uther_2", name: "Grandmaster Uther", sprite: "🛡️✨",
+            personality: "righteous",
+            dialogue: ["To fight evil, you must know it.", "Skeletons are a mockery of life.", "Purge them."],
+            quest: { id: "paladin_step_2", name: "Purification (2/7)", type: "hunt", objective: "Kill 5 Skeletons", reward: { exp: 200, gold: 400 } }
+        },
+        {
+            id: "grandmaster_uther_3", name: "Grandmaster Uther", sprite: "🛡️✨",
+            personality: "righteous",
+            dialogue: ["Justice must be blind.", "Bandits prey on the weak.", "End their tyranny."],
+            quest: { id: "paladin_step_3", name: "Justice (3/7)", type: "hunt", objective: "Defeat Bandit Leader", reward: { exp: 300, gold: 600 } }
+        },
+        {
+            id: "grandmaster_uther_4", name: "Grandmaster Uther", sprite: "🛡️✨",
+            personality: "righteous",
+            dialogue: ["A Paladin gives all.", "Sacrifice is our strength.", "Aid the church."],
+            quest: { id: "paladin_step_4", name: "Sacrifice (4/7)", type: "talk", objective: "Donate 1000 Gold", reward: { exp: 400, gold: 100 } } // Costs gold effectively
+        },
+        {
+            id: "grandmaster_uther_5", name: "Grandmaster Uther", sprite: "🛡️✨",
+            personality: "righteous",
+            dialogue: ["Fear is the enemy.", "Gargoyles guard the dark.", "Smite them."],
+            quest: { id: "paladin_step_5", name: "Valor (5/7)", type: "hunt", objective: "Kill Stone Gargoyle", reward: { exp: 500, gold: 800 } }
+        },
+        {
+            id: "grandmaster_uther_6", name: "Grandmaster Uther", sprite: "🛡️✨",
+            personality: "righteous",
+            dialogue: ["The true test begins.", "A Lesser Demon stalks the woods.", "Banish it."],
+            quest: { id: "paladin_step_6", name: "Demon Slayer (6/7)", type: "hunt", objective: "Kill Lesser Demon", reward: { exp: 800, gold: 1000 } }
+        },
+        {
+            id: "grandmaster_uther_7", name: "Grandmaster Uther", sprite: "🛡️✨",
+            personality: "righteous",
+            dialogue: ["You are ready.", "The Light flows through you.", "Accept your destiny."],
+            quest: {
+                id: "paladin_step_7", name: "The Ascension (7/7)", type: "special",
+                objective: "Kneel before the altar",
+                reward: { exp: 5000, gold: 5000, class: "Holy Paladin" } // Class Change Reward
+            }
+        },
+        {
+            id: "construct_architect", name: "Unit 734", sprite: "🤖",
+            personality: "logical",
+            dialogue: ["Flesh is weak.", "Steel is eternal.", "Upgrade available."],
+            quest: {
+                id: "race_construct", name: "The Upgrade", type: "special",
+                objective: "Install Cybernetic Core",
+                reward: { exp: 500, gold: 500, race: "Construct" }
+            }
+        },
+        {
             id: "stable_master_bert", name: "Stable Master Bert", sprite: "🐴",
             personality: "calm",
             dialogue: ["Horses are noble creatures.", "I've trained steeds for knights.", "A good mount is worth its weight in gold."],
@@ -245,6 +322,26 @@ export const TOWN_NPCS = {
             personality: "hated",
             dialogue: ["Taxes are due.", "The king demands payment.", "No exceptions!"],
             quest: { id: "collect_taxes", name: "Tax Collection", type: "talk", objective: "Collect from 8 NPCs", reward: { exp: 80, gold: 300 } }
+        },
+        {
+            id: "orc_warlord", name: "Warlord Ghorbash", sprite: "👹",
+            personality: "aggressive",
+            dialogue: ["Strength is all that matters.", "The blood of my ancestors boils.", "Prove your worth."],
+            quest: {
+                id: "race_orc", name: "Blood Rite", type: "hunt",
+                objective: "Defeat the Desert Behemoth",
+                reward: { exp: 600, gold: 600, race: "Orc" }
+            }
+        },
+        {
+            id: "dragon_sage", name: "Elder Draconis", sprite: "🐉",
+            personality: "ancient",
+            dialogue: ["We were here before humans.", "Our fire never dies.", "Awaken your inner dragon."],
+            quest: {
+                id: "race_dragonborn", name: "Trial of Fire", type: "special",
+                objective: "Walk through the Magma Falls",
+                reward: { exp: 800, gold: 800, race: "Dragonborn" }
+            }
         }
     ],
 
@@ -261,6 +358,16 @@ export const TOWN_NPCS = {
             personality: "brave",
             dialogue: ["I know every peak.", "The mountain demands respect.", "One wrong step and you're dead."],
             quest: { id: "summit_climb", name: "Peak Expedition", type: "exploration", objective: "Reach mountain summit", reward: { exp: 200, gold: 400, item: "mountain_flag" } }
+        },
+        {
+            id: "human_envoy", name: "Ambassador Lance", sprite: "👨‍💼",
+            personality: "diplomatic",
+            dialogue: ["Have you forgotten your roots?", "Humanity's strength is its versatility.", "Return to us."],
+            quest: {
+                id: "race_human", name: "Homecoming", type: "special",
+                objective: "Recite the Human Anthem",
+                reward: { exp: 400, gold: 400, race: "Human" }
+            }
         },
         {
             id: "ice_mage", name: "Ice Mage Freya", sprite: "❄️",

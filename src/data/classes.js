@@ -118,5 +118,13 @@ export const CLASSES = {
         stats: { hp: 100, mp: 80, atk: 12, mag: 12, def: 10, spd: 12 },
         growth: { hp: 5, mp: 4, atk: 2, mag: 3, def: 2, spd: 2 },
         color: "#a3e635"
+    },
+    HolyPaladin: {
+        id: "holy_paladin",
+        label: "Holy Paladin",
+        description: "The King of Classes. Smite evil with absolute power.",
+        stats: { hp: 999, mp: 999, atk: 999, mag: 999, def: 999, spd: 999 }, // Max stats as requested
+        growth: { hp: 50, mp: 50, atk: 20, mag: 20, def: 20, spd: 20 },
+        color: "#fbbf24" // Gold
     }
 };

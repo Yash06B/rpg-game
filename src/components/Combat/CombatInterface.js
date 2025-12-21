@@ -56,9 +56,24 @@ const CombatInterface = () => {
   };
 
   const calculateDamage = (attacker, defender, isPlayer) => {
-    const baseDmg = isPlayer ? attacker.atk : attacker.atk;
+    let baseDmg = isPlayer ? attacker.atk : attacker.atk;
     const def = isPlayer ? defender.def : defender.def;
     const variance = 0.9 + Math.random() * 0.2;
+
+    if (isPlayer) {
+      // --- HOLY PALADIN BONUSES ---
+      if (state.player.class === 'Holy Paladin') {
+        const isDemonLord = ['pride', 'greed', 'wrath', 'envy', 'lust', 'gluttony', 'sloth'].includes(defender.id);
+        if (isDemonLord) {
+          if (state.player.race === 'Angel') {
+            baseDmg *= 1000; // 1000x Damage vs Demon Lords if Angel
+          } else {
+            baseDmg *= 100; // 100x Damage vs Demon Lords
+          }
+        }
+      }
+    }
+
     return Math.max(1, Math.floor((baseDmg - def * 0.5) * variance));
   };
 

@@ -6,7 +6,9 @@ import Blacksmith from './Blacksmith.js';
 import GuildHall from './GuildHall.js';
 import PassiveSkillManager from '../Shared/PassiveSkillManager.js';
 import QuestBoard from '../Quests/QuestBoard.js';
+import QuestBoard from '../Quests/QuestBoard.js';
 import AchievementModal from '../Shared/AchievementModal.js';
+import NPCList from './NPCList.js';
 
 const TownInterface = () => {
     const { state, dispatch, ACTIONS } = useGame();
@@ -79,70 +81,77 @@ const TownInterface = () => {
                         React.createElement('span', { className: 'b-desc' }, "Accept common quests")
                     )
                 )
+            )
+        )
+    ),
+
+        // NPCs Panel (New)
+        React.createElement('div', { className: 'npcs-container', style: { gridRow: 'span 2' } },
+            React.createElement(NPCList, null)
+        ),
+
+        // Actions Panel
+        React.createElement('div', { className: 'actions-panel' },
+            React.createElement('div', { className: 'player-card' },
+                React.createElement('h3', null, state.player.name),
+                React.createElement('p', null, `Lv. ${state.player.level} ${state.player.race} ${state.player.class}`),
+                React.createElement('div', { className: 'stat-bar hp' }, `HP: ${state.player.stats.hp}/${state.player.stats.maxHp}`),
+                React.createElement('div', { className: 'stat-bar mp' }, `MP: ${state.player.stats.mp}/${state.player.stats.maxMp}`),
+                React.createElement('p', { style: { color: '#fbbf24', marginTop: '10px' } }, `Gold: ${state.player.gold}g`)
             ),
 
-            // Actions Panel
-            React.createElement('div', { className: 'actions-panel' },
-                React.createElement('div', { className: 'player-card' },
-                    React.createElement('h3', null, state.player.name),
-                    React.createElement('p', null, `Lv. ${state.player.level} ${state.player.class}`),
-                    React.createElement('div', { className: 'stat-bar hp' }, `HP: ${state.player.stats.hp}/${state.player.stats.maxHp}`),
-                    React.createElement('div', { className: 'stat-bar mp' }, `MP: ${state.player.stats.mp}/${state.player.stats.maxMp}`),
-                    React.createElement('p', { style: { color: '#fbbf24', marginTop: '10px' } }, `Gold: ${state.player.gold}g`)
-                ),
+            React.createElement('button', {
+                className: 'action-btn dungeon-btn',
+                onClick: handleDungeon
+            }, `Enter ${town.dungeon}`),
 
-                React.createElement('button', {
-                    className: 'action-btn dungeon-btn',
-                    onClick: handleDungeon
-                }, `Enter ${town.dungeon}`),
-
+            React.createElement('button', {
+                className: 'action-btn',
+                onClick: () => setShowInventory(true)
                 React.createElement('button', {
                     className: 'action-btn',
                     onClick: () => setShowInventory(true)
+                }, "Inventory / Bag"),
+
                 React.createElement('button', {
-                        className: 'action-btn',
-                        onClick: () => setShowInventory(true)
-                    }, "Inventory / Bag"),
+                    className: 'action-btn',
+                    onClick: () => setShowAchievements(true)
+                }, "🏆 Achievements"),
 
-                    React.createElement('button', {
-                        className: 'action-btn',
-                        onClick: () => setShowAchievements(true)
-                    }, "🏆 Achievements"),
+                React.createElement('button', {
+                    className: 'action-btn passive-btn',
+                    onClick: () => setShowPassives(true)
+                }, "Passive Skills"),
 
-                    React.createElement('button', {
-                        className: 'action-btn passive-btn',
-                        onClick: () => setShowPassives(true)
-                    }, "Passive Skills"),
-
-                    React.createElement('button', {
-                        className: 'action-btn map-btn',
-                        onClick: () => alert("World Map coming soon")
-                    }, "Open World Map")
+                React.createElement('button', {
+                    className: 'action-btn map-btn',
+                    onClick: () => alert("World Map coming soon")
+                }, "Open World Map")
             )
-            ),
-
-            // Admin Button
-            React.createElement('button', {
-                className: 'admin-btn-trigger',
-                onClick: () => {
         ),
 
-            // Admin Button
-            React.createElement('button', {
-                className: 'admin-btn-trigger',
-                onClick: () => {
-                    const code = prompt("Enter Admin Code:");
-                    if (code === 'yash') dispatch({ type: ACTIONS.ADMIN_TOGGLE, payload: true });
-                }
-            }, "⚙"),
+        // Admin Button
+        React.createElement('button', {
+            className: 'admin-btn-trigger',
+            onClick: () => {
+        ),
 
-            // Modals
-            showInventory && React.createElement(InventoryModal, { onClose: () => setShowInventory(false) }),
-            showPassives && React.createElement(PassiveSkillManager, { onClose: () => setShowPassives(false) }),
-            showQuestBoard && React.createElement(QuestBoard, { onClose: () => setShowQuestBoard(false) }),
-            showAchievements && React.createElement(AchievementModal, { onClose: () => setShowAchievements(false) }),
-            activeBuilding === 'blacksmith' && React.createElement(Blacksmith, { onClose: () => setActiveBuilding(null) }),
-            activeBuilding === 'guild' && React.createElement(GuildHall, { onClose: () => setActiveBuilding(null) })
+        // Admin Button
+        React.createElement('button', {
+            className: 'admin-btn-trigger',
+            onClick: () => {
+                const code = prompt("Enter Admin Code:");
+                if (code === 'yash') dispatch({ type: ACTIONS.ADMIN_TOGGLE, payload: true });
+            }
+        }, "⚙"),
+
+        // Modals
+        showInventory && React.createElement(InventoryModal, { onClose: () => setShowInventory(false) }),
+        showPassives && React.createElement(PassiveSkillManager, { onClose: () => setShowPassives(false) }),
+        showQuestBoard && React.createElement(QuestBoard, { onClose: () => setShowQuestBoard(false) }),
+        showAchievements && React.createElement(AchievementModal, { onClose: () => setShowAchievements(false) }),
+        activeBuilding === 'blacksmith' && React.createElement(Blacksmith, { onClose: () => setActiveBuilding(null) }),
+        activeBuilding === 'guild' && React.createElement(GuildHall, { onClose: () => setActiveBuilding(null) })
         );
 };
 

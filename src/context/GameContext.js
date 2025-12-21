@@ -5,6 +5,7 @@ const initialState = {
     player: {
         name: "",
         class: null,
+        race: "Human", // Default Race
         level: 1,
         exp: 0,
         maxExp: 100,
@@ -44,7 +45,8 @@ const ACTIONS = {
     ADMIN_TOGGLE: 'ADMIN_TOGGLE',
     LOAD_STATE: 'LOAD_STATE',
     UPDATE_PLAYER_DATA: 'UPDATE_PLAYER_DATA',
-    UNLOCK_ACHIEVEMENT: 'UNLOCK_ACHIEVEMENT'
+    UNLOCK_ACHIEVEMENT: 'UNLOCK_ACHIEVEMENT',
+    SET_RACE: 'SET_RACE'
 };
 
 // --- Reducer ---
@@ -96,6 +98,18 @@ function gameReducer(state, action) {
                 player: {
                     ...state.player,
                     achievements: [...state.player.achievements, action.payload]
+                }
+            };
+
+        case ACTIONS.SET_RACE:
+            // Calculate new stats based on race bonuses?
+            // For simplicity, we just update the race tag and maybe apply a one-time boost
+            // OR we can make stats dynamic. Let's make it a permanent state change.
+            return {
+                ...state,
+                player: {
+                    ...state.player,
+                    race: action.payload
                 }
             };
 
