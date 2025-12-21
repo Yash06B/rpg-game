@@ -58,7 +58,15 @@ const AchievementModal = ({ onClose }) => {
                 .progress-track { background: #333; height: 10px; border-radius: 5px; overflow: hidden; }
                 .progress-fill { background: linear-gradient(90deg, #ffd700, #ffaa00); height: 100%; transition: width 0.5s; }
 
-                .achievements-list { overflow-y: auto; flex: 1; padding-right: 10px; }
+                .ach-list {
+                    flex: 1;
+                    overflow-y: auto;
+                    padding: 10px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    padding-bottom: 60px;
+                }
                 
                 .achievement-card { 
                     display: flex; align-items: center; gap: 15px; padding: 15px; 

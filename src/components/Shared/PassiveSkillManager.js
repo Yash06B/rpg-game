@@ -84,7 +84,15 @@ const PassiveSkillManager = ({ onClose }) => {
       .passive-modal { width: 700px; max-height: 80vh; }
       .passive-content { padding: 20px; }
       .info { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; text-align: center; }
-      
+            .skill-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 15px;
+                overflow-y: auto;
+                flex: 1;
+                padding: 5px;
+                padding-bottom: 60px;
+            }
       .passive-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
       
       .passive-card {

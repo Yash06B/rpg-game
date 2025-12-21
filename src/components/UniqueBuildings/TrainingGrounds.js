@@ -116,7 +116,7 @@ const TrainingGrounds = ({ onClose }) => {
 
         React.createElement('style', null, `
       .training-modal { width: 600px; }
-      .training-content { padding: 25px; }
+      .tg-content { flex: 1; overflow-y: auto; padding-right: 10px; padding-bottom: 60px; }
       
       .points-display { text-align: center; background: var(--bg-dark); padding: 20px; border-radius: var(--radius-lg); margin-bottom: 20px; border: 2px solid var(--primary); }
       .points-display h3 { margin: 0 0 10px 0; color: var(--text-muted); font-size: 1rem; }
