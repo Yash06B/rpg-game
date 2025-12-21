@@ -6,6 +6,7 @@ import Blacksmith from './Blacksmith.js';
 import GuildHall from './GuildHall.js';
 import PassiveSkillManager from '../Shared/PassiveSkillManager.js';
 import QuestBoard from '../Shared/QuestBoard.js';
+import QuestTracker from '../Shared/QuestTracker.js';
 import AchievementModal from '../Shared/AchievementModal.js';
 import NPCList from './NPCList.js';
 import TrainingGrounds from '../UniqueBuildings/TrainingGrounds.js';
@@ -15,6 +16,7 @@ const TownInterface = () => {
     const [showInventory, setShowInventory] = useState(false);
     const [showPassives, setShowPassives] = useState(false);
     const [showQuestBoard, setShowQuestBoard] = useState(false);
+    const [showQuestLog, setShowQuestLog] = useState(false);
     const [showAchievements, setShowAchievements] = useState(false);
     const [activeBuilding, setActiveBuilding] = useState(null);
 
@@ -115,6 +117,7 @@ const TownInterface = () => {
             React.createElement('div', { className: 'action-buttons' },
                 React.createElement('button', { className: 'action-btn dungeon-btn', onClick: handleDungeon }, `⚔️ Enter ${town.dungeon}`),
                 React.createElement('button', { className: 'action-btn', onClick: () => setShowInventory(true) }, "🎒 Inventory"),
+                React.createElement('button', { className: 'action-btn', onClick: () => setShowQuestLog(true) }, "📜 Quest Log"),
                 React.createElement('button', { className: 'action-btn', onClick: () => setShowAchievements(true) }, "🏆 Achievements"),
                 React.createElement('button', { className: 'action-btn', onClick: () => setShowPassives(true) }, "✨ Skills"),
                 React.createElement('button', { className: 'action-btn', onClick: () => alert("Map coming soon") }, "🗺️ Map")
@@ -134,6 +137,7 @@ const TownInterface = () => {
         showInventory && React.createElement(InventoryModal, { onClose: () => setShowInventory(false) }),
         showPassives && React.createElement(PassiveSkillManager, { onClose: () => setShowPassives(false) }),
         showQuestBoard && React.createElement(QuestBoard, { onClose: () => setShowQuestBoard(false) }),
+        showQuestLog && React.createElement(QuestTracker, { onClose: () => setShowQuestLog(false) }),
         showAchievements && React.createElement(AchievementModal, { onClose: () => setShowAchievements(false) }),
         activeBuilding === 'blacksmith' && React.createElement(Blacksmith, { onClose: () => setActiveBuilding(null) }),
         activeBuilding === 'guild' && React.createElement(GuildHall, { onClose: () => setActiveBuilding(null) }),

@@ -88,9 +88,7 @@ const GameContainer = () => {
         React.createElement(StoryModal),
         React.createElement(VictoryScreen),
 
-        // 5. Quest Tracker (Visible in game, hidden in menu/char creation)
-        (state.system.view !== 'character_creation' && state.system.view !== 'main_menu') &&
-        React.createElement(QuestTracker)
+
     );
 };
 
