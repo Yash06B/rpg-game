@@ -4,10 +4,12 @@ import { TOWNS, BUILDINGS } from '../../data/towns.js';
 import InventoryModal from '../Shared/InventoryModal.js';
 import Blacksmith from './Blacksmith.js';
 import GuildHall from './GuildHall.js';
+import PassiveSkillManager from '../Shared/PassiveSkillManager.js';
 
 const TownInterface = () => {
     const { state, dispatch, ACTIONS } = useGame();
     const [showInventory, setShowInventory] = useState(false);
+    const [showPassives, setShowPassives] = useState(false);
     const [activeBuilding, setActiveBuilding] = useState(null);
 
     const currentTownId = state.world.location === 'town_1' ? 'town_1' : state.world.location;
@@ -83,6 +85,11 @@ const TownInterface = () => {
                 }, "Inventory / Bag"),
 
                 React.createElement('button', {
+                    className: 'action-btn passive-btn',
+                    onClick: () => setShowPassives(true)
+                }, "Passive Skills"),
+
+                React.createElement('button', {
                     className: 'action-btn map-btn',
                     onClick: () => alert("World Map coming soon")
                 }, "Open World Map")
@@ -100,6 +107,7 @@ const TownInterface = () => {
 
         // Modals
         showInventory && React.createElement(InventoryModal, { onClose: () => setShowInventory(false) }),
+        showPassives && React.createElement(PassiveSkillManager, { onClose: () => setShowPassives(false) }),
         activeBuilding === 'blacksmith' && React.createElement(Blacksmith, { onClose: () => setActiveBuilding(null) }),
         activeBuilding === 'guild' && React.createElement(GuildHall, { onClose: () => setActiveBuilding(null) })
     );
