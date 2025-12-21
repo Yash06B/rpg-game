@@ -5,11 +5,13 @@ import InventoryModal from '../Shared/InventoryModal.js';
 import Blacksmith from './Blacksmith.js';
 import GuildHall from './GuildHall.js';
 import PassiveSkillManager from '../Shared/PassiveSkillManager.js';
+import QuestBoard from '../Shared/QuestBoard.js';
 
 const TownInterface = () => {
     const { state, dispatch, ACTIONS } = useGame();
     const [showInventory, setShowInventory] = useState(false);
     const [showPassives, setShowPassives] = useState(false);
+    const [showQuestBoard, setShowQuestBoard] = useState(false);
     const [activeBuilding, setActiveBuilding] = useState(null);
 
     const currentTownId = state.world.location === 'town_1' ? 'town_1' : state.world.location;
@@ -26,6 +28,11 @@ const TownInterface = () => {
 
         if (bKey === 'guild') {
             setActiveBuilding('guild');
+            return;
+        }
+
+        if (bKey === 'quest_board') {
+            setShowQuestBoard(true);
             return;
         }
 
@@ -60,7 +67,15 @@ const TownInterface = () => {
                             React.createElement('span', { className: 'b-name' }, b.label),
                             React.createElement('span', { className: 'b-desc' }, b.description)
                         );
-                    })
+                    }),
+                    // Add Quest Board button
+                    React.createElement('button', {
+                        className: 'building-btn',
+                        onClick: () => setShowQuestBoard(true)
+                    },
+                        React.createElement('span', { className: 'b-name' }, "📋 Quest Board"),
+                        React.createElement('span', { className: 'b-desc' }, "Accept common quests")
+                    )
                 )
             ),
 
@@ -108,6 +123,7 @@ const TownInterface = () => {
         // Modals
         showInventory && React.createElement(InventoryModal, { onClose: () => setShowInventory(false) }),
         showPassives && React.createElement(PassiveSkillManager, { onClose: () => setShowPassives(false) }),
+        showQuestBoard && React.createElement(QuestBoard, { onClose: () => setShowQuestBoard(false) }),
         activeBuilding === 'blacksmith' && React.createElement(Blacksmith, { onClose: () => setActiveBuilding(null) }),
         activeBuilding === 'guild' && React.createElement(GuildHall, { onClose: () => setActiveBuilding(null) })
     );

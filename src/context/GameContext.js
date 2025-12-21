@@ -4,28 +4,30 @@ import React, { createContext, useReducer, useEffect, useContext } from 'react';
 const initialState = {
     player: {
         name: "",
-        class: null, // "Mage", "Warrior", etc.
+        class: null,
         level: 1,
         exp: 0,
         maxExp: 100,
         stats: { hp: 100, maxHp: 100, mp: 50, maxMp: 50, atk: 10, mag: 10, def: 5, spd: 10 },
-        inventory: [], // [{ id, count }]
+        inventory: [],
         gold: 0,
         equipment: { weapon: null, armor: null, accessory: null },
-        skills: [], // [{ id: 'fireball', level: 1, exp: 0, maxExp: 100 }]
-        equippedSkills: [], // Active skill slots (max 8)
-        passiveSkills: [], // Passive skill slots (max 4)
-        tier: 0, // 0=Base, 1=Lv10, 2=Lv40, ...
-        evolutionHistory: [], // ["Mage", "Pyromancer"]
+        skills: [],
+        equippedSkills: [],
+        passiveSkills: [],
+        tier: 0,
+        evolutionHistory: [],
     },
     world: {
-        location: "character_creation", // "town_1", "world_map", "combat", "dungeon"
+        location: "character_creation",
         unlockedTowns: ["town_1"],
-        questFlags: {},
+        questFlags: {}, // For main questlines
+        activeCommonQuests: [], // [{ id, progress, accepted }]
+        completedQuests: [], // [questId]
         uniqueBuildingData: {},
     },
     system: {
-        view: "character_creation", // "character_creation", "town", "combat", "admin", "menu"
+        view: "character_creation",
         adminMode: false,
         lastSave: null
     }
@@ -40,7 +42,7 @@ const ACTIONS = {
     UPDATE_STATS: 'UPDATE_STATS',
     ADMIN_TOGGLE: 'ADMIN_TOGGLE',
     LOAD_STATE: 'LOAD_STATE',
-    UPDATE_PLAYER_DATA: 'UPDATE_PLAYER_DATA' // Added for Admin
+    UPDATE_PLAYER_DATA: 'UPDATE_PLAYER_DATA'
 };
 
 // --- Reducer ---
@@ -81,7 +83,8 @@ function gameReducer(state, action) {
         case ACTIONS.UPDATE_PLAYER_DATA:
             return {
                 ...state,
-                player: action.payload
+                player: action.payload.player || action.payload,
+                world: action.payload.world || state.world
             };
 
         default:
@@ -95,7 +98,7 @@ const GameContext = createContext();
 export const GameProvider = ({ children }) => {
     const [state, dispatch] = useReducer(gameReducer, initialState);
 
-    // Auto-Save Effect (Basic)
+    // Auto-Save Effect
     useEffect(() => {
         if (state.player.name) {
             localStorage.setItem('sins_rpg_autosave', JSON.stringify(state));
