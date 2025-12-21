@@ -281,6 +281,36 @@ const TownInterface = () => {
                 cursor: pointer;
             }
             .admin-btn-trigger:hover { opacity: 1; }
+
+            /* MOBILE RESPONSIVENESS */
+            @media (max-width: 768px) {
+                .town-header h1 { font-size: 1.2rem; }
+                .town-desc { font-size: 0.8rem; }
+                .town-content { padding: 10px; gap: 10px; }
+                
+                .building-list {
+                    grid-template-columns: 1fr; /* Stack on very small screens */
+                }
+                
+                .action-buttons {
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    overflow-x: visible; /* Remove scroll, allow wrap */
+                }
+                
+                .action-btn {
+                    flex: 1 0 40%; /* 2 buttons per row */
+                    font-size: 0.9rem;
+                    padding: 8px;
+                    text-align: center;
+                }
+                
+                .player-mini-status {
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    font-size: 0.8rem;
+                }
+            }
         `)
     );
 };

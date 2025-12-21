@@ -204,6 +204,34 @@ const MainMenu = () => {
                 from { transform: scale(0.8); opacity: 0; }
                 to { transform: scale(1); opacity: 1; }
             }
+
+            /* MOBILE RESPONSIVENESS */
+            @media (max-width: 768px) {
+                .game-title {
+                    font-size: 2.5rem;
+                    letter-spacing: 2px;
+                    line-height: 1.2;
+                }
+                .subtitle {
+                    font-size: 1rem;
+                    margin-bottom: 30px;
+                }
+                .menu-content {
+                    width: 90%;
+                    padding: 20px;
+                }
+                .menu-buttons {
+                    width: 100%;
+                }
+                .menu-btn {
+                    padding: 12px 20px;
+                    font-size: 1rem;
+                }
+                .confirm-modal {
+                    width: 90%;
+                    padding: 20px;
+                }
+            }
         `)
     );
 };
