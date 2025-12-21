@@ -5,7 +5,7 @@ import InventoryModal from '../Shared/InventoryModal.js';
 import Blacksmith from './Blacksmith.js';
 import GuildHall from './GuildHall.js';
 import PassiveSkillManager from '../Shared/PassiveSkillManager.js';
-import QuestBoard from '../Quests/QuestBoard.js';
+import QuestBoard from '../Shared/QuestBoard.js';
 import AchievementModal from '../Shared/AchievementModal.js';
 import NPCList from './NPCList.js';
 import TrainingGrounds from '../UniqueBuildings/TrainingGrounds.js';
