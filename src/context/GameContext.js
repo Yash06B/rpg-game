@@ -29,7 +29,7 @@ const initialState = {
         uniqueBuildingData: {},
     },
     system: {
-        view: "character_creation",
+        view: "main_menu",
         adminMode: false,
         lastSave: null
     }
@@ -132,17 +132,17 @@ export const GameProvider = ({ children }) => {
     }, [state]);
 
     // Initial Load
-    useEffect(() => {
-        const saved = localStorage.getItem('sins_rpg_autosave');
-        if (saved) {
-            try {
-                const parsed = JSON.parse(saved);
-                dispatch({ type: ACTIONS.LOAD_STATE, payload: parsed });
-            } catch (e) {
-                console.error("Save file corrupted", e);
-            }
-        }
-    }, []);
+    // useEffect(() => {
+    //     const saved = localStorage.getItem('sins_rpg_autosave');
+    //     if (saved) {
+    //         try {
+    //             const parsed = JSON.parse(saved);
+    //             dispatch({ type: ACTIONS.LOAD_STATE, payload: parsed });
+    //         } catch (e) {
+    //             console.error("Save file corrupted", e);
+    //         }
+    //     }
+    // }, []);
 
     return React.createElement(GameContext.Provider, { value: { state, dispatch, ACTIONS } }, children);
 };
