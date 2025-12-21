@@ -6,7 +6,6 @@ import Blacksmith from './Blacksmith.js';
 import GuildHall from './GuildHall.js';
 import PassiveSkillManager from '../Shared/PassiveSkillManager.js';
 import QuestBoard from '../Quests/QuestBoard.js';
-import QuestBoard from '../Quests/QuestBoard.js';
 import AchievementModal from '../Shared/AchievementModal.js';
 import NPCList from './NPCList.js';
 import TrainingGrounds from '../UniqueBuildings/TrainingGrounds.js';
@@ -19,7 +18,9 @@ const TownInterface = () => {
     const [showAchievements, setShowAchievements] = useState(false);
     const [activeBuilding, setActiveBuilding] = useState(null);
 
-    const currentTownId = state.world.location === 'town_1' ? 'town_1' : state.world.location;
+    // Safety check for location
+    const currentTownId = (state.world && state.world.location) ? state.world.location : 'town_1';
+    // Fallback if town ID is invalid (e.g. 'character_creation' view bug)
     const town = TOWNS[currentTownId] || TOWNS.town_1;
 
     const handleBuildingClick = (bKey) => {
@@ -55,15 +56,15 @@ const TownInterface = () => {
     };
 
     return React.createElement('div', { className: 'town-container fade-in' },
-        // Header
+        // 1. Header
         React.createElement('div', { className: 'town-header' },
             React.createElement('h1', null, town.name),
             React.createElement('p', { className: 'town-desc' }, town.description)
         ),
 
-        // Content Grid
+        // 2. Town Grid (Left Side)
         React.createElement('div', { className: 'town-grid' },
-            // Buildings List
+            // Buildings Panel
             React.createElement('div', { className: 'buildings-panel' },
                 React.createElement('h3', null, "Facilities"),
                 React.createElement('div', { className: 'building-list' },
@@ -78,7 +79,7 @@ const TownInterface = () => {
                             React.createElement('span', { className: 'b-desc' }, b.description)
                         );
                     }),
-                    // Add Quest Board button
+                    // Quest Board Button (Always present)
                     React.createElement('button', {
                         className: 'building-btn',
                         onClick: () => setShowQuestBoard(true)
@@ -87,16 +88,15 @@ const TownInterface = () => {
                         React.createElement('span', { className: 'b-desc' }, "Accept common quests")
                     )
                 )
-            )
-        )
-    ),
+            ),
 
-        // NPCs Panel (New)
-        React.createElement('div', { className: 'npcs-container', style: { gridRow: 'span 2' } },
-            React.createElement(NPCList, null)
+            // NPCs Panel (New) - Grid Row Span 
+            React.createElement('div', { className: 'npcs-container', style: { marginTop: '20px' } },
+                React.createElement(NPCList, null)
+            )
         ),
 
-        // Actions Panel
+        // 3. Actions Panel (Right Side)
         React.createElement('div', { className: 'actions-panel' },
             React.createElement('div', { className: 'player-card' },
                 React.createElement('h3', null, state.player.name),
@@ -114,29 +114,25 @@ const TownInterface = () => {
             React.createElement('button', {
                 className: 'action-btn',
                 onClick: () => setShowInventory(true)
-                React.createElement('button', {
-                    className: 'action-btn',
-                    onClick: () => setShowInventory(true)
-                }, "Inventory / Bag"),
+            }, "Inventory / Bag"),
 
-                React.createElement('button', {
-                    className: 'action-btn',
-                    onClick: () => setShowAchievements(true)
-                }, "🏆 Achievements"),
+            React.createElement('button', {
+                className: 'action-btn',
+                onClick: () => setShowAchievements(true)
+            }, "🏆 Achievements"),
 
-                React.createElement('button', {
-                    className: 'action-btn passive-btn',
-                    onClick: () => setShowPassives(true)
-                }, "Passive Skills"),
+            React.createElement('button', {
+                className: 'action-btn passive-btn',
+                onClick: () => setShowPassives(true)
+            }, "Passive Skills"),
 
-                React.createElement('button', {
-                    className: 'action-btn map-btn',
-                    onClick: () => alert("World Map coming soon")
-                }, "Open World Map")
-            )
+            React.createElement('button', {
+                className: 'action-btn map-btn',
+                onClick: () => alert("World Map coming soon")
+            }, "Open World Map")
         ),
 
-        // Admin Button
+        // 4. Admin Toggle
         React.createElement('button', {
             className: 'admin-btn-trigger',
             onClick: () => {
@@ -145,7 +141,7 @@ const TownInterface = () => {
             }
         }, "⚙"),
 
-        // Modals
+        // 5. Modals
         showInventory && React.createElement(InventoryModal, { onClose: () => setShowInventory(false) }),
         showPassives && React.createElement(PassiveSkillManager, { onClose: () => setShowPassives(false) }),
         showQuestBoard && React.createElement(QuestBoard, { onClose: () => setShowQuestBoard(false) }),
