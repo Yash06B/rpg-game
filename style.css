@@ -52,18 +52,20 @@ body {
 }
 
 /* Scrollbar */
+/* Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 12px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-dark); 
+  background: #0f0f15; 
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border); 
-  border-radius: 4px;
+  background: #444; 
+  border: 2px solid #0f0f15;
+  border-radius: 6px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted); 
+  background: var(--primary); 
 }
 
 /* Animations */
