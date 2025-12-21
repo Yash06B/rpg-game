@@ -263,6 +263,331 @@ export const QUESTS = {
                 reward: { item: "tome_of_mastery", flag: "mastery_quest_complete", exp: 20000 }
             }
         ]
+    },
+
+    // === TOWN 3 - Wrath Demon Questline ===
+    wrath_quest: {
+        id: "wrath_quest",
+        town: "town_3",
+        name: "Calming the Storm",
+        steps: [
+            {
+                step: 1,
+                title: "The Raging Blacksmith",
+                npc: "Furious Smith",
+                dialogue: [
+                    "*smashing hammer* THEY STOLE FROM ME!",
+                    "Those bandits! I'll DESTROY them all!",
+                    "My tools... my LIFE'S WORK! Gone!",
+                    "Help me get revenge... or I'll lose myself to rage."
+                ],
+                condition: "TALK_TO_SMITH",
+                reward: { item: "rage_note", flag: "wrath_1_complete" }
+            },
+            {
+                step: 2,
+                title: "Defeating Anger",
+                description: "Defeat 20 enemies WITHOUT getting hit. Control your anger.",
+                condition: "DEFEAT_20_FLAWLESS",
+                reward: { item: "patience_medal", flag: "wrath_2_complete", exp: 500 }
+            },
+            {
+                step: 3,
+                title: "The Meditation Master",
+                npc: "Zen Monk",
+                dialogue: [
+                    "Anger clouds judgment. Peace brings clarity.",
+                    "Meditate at the mountaintop for 3 turns in battle.",
+                    "Do not attack. Only defend."
+                ],
+                condition: "MEDITATE_3_TURNS_COMBAT",
+                reward: { item: "zen_scroll", flag: "wrath_3_complete" }
+            },
+            {
+                step: 4,
+                title: "Forgiving the Thief",
+                npc: "Captured Bandit",
+                dialogue: [
+                    "*trembling* Please... I was desperate... my family was starving...",
+                    "The blacksmith wants me dead. But I'll return everything!",
+                    "Convince him to forgive me?"
+                ],
+                condition: "CONVINCE_SMITH_FORGIVE",
+                reward: { item: "forgiveness_letter", flag: "wrath_4_complete" }
+            },
+            {
+                step: 5,
+                title: "The Blacksmith's Choice",
+                npc: "Furious Smith",
+                dialogue: [
+                    "*reading letter* He... he has children?",
+                    "*tears up* I... I was going to kill a father...",
+                    "Thank you for stopping me. Take this amulet. It calms rage."
+                ],
+                condition: "GIVE_LETTER_TO_SMITH",
+                reward: { item: "peaceful_amulet", flag: "wrath_5_complete" }
+            },
+            {
+                step: 6,
+                title: "Inner Peace",
+                description: "Win 10 battles using ONLY defensive skills.",
+                condition: "WIN_10_DEFENSE_ONLY",
+                reward: { item: "serene_gem", flag: "wrath_6_complete", exp: 800 }
+            },
+            {
+                step: 7,
+                title: "Forging the Calm",
+                npc: "Zen Monk",
+                dialogue: [
+                    "You have learned true peace. The opposite of wrath.",
+                    "Take these blessed items to the altar.",
+                    "The Calm Amulet will drain Wrath's power!"
+                ],
+                condition: "FORGE_CALM_AMULET",
+                reward: { item: "calm_amulet", flag: "wrath_quest_complete", exp: 2000 }
+            }
+        ]
+    },
+
+    // === TOWN 4 - Envy Demon Questline ===
+    envy_quest: {
+        id: "envy_quest",
+        town: "town_4",
+        name: "The Sin of Comparison",
+        steps: [
+            {
+                step: 1,
+                title: "The Jealous Rival",
+                npc: "Bitter Mage",
+                dialogue: [
+                    "Everyone praises THEM. Never me!",
+                    "I'm just as powerful! No, MORE powerful!",
+                    "I hate them. I HATE them all!",
+                    "Envy consumes this town. We need to break it."
+                ],
+                condition: "TALK_TO_MAGE",
+                reward: { item: "envy_diary", flag: "envy_1_complete" }
+            },
+            {
+                step: 2,
+                title: "Celebrating Others",
+                description: "Donate 1000 gold to 3 different NPCs.",
+                condition: "DONATE_TO_3_NPCS",
+                reward: { item: "generosity_badge", flag: "envy_2_complete" }
+            },
+            {
+                step: 3,
+                title: "The Mirror of Truth",
+                description: "Find the cursed mirror showing people their inadequacies.",
+                dialogue: [
+                    "You find a dark mirror. It shows your worst fears.",
+                    "Every failure. Every missed opportunity.",
+                    "Resist the urge to compare. Break the mirror."
+                ],
+                condition: "BREAK_CURSED_MIRROR",
+                reward: { item: "mirror_shard", flag: "envy_3_complete" }
+            },
+            {
+                step: 4,
+                title: "Helping a Competitor",
+                npc: "Rival Adventurer",
+                dialogue: [
+                    "You... you're helping ME? Your rival?",
+                    "I've been so jealous of your success...",
+                    "But you showed me... we can both succeed.",
+                    "Here, take this. You earned it more than I did."
+                ],
+                condition: "HELP_RIVAL_QUEST",
+                reward: { item: "friendship_ring", flag: "envy_4_complete" }
+            },
+            {
+                step: 5,
+                title: "Being Content",
+                description: "Refuse a powerful legendary item offer. Choose contentment.",
+                condition: "REFUSE_LEGENDARY",
+                reward: { item: "contentment_stone", flag: "envy_5_complete" }
+            },
+            {
+                step: 6,
+                title: "The Shapeshifter's Lesson",
+                npc: "Doppelganger",
+                dialogue: [
+                    "I copy everyone. Never myself.",
+                    "I envy all... am nothing.",
+                    "Teach me... to be myself?"
+                ],
+                condition: "TEACH_DOPPELGANGER",
+                reward: { item: "identity_crystal", flag: "envy_6_complete" }
+            },
+            {
+                step: 7,
+                title: "Ring of Contentment",
+                npc: "Sage of Self",
+                dialogue: [
+                    "You've learned the greatest lesson: to be yourself.",
+                    "Envy dies when we accept who we are.",
+                    "This ring will weaken the Envy Demon greatly!"
+                ],
+                condition: "FORGE_CONTENTMENT_RING",
+                reward: { item: "ring_of_contentment", flag: "envy_quest_complete", exp: 3000 }
+            }
+        ]
+    },
+
+    // === TOWN 5 - Lust Demon Questline ===
+    lust_quest: {
+        id: "lust_quest",
+        town: "town_5",
+        name: "Resisting Temptation",
+        steps: [
+            {
+                step: 1,
+                title: "The Enchanted",
+                npc: "Charmed Villager",
+                dialogue: [
+                    "*glazed eyes* She's... so beautiful...",
+                    "I'd do anything for her...",
+                    "My family? Job? Who cares! I need HER!",
+                    "Please... save me from this curse..."
+                ],
+                condition: "TALK_TO_CHARMED",
+                reward: { item: "charm_analysis", flag: "lust_1_complete" }
+            },
+            {
+                step: 2,
+                title: "Breaking the Charm",
+                description: "Defeat the Succubus without looking at her. Resist temptation.",
+                condition: "DEFEAT_SUCCUBUS_BLIND",
+                reward: { item: "broken_charm", flag: "lust_2_complete", exp: 800 }
+            },
+            {
+                step: 3,
+                title: "The Faithful Partner",
+                npc: "Loyal Spouse",
+                dialogue: [
+                    "My husband was taken by that demon...",
+                    "But I never stopped loving him. Never gave up.",
+                    "True love isn't about desire. It's about commitment.",
+                    "Take this ring. It protected our marriage for 50 years."
+                ],
+                condition: "TALK_TO_SPOUSE",
+                reward: { item: "wedding_band", flag: "lust_3_complete" }
+            },
+            {
+                step: 4,
+                title: "Rejecting Desire",
+                description: "A goddess offers you ultimate power for your devotion. Refuse.",
+                condition: "REJECT_GODDESS",
+                reward: { item: "purity_seal", flag: "lust_4_complete" }
+            },
+            {
+                step: 5,
+                title: "Saving the Innocent",
+                description: "Rescue 10 charmed villagers from the demon's lair.",
+                condition: "RESCUE_10_CHARMED",
+                reward: { item: "savior_medal", flag: "lust_5_complete", exp: 1200 }
+            },
+            {
+                step: 6,
+                title: "The Heart of Purity",
+                npc: "High Priestess",
+                dialogue: [
+                    "Your heart remains pure despite temptation.",
+                    "This clarity of mind is rare in this corrupted age.",
+                    "Take the Crystal of Clarity. Guard it well."
+                ],
+                condition: "RECEIVE_CRYSTAL",
+                reward: { item: "clarity_crystal", flag: "lust_6_complete" }
+            },
+            {
+                step: 7,
+                title: "Crown of Clarity",
+                npc: "Temple Smith",
+                dialogue: [
+                    "These holy items together... incredible!",
+                    "I can forge the Crown of Clarity!",
+                    "The Lust Demon will lose all power over minds!"
+                ],
+                condition: "FORGE_CLARITY_CROWN",
+                reward: { item: "crown_of_clarity", flag: "lust_quest_complete", exp: 4000 }
+            }
+        ]
+    },
+
+    // === TOWN 6 - Gluttony Demon Questline ===
+    gluttony_quest: {
+        id: "gluttony_quest",
+        town: "town_6",
+        name: "The Price of Excess",
+        steps: [
+            {
+                step: 1,
+                title: "The Endless Feast",
+                npc: "Bloated Noble",
+                dialogue: [
+                    "*eating* More! I need MORE!",
+                    "I can't stop eating... I'm dying... but I CAN'T STOP!",
+                    "The demon's curse... it makes us HUNGER...",
+                    "*sobbing* Help us..."
+                ],
+                condition: "TALK_TO_NOBLE",
+                reward: { item: "gluttony_note", flag: "gluttony_1_complete" }
+            },
+            {
+                step: 2,
+                title: "Fasting Challenge",
+                description: "Complete 5 battles without using any consumable items.",
+                condition: "WIN_5_NO_ITEMS",
+                reward: { item: "self_control_badge", flag: "gluttony_2_complete", exp: 1000 }
+            },
+            {
+                step: 3,
+                title: "Feeding the Poor",
+                description: "Donate all your food items to the hungry in town.",
+                condition: "DONATE_ALL_FOOD",
+                reward: { item: "charity_deed_food", flag: "gluttony_3_complete" }
+            },
+            {
+                step: 4,
+                title: "The Starving Merchant",
+                npc: "Thin Trader",
+                dialogue: [
+                    "I used to be like them. Always wanting more.",
+                    "Then I lost everything. Learned to survive on nothing.",
+                    "Now I'm free. Hunger no longer controls me.",
+                    "This belt kept me disciplined. You'll need it."
+                ],
+                condition: "TALK_TO_TRADER",
+                reward: { item: "discipline_belt", flag: "gluttony_4_complete" }
+            },
+            {
+                step: 5,
+                title: "Destroying the Feast",
+                description: "Find and destroy the demon's corrupted feast hall.",
+                condition: "DESTROY_FEAST_HALL",
+                reward: { item: "holy_fire", flag: "gluttony_5_complete", exp: 1500 }
+            },
+            {
+                step: 6,
+                title: "Taking Only What's Needed",
+                description: "In a room of treasure, take only 1 gold. Show restraint.",
+                condition: "TAKE_ONLY_1_GOLD",
+                reward: { item: "restraint_proof", flag: "gluttony_6_complete" }
+            },
+            {
+                step: 7,
+                title: "Belt of Restraint",
+                npc: "Master of Discipline",
+                dialogue: [
+                    "You've shown perfect self-control.",
+                    "In a world of excess, you chose balance.",
+                    "The Belt of Restraint will bind the Gluttony Demon!",
+                    "He who consumes all... will be consumed by nothing!"
+                ],
+                condition: "FORGE_RESTRAINT_BELT",
+                reward: { item: "belt_of_restraint", flag: "gluttony_quest_complete", exp: 5000 }
+            }
+        ]
     }
 };
 
