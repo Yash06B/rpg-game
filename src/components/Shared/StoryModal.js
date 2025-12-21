@@ -75,7 +75,10 @@ const StoryModal = () => {
 
         dispatch({
             type: ACTIONS.UPDATE_PLAYER_DATA,
-            payload: updates
+            payload: {
+                player: state.player, // CRITICAL FIX: Preserve player state
+                world: updates.world
+            }
         });
 
         setCurrentStory(null);
@@ -109,8 +112,7 @@ const StoryModal = () => {
         ),
         React.createElement('style', null, `
       .story-modal {
-        background: url('https://img.freepik.com/free-vector/old-paper-texture-background_1387-259.jpg?size=626&ext=jpg') no-repeat center center;
-        background-size: cover;
+        background: #000; /* PURE BLACK BACKGROUND */
         width: 600px;
         min-height: 400px;
         display: flex;
@@ -118,16 +120,17 @@ const StoryModal = () => {
         justify-content: space-between;
         padding: 40px;
         box-shadow: 0 0 50px rgba(0,0,0,0.8);
-        border: 10px solid #5d4037;
-        color: #3e2723;
+        border: 2px solid #333;
+        color: #fff; /* White text */
         font-family: 'Times New Roman', serif;
       }
       .story-header h2 {
         text-align: center;
         font-size: 2.5rem;
         margin-bottom: 20px;
-        border-bottom: 2px solid #3e2723;
+        border-bottom: 1px solid #333;
         padding-bottom: 10px;
+        color: #fdb931; /* Gold title */
       }
       .story-text-container {
         flex: 1;
@@ -140,6 +143,7 @@ const StoryModal = () => {
         line-height: 1.6;
         text-align: center;
         font-style: italic;
+        color: #eee;
       }
       .story-controls {
         display: flex;
@@ -150,11 +154,12 @@ const StoryModal = () => {
       .page-indicator {
         font-weight: bold;
         font-size: 1.1rem;
+        color: #666;
       }
       .next-btn {
-        background: #3e2723;
-        color: #f5deb3;
-        border: none;
+        background: #222;
+        color: #fff;
+        border: 1px solid #444;
         padding: 10px 25px;
         font-size: 1.2rem;
         font-family: serif;
@@ -164,7 +169,8 @@ const StoryModal = () => {
       }
       .next-btn:hover {
         transform: scale(1.05);
-        background: #5d4037;
+        background: #333;
+        border-color: #fdb931;
       }
       @keyframes type {
         from { width: 0 }
