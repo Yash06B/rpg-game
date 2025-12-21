@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useGame } from '../../context/GameContext.js';
 import { MONSTERS, DRAGONS, DEMON_LORDS } from '../../data/monsters.js';
 import { SKILLS, getSkillAtLevel } from '../../data/skills.js';
+import { getFlavorText } from '../../data/flavorText.js';
 
 const CombatInterface = () => {
   const { state, dispatch, ACTIONS } = useGame();
@@ -110,11 +111,22 @@ const CombatInterface = () => {
     if (!playerTurn || combatState !== 'active' || !enemy) return;
 
     const dmg = calculateDamage(state.player.stats, enemy, true);
-    const newEnemyHp = Math.max(0, enemy.hp - dmg);
-    setEnemy(prev => ({ ...prev, hp: newEnemyHp }));
 
-    const attackVerb = dmg > 50 ? 'devastates' : dmg > 20 ? 'strikes' : 'hits';
-    addLog(`You ${attackVerb} ${enemy.name} for ${dmg} damage!`);
+    // Check for miss (10% chance base)
+    if (Math.random() < 0.1) {
+      addLog(getFlavorText('miss', { enemyName: enemy.name }));
+    } else {
+      const newEnemyHp = Math.max(0, enemy.hp - dmg);
+      setEnemy(prev => ({ ...prev, hp: newEnemyHp }));
+
+      const flavorType = dmg > 50 ? 'player_strong' : dmg > 20 ? 'player_normal' : 'player_weak';
+      addLog(`${getFlavorText(flavorType, { enemyName: enemy.name })} (${dmg} dmg)`);
+
+      if (newEnemyHp <= 0) {
+        handleVictory();
+        return;
+      }
+    }
 
     if (newEnemyHp <= 0) {
       handleVictory();
@@ -176,26 +188,40 @@ const CombatInterface = () => {
   const handleEnemyTurn = (currentEnemyHp) => {
     if (currentEnemyHp <= 0) return;
 
-    const enemyDmg = calculateDamage(enemy, state.player.stats, false);
-    const newPlayerHp = Math.max(0, state.player.stats.hp - enemyDmg);
+    // Enemy miss chance based on player speed vs enemy speed
+    // If player is faster, up to 30% dodge chance
+    const dodgeChance = Math.min(0.3, Math.max(0.05, (state.player.stats.spd - enemy.spd) * 0.01));
 
-    dispatch({
-      type: ACTIONS.UPDATE_PLAYER_DATA,
-      payload: {
-        ...state.player,
-        stats: { ...state.player.stats, hp: newPlayerHp }
+    if (Math.random() < dodgeChance) {
+      addLog(getFlavorText('enemy_miss', { enemyName: enemy.name }));
+    } else {
+      const enemyDmg = calculateDamage(enemy, state.player.stats, false);
+      const newPlayerHp = Math.max(0, state.player.stats.hp - enemyDmg);
+
+      dispatch({
+        type: ACTIONS.UPDATE_PLAYER_DATA,
+        payload: {
+          ...state.player,
+          stats: { ...state.player.stats, hp: newPlayerHp }
+        }
+      });
+
+      const attackName = enemy.attacks && enemy.attacks.length > 0
+        ? enemy.attacks[Math.floor(Math.random() * enemy.attacks.length)]
+        : 'basic attack';
+
+      // Use flavor text or special attack name
+      if (attackName !== 'basic attack') {
+        addLog(`${enemy.name} uses ${attackName.replace('_', ' ')}! (${enemyDmg} damage)`);
+      } else {
+        const flavorType = enemyDmg > 40 ? 'enemy_strong' : enemyDmg > 15 ? 'enemy_normal' : 'enemy_weak';
+        addLog(`${getFlavorText(flavorType, { enemyName: enemy.name })} (${enemyDmg} damage)`);
       }
-    });
 
-    const attackName = enemy.attacks && enemy.attacks.length > 0
-      ? enemy.attacks[Math.floor(Math.random() * enemy.attacks.length)]
-      : 'basic attack';
-
-    addLog(`${enemy.name} uses ${attackName.replace('_', ' ')} for ${enemyDmg} damage!`);
-
-    if (newPlayerHp <= 0) {
-      handleDefeat();
-      return;
+      if (newPlayerHp <= 0) {
+        handleDefeat();
+        return;
+      }
     }
 
     setTurn(t => t + 1);
@@ -294,12 +320,12 @@ const CombatInterface = () => {
   const handleFlee = () => {
     const fleeChance = Math.random();
     if (fleeChance > 0.5 || state.player.stats.spd > enemy.spd) {
-      addLog("You successfully fled from battle!");
+      addLog(getFlavorText('flee_success', { enemyName: enemy.name }));
       setTimeout(() => {
         dispatch({ type: ACTIONS.NAVIGATE, payload: state.world.location });
       }, 1000);
     } else {
-      addLog("Failed to flee!");
+      addLog(getFlavorText('flee_fail', { enemyName: enemy.name }));
       setPlayerTurn(false);
       setTimeout(() => handleEnemyTurn(enemy.hp), 800);
     }
