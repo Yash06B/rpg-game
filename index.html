@@ -7,7 +7,29 @@
     <base href="./" />
     <link rel="stylesheet" href="style.css">
     
-    <!-- React & ReactDOM via ESM -->
+    <!-- CRITICAL: Early Error Handler -->
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            const root = document.getElementById('root');
+            if (root) {
+                root.innerHTML = `
+                    <div style="background:#1a0505; color:#ff5555; padding:20px; font-family:monospace; height:100vh;">
+                        <h1>CRITICAL ERROR</h1>
+                        <p>${message}</p>
+                        <p>Source: ${source}:${lineno}:${colno}</p>
+                        <pre>${error ? error.stack : 'No stack trace'}</pre>
+                        <button onclick="localStorage.clear(); location.reload()">Clear Data & Reload</button>
+                    </div>
+                `;
+            }
+        };
+        // Also catch unhandled promise rejections (like dynamic import failures)
+        window.onunhandledrejection = function(event) {
+            window.onerror(event.reason, 'Promise', 0, 0, event.reason);
+        };
+    </script>
+
+    <!-- React Dependencies via ESM -->
     <script type="importmap">
     {
       "imports": {
@@ -20,6 +42,12 @@
     <script type="module" src="./src/main.js" defer></script>
 </head>
 <body>
-    <div id="root"></div>
+    <div id="root">
+        <!-- Loading State (Replaced by React if successful) -->
+        <div style="color: white; text-align: center; margin-top: 20%; font-family: sans-serif;">
+            <p>Summoning the Demon Lords...</p>
+            <small>(Loading resources)</small>
+        </div>
+    </div>
 </body>
 </html>
