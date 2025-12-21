@@ -4,6 +4,7 @@ import { useGame } from '../context/GameContext.js';
 const MainMenu = () => {
     const { state, dispatch, ACTIONS } = useGame();
     const [hasSave, setHasSave] = useState(false);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
 
     useEffect(() => {
         const saved = localStorage.getItem('sins_rpg_autosave');
@@ -12,14 +13,17 @@ const MainMenu = () => {
         }
     }, []);
 
-    const handleNewGame = () => {
-        if (window.confirm("Start a new journey? Any existing progress will be overwritten.")) {
-            // Clear save
-            localStorage.removeItem('sins_rpg_autosave');
-            dispatch({ type: ACTIONS.INIT_GAME });
-            // Should verify INIT_GAME sets view to 'character_creation', if not we force it
-            // Actually INIT_GAME usually resets to initialState which is character_creation.
+    const handleNewGameClick = () => {
+        if (hasSave) {
+            setShowConfirmModal(true);
+        } else {
+            startNewGame();
         }
+    };
+
+    const startNewGame = () => {
+        localStorage.removeItem('sins_rpg_autosave');
+        dispatch({ type: ACTIONS.INIT_GAME });
     };
 
     const handleContinue = () => {
@@ -43,7 +47,7 @@ const MainMenu = () => {
             React.createElement('div', { className: 'menu-buttons' },
                 React.createElement('button', {
                     className: 'menu-btn primary',
-                    onClick: handleNewGame
+                    onClick: handleNewGameClick
                 }, "New Game"),
 
                 React.createElement('button', {
@@ -58,6 +62,25 @@ const MainMenu = () => {
                 }, "Credits")
             )
         ),
+
+        // Custom Confirmation Modal
+        showConfirmModal && React.createElement('div', { className: 'modal-overlay' },
+            React.createElement('div', { className: 'confirm-modal' },
+                React.createElement('h2', null, "Start a New Journey?"),
+                React.createElement('p', null, "Existing progress will be lost forever."),
+                React.createElement('div', { className: 'modal-actions' },
+                    React.createElement('button', {
+                        className: 'modal-btn cancel',
+                        onClick: () => setShowConfirmModal(false)
+                    }, "Cancel"),
+                    React.createElement('button', {
+                        className: 'modal-btn confirm',
+                        onClick: startNewGame
+                    }, "Yes, Erase & Start")
+                )
+            )
+        ),
+
         React.createElement('style', null, `
             .main-menu {
                 height: 100vh;
@@ -122,6 +145,64 @@ const MainMenu = () => {
                 opacity: 0.3;
                 cursor: not-allowed;
                 border-color: transparent;
+            }
+
+            /* Modal Styles */
+            .modal-overlay {
+                position: fixed;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0, 0, 0, 0.7);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                backdrop-filter: blur(5px);
+                z-index: 1000;
+            }
+            .confirm-modal {
+                background: #1e293b;
+                border: 2px solid #ef4444;
+                padding: 30px;
+                border-radius: 10px;
+                max-width: 400px;
+                text-align: center;
+                box-shadow: 0 0 30px rgba(239, 68, 68, 0.3);
+                animation: popIn 0.3s ease;
+            }
+            .confirm-modal h2 {
+                color: #ef4444;
+                margin-bottom: 15px;
+            }
+            .confirm-modal p {
+                margin-bottom: 25px;
+                color: #cbd5e1;
+            }
+            .modal-actions {
+                display: flex;
+                justify-content: space-around;
+                gap: 15px;
+            }
+            .modal-btn {
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-weight: bold;
+                transition: transform 0.1s;
+            }
+            .modal-btn.cancel {
+                background: #475569;
+                color: white;
+            }
+            .modal-btn.confirm {
+                background: #ef4444;
+                color: white;
+            }
+            .modal-btn:hover {
+                transform: scale(1.05);
+            }
+            @keyframes popIn {
+                from { transform: scale(0.8); opacity: 0; }
+                to { transform: scale(1); opacity: 1; }
             }
         `)
     );
