@@ -65,7 +65,7 @@ const AchievementModal = ({ onClose }) => {
                     display: flex;
                     flex-direction: column;
                     gap: 10px;
-                    padding-bottom: 60px;
+                    padding-bottom: 30px;
                 }
                 
                 .achievement-card { 

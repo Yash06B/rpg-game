@@ -109,7 +109,7 @@ const QuestTracker = ({ onClose }) => {
                     padding: 20px;
                     overflow-y: auto;
                     flex: 1;
-                    padding-bottom: 60px;
+                    padding-bottom: 30px;
                 }
                 .section-title {
                     font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase;

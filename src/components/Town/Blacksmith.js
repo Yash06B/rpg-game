@@ -205,7 +205,7 @@ const Blacksmith = ({ onClose }) => {
       .tabs button { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 8px 20px; cursor: pointer; border-radius: var(--radius-md); }
       .tabs button.active { background: var(--primary); color: white; border-color: var(--primary); }
       
-      .bs-content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 60px; }
+      .bs-content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 30px; }
       
       .recipe-card {
         background: var(--bg-dark);

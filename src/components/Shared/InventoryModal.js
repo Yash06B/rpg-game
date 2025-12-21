@@ -54,7 +54,7 @@ const InventoryModal = ({ onClose }) => {
         gap: 10px;
         overflow-y: auto;
         flex: 1;
-        padding-bottom: 60px; /* Extra spacing */
+        padding-bottom: 30px; /* Reduced from 60px */
       }
       .inv-slot {
         background: var(--bg-dark);

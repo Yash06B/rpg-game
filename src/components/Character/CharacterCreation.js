@@ -94,7 +94,7 @@ const CharacterCreation = () => {
         overflow-y: auto;
         padding: 10px;
         flex: 1;
-        padding-bottom: 80px;
+        padding-bottom: 30px;
       }
       .class-card {
         background: var(--bg-card);

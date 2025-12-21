@@ -91,7 +91,7 @@ const PassiveSkillManager = ({ onClose }) => {
                 overflow-y: auto;
                 flex: 1;
                 padding: 5px;
-                padding-bottom: 60px;
+                padding-bottom: 30px;
             }
       .passive-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
       

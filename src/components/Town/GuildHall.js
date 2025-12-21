@@ -226,6 +226,7 @@ const GuildHall = ({ onClose }) => {
         border: 2px solid var(--border);
         border-radius: var(--radius-md);
         padding: 15px;
+        padding-bottom: 30px;
         transition: all 0.2s;
       }
       .skill-card:hover { border-color: var(--primary); }
