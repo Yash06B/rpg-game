@@ -8,72 +8,59 @@ import EvolutionModal from './components/Character/EvolutionModal.js';
 import QuestTracker from './components/Shared/QuestTracker.js';
 import StoryModal from './components/Shared/StoryModal.js';
 import VictoryScreen from './components/Shared/VictoryScreen.js';
-
+import MainMenu from './components/MainMenu.js';
 import { ACHIEVEMENTS } from './data/achievements.js';
 
 const GameContainer = () => {
     const { state } = useGame();
 
-    import MainMenu from './components/MainMenu.js';
-    import { ACHIEVEMENTS } from './data/achievements.js';
+    // View Router
+    const renderView = () => {
+        switch (state.system.view) {
+            case 'main_menu': return React.createElement(MainMenu);
+            case 'character_creation': return React.createElement(CharacterCreation);
+            case 'town': return React.createElement(TownInterface);
+            case 'combat': return React.createElement(CombatInterface);
+            case 'admin': return React.createElement('div', null, "Admin View");
+            default: return React.createElement('div', { className: 'error' }, "Unknown View: " + state.system.view);
+        }
+    };
 
-    const GameContainer = () => {
-        const { state } = useGame();
+    return React.createElement('div', { className: 'app-container' },
+        renderView(),
+        // Modular Overlays
+        state.system.adminMode && React.createElement(AdminPanel),
+        state.player.class && React.createElement(EvolutionModal),
+        React.createElement(StoryModal), // Narrative Controller
+        React.createElement(VictoryScreen), // Win State
+        // Quest Tracker (shows in town/combat, not in char creation)
+        state.system.view !== 'character_creation' && state.system.view !== 'main_menu' && React.createElement(QuestTracker)
+    );
+};
 
-        // View Router
-        const renderView = () => {
-            switch (state.system.view) {
-                case 'main_menu': return React.createElement(MainMenu);
-                case 'character_creation': return React.createElement(CharacterCreation);
-                case 'town': return React.createElement(TownInterface);
-                case 'combat': return React.createElement(CombatInterface);
-                case 'admin': return React.createElement('div', null, "Admin View");
-                default: return React.createElement('div', { className: 'error' }, "Unknown View: " + state.system.view);
+// Wrapper to allow useGame hook usage
+const GameContainerWithAchievements = () => {
+    const { state, dispatch, ACTIONS } = useGame();
+
+    // Global Achievement Check
+    React.useEffect(() => {
+        // Check all achievements
+        Object.values(ACHIEVEMENTS).forEach(ach => {
+            // If satisfied and not already unlocked
+            if (ach.condition(state) && !(state.player.achievements || []).includes(ach.id)) {
+                dispatch({ type: ACTIONS.UNLOCK_ACHIEVEMENT, payload: ach.id });
+                console.log(`Achievement Unlocked: ${ach.title}`);
             }
-        };
+        });
+    }, [state.player, state.world, dispatch, ACTIONS]);
 
-        return React.createElement('div', { className: 'app-container' },
-            renderView(),
-            // Modular Overlays
-            state.system.adminMode && React.createElement(AdminPanel),
-            state.player.class && React.createElement(EvolutionModal),
-            React.createElement(StoryModal), // Narrative Controller
-            React.createElement(VictoryScreen), // Win State
-            // Quest Tracker (shows in town/combat, not in char creation)
-            state.system.view !== 'character_creation' && React.createElement(QuestTracker)
-        );
-    };
+    return React.createElement(GameContainer);
+};
 
+const App = () => {
+    return React.createElement(GameProvider, null,
+        React.createElement(GameContainerWithAchievements)
+    );
+};
 
-
-    const App = () => {
-        return React.createElement(GameProvider, null,
-            React.createElement(GameContainerWithAchievements)
-        );
-    };
-
-    // Wrapper to allow useGame hook usage
-    const GameContainerWithAchievements = () => {
-        const { state, dispatch, ACTIONS } = useGame();
-
-        // Global Achievement Check
-        React.useEffect(() => {
-            // Check all achievements
-            Object.values(ACHIEVEMENTS).forEach(ach => {
-                // If satisfied and not already unlocked
-                if (ach.condition(state) && !(state.player.achievements || []).includes(ach.id)) {
-                    dispatch({ type: ACTIONS.UNLOCK_ACHIEVEMENT, payload: ach.id });
-                    // Could add a toast notification here
-                    console.log(`Achievement Unlocked: ${ach.title}`);
-                    // Simple toast system could go here
-
-                    // Alert for impact (optional, might be annoying if too many at once)
-                    // alert(`🏆 Achievement Unlocked: ${ach.title}\n${ach.description}`);
-                }
-            });
-        }, [state.player, state.world, dispatch, ACTIONS]);
-
-        return React.createElement(GameContainer);
-    };
-
-    export default App;
+export default App;
