@@ -125,6 +125,7 @@ export const CLASSES = {
         description: "The King of Classes. Smite evil with absolute power.",
         stats: { hp: 999, mp: 999, atk: 999, mag: 999, def: 999, spd: 999 }, // Max stats as requested
         growth: { hp: 50, mp: 50, atk: 20, mag: 20, def: 20, spd: 20 },
-        color: "#fbbf24" // Gold
+        color: "#fbbf24", // Gold
+        unlockable: true // Hidden from character creation
     }
 };

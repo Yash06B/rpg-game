@@ -3,64 +3,64 @@ import { useGame } from '../../context/GameContext.js';
 import { CLASSES } from '../../data/classes.js';
 
 const CharacterCreation = () => {
-    const { dispatch, ACTIONS } = useGame();
-    const [selectedClass, setSelectedClass] = useState(null);
-    const [name, setName] = useState('');
+  const { dispatch, ACTIONS } = useGame();
+  const [selectedClass, setSelectedClass] = useState(null);
+  const [name, setName] = useState('');
 
-    const handleStart = () => {
-        if (!name || !selectedClass) return;
+  const handleStart = () => {
+    if (!name || !selectedClass) return;
 
-        // Dispatch init
-        dispatch({
-            type: ACTIONS.SET_PLAYER_CLASS,
-            payload: {
-                className: CLASSES[selectedClass].label,
-                stats: CLASSES[selectedClass].stats
-            }
-        });
-    };
+    // Dispatch init
+    dispatch({
+      type: ACTIONS.SET_PLAYER_CLASS,
+      payload: {
+        className: CLASSES[selectedClass].label,
+        stats: CLASSES[selectedClass].stats
+      }
+    });
+  };
 
-    return React.createElement('div', { className: 'char-creation fade-in' },
-        React.createElement('div', { className: 'header' },
-            React.createElement('h1', null, "Create Your Hero"),
-            React.createElement('input', {
-                type: 'text',
-                placeholder: "Enter Hero Name...",
-                value: name,
-                onChange: (e) => setName(e.target.value),
-                className: 'name-input'
-            })
-        ),
-        React.createElement('div', { className: 'class-grid' },
-            Object.keys(CLASSES).map(key => {
-                const cls = CLASSES[key];
-                const isSelected = selectedClass === key;
+  return React.createElement('div', { className: 'char-creation fade-in' },
+    React.createElement('div', { className: 'header' },
+      React.createElement('h1', null, "Create Your Hero"),
+      React.createElement('input', {
+        type: 'text',
+        placeholder: "Enter Hero Name...",
+        value: name,
+        onChange: (e) => setName(e.target.value),
+        className: 'name-input'
+      })
+    ),
+    React.createElement('div', { className: 'class-grid' },
+      Object.keys(CLASSES).filter(key => !CLASSES[key].unlockable).map(key => {
+        const cls = CLASSES[key];
+        const isSelected = selectedClass === key;
 
-                return React.createElement('div', {
-                    key: cls.id,
-                    className: `class-card ${isSelected ? 'selected' : ''}`,
-                    onClick: () => setSelectedClass(key),
-                    style: { borderColor: isSelected ? cls.color : 'transparent' }
-                },
-                    React.createElement('h3', { style: { color: cls.color } }, cls.label),
-                    React.createElement('p', { className: 'desc' }, cls.description),
-                    React.createElement('div', { className: 'stats-mini' },
-                        React.createElement('span', null, `HP: ${cls.stats.hp}`),
-                        React.createElement('span', null, `MP: ${cls.stats.mp}`),
-                        React.createElement('span', null, `ATK: ${cls.stats.atk}`),
-                        React.createElement('span', null, `MAG: ${cls.stats.mag}`)
-                    )
-                );
-            })
-        ),
-        React.createElement('div', { className: 'footer' },
-            React.createElement('button', {
-                disabled: !name || !selectedClass,
-                onClick: handleStart,
-                className: 'start-btn'
-            }, "Embark on Journey")
-        ),
-        React.createElement('style', null, `
+        return React.createElement('div', {
+          key: cls.id,
+          className: `class-card ${isSelected ? 'selected' : ''}`,
+          onClick: () => setSelectedClass(key),
+          style: { borderColor: isSelected ? cls.color : 'transparent' }
+        },
+          React.createElement('h3', { style: { color: cls.color } }, cls.label),
+          React.createElement('p', { className: 'desc' }, cls.description),
+          React.createElement('div', { className: 'stats-mini' },
+            React.createElement('span', null, `HP: ${cls.stats.hp}`),
+            React.createElement('span', null, `MP: ${cls.stats.mp}`),
+            React.createElement('span', null, `ATK: ${cls.stats.atk}`),
+            React.createElement('span', null, `MAG: ${cls.stats.mag}`)
+          )
+        );
+      })
+    ),
+    React.createElement('div', { className: 'footer' },
+      React.createElement('button', {
+        disabled: !name || !selectedClass,
+        onClick: handleStart,
+        className: 'start-btn'
+      }, "Embark on Journey")
+    ),
+    React.createElement('style', null, `
       .char-creation {
         padding: 40px;
         max-width: 1200px;
@@ -144,7 +144,7 @@ const CharacterCreation = () => {
         transform: none;
       }
     `)
-    );
+  );
 };
 
 export default CharacterCreation;
