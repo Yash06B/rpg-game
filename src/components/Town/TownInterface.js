@@ -9,6 +9,7 @@ import QuestBoard from '../Quests/QuestBoard.js';
 import QuestBoard from '../Quests/QuestBoard.js';
 import AchievementModal from '../Shared/AchievementModal.js';
 import NPCList from './NPCList.js';
+import TrainingGrounds from '../UniqueBuildings/TrainingGrounds.js';
 
 const TownInterface = () => {
     const { state, dispatch, ACTIONS } = useGame();
@@ -37,6 +38,11 @@ const TownInterface = () => {
 
         if (bKey === 'quest_board') {
             setShowQuestBoard(true);
+            return;
+        }
+
+        if (bKey === 'training') {
+            setActiveBuilding('training');
             return;
         }
 
@@ -134,12 +140,6 @@ const TownInterface = () => {
         React.createElement('button', {
             className: 'admin-btn-trigger',
             onClick: () => {
-        ),
-
-        // Admin Button
-        React.createElement('button', {
-            className: 'admin-btn-trigger',
-            onClick: () => {
                 const code = prompt("Enter Admin Code:");
                 if (code === 'yash') dispatch({ type: ACTIONS.ADMIN_TOGGLE, payload: true });
             }
@@ -151,8 +151,9 @@ const TownInterface = () => {
         showQuestBoard && React.createElement(QuestBoard, { onClose: () => setShowQuestBoard(false) }),
         showAchievements && React.createElement(AchievementModal, { onClose: () => setShowAchievements(false) }),
         activeBuilding === 'blacksmith' && React.createElement(Blacksmith, { onClose: () => setActiveBuilding(null) }),
-        activeBuilding === 'guild' && React.createElement(GuildHall, { onClose: () => setActiveBuilding(null) })
-        );
+        activeBuilding === 'guild' && React.createElement(GuildHall, { onClose: () => setActiveBuilding(null) }),
+        activeBuilding === 'training' && React.createElement(TrainingGrounds, { onClose: () => setActiveBuilding(null) })
+    );
 };
 
 export default TownInterface;
