@@ -9,6 +9,8 @@ import QuestTracker from './components/Shared/QuestTracker.js';
 import StoryModal from './components/Shared/StoryModal.js';
 import VictoryScreen from './components/Shared/VictoryScreen.js';
 
+import { ACHIEVEMENTS } from './data/achievements.js';
+
 const GameContainer = () => {
     const { state } = useGame();
 
@@ -35,7 +37,7 @@ const GameContainer = () => {
     );
 };
 
-import { ACHIEVEMENTS } from './data/achievements.js';
+
 
 const App = () => {
     return React.createElement(GameProvider, null,
