@@ -17,6 +17,7 @@ const initialState = {
         passiveSkills: [],
         tier: 0,
         evolutionHistory: [],
+        achievements: []
     },
     world: {
         location: "character_creation",
@@ -42,7 +43,8 @@ const ACTIONS = {
     UPDATE_STATS: 'UPDATE_STATS',
     ADMIN_TOGGLE: 'ADMIN_TOGGLE',
     LOAD_STATE: 'LOAD_STATE',
-    UPDATE_PLAYER_DATA: 'UPDATE_PLAYER_DATA'
+    UPDATE_PLAYER_DATA: 'UPDATE_PLAYER_DATA',
+    UNLOCK_ACHIEVEMENT: 'UNLOCK_ACHIEVEMENT'
 };
 
 // --- Reducer ---
@@ -85,6 +87,16 @@ function gameReducer(state, action) {
                 ...state,
                 player: action.payload.player || action.payload,
                 world: action.payload.world || state.world
+            };
+
+        case ACTIONS.UNLOCK_ACHIEVEMENT:
+            if (state.player.achievements.includes(action.payload)) return state;
+            return {
+                ...state,
+                player: {
+                    ...state.player,
+                    achievements: [...state.player.achievements, action.payload]
+                }
             };
 
         default:

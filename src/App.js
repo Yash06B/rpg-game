@@ -35,10 +35,36 @@ const GameContainer = () => {
     );
 };
 
+import { ACHIEVEMENTS } from './data/achievements.js';
+
 const App = () => {
     return React.createElement(GameProvider, null,
-        React.createElement(GameContainer)
+        React.createElement(GameContainerWithAchievements)
     );
+};
+
+// Wrapper to allow useGame hook usage
+const GameContainerWithAchievements = () => {
+    const { state, dispatch, ACTIONS } = useGame();
+
+    // Global Achievement Check
+    React.useEffect(() => {
+        // Check all achievements
+        Object.values(ACHIEVEMENTS).forEach(ach => {
+            // If satisfied and not already unlocked
+            if (ach.condition(state) && !(state.player.achievements || []).includes(ach.id)) {
+                dispatch({ type: ACTIONS.UNLOCK_ACHIEVEMENT, payload: ach.id });
+                // Could add a toast notification here
+                console.log(`Achievement Unlocked: ${ach.title}`);
+                // Simple toast system could go here
+
+                // Alert for impact (optional, might be annoying if too many at once)
+                // alert(`🏆 Achievement Unlocked: ${ach.title}\n${ach.description}`);
+            }
+        });
+    }, [state.player, state.world, dispatch, ACTIONS]);
+
+    return React.createElement(GameContainer);
 };
 
 export default App;

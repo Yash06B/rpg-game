@@ -5,13 +5,15 @@ import InventoryModal from '../Shared/InventoryModal.js';
 import Blacksmith from './Blacksmith.js';
 import GuildHall from './GuildHall.js';
 import PassiveSkillManager from '../Shared/PassiveSkillManager.js';
-import QuestBoard from '../Shared/QuestBoard.js';
+import QuestBoard from '../Quests/QuestBoard.js';
+import AchievementModal from '../Shared/AchievementModal.js';
 
 const TownInterface = () => {
     const { state, dispatch, ACTIONS } = useGame();
     const [showInventory, setShowInventory] = useState(false);
     const [showPassives, setShowPassives] = useState(false);
     const [showQuestBoard, setShowQuestBoard] = useState(false);
+    const [showAchievements, setShowAchievements] = useState(false);
     const [activeBuilding, setActiveBuilding] = useState(null);
 
     const currentTownId = state.world.location === 'town_1' ? 'town_1' : state.world.location;
@@ -97,36 +99,51 @@ const TownInterface = () => {
                 React.createElement('button', {
                     className: 'action-btn',
                     onClick: () => setShowInventory(true)
-                }, "Inventory / Bag"),
-
                 React.createElement('button', {
-                    className: 'action-btn passive-btn',
-                    onClick: () => setShowPassives(true)
-                }, "Passive Skills"),
+                        className: 'action-btn',
+                        onClick: () => setShowInventory(true)
+                    }, "Inventory / Bag"),
 
-                React.createElement('button', {
-                    className: 'action-btn map-btn',
-                    onClick: () => alert("World Map coming soon")
-                }, "Open World Map")
+                    React.createElement('button', {
+                        className: 'action-btn',
+                        onClick: () => setShowAchievements(true)
+                    }, "🏆 Achievements"),
+
+                    React.createElement('button', {
+                        className: 'action-btn passive-btn',
+                        onClick: () => setShowPassives(true)
+                    }, "Passive Skills"),
+
+                    React.createElement('button', {
+                        className: 'action-btn map-btn',
+                        onClick: () => alert("World Map coming soon")
+                    }, "Open World Map")
             )
+            ),
+
+            // Admin Button
+            React.createElement('button', {
+                className: 'admin-btn-trigger',
+                onClick: () => {
         ),
 
-        // Admin Button
-        React.createElement('button', {
-            className: 'admin-btn-trigger',
-            onClick: () => {
-                const code = prompt("Enter Admin Code:");
-                if (code === 'yash') dispatch({ type: ACTIONS.ADMIN_TOGGLE, payload: true });
-            }
-        }, "⚙"),
+            // Admin Button
+            React.createElement('button', {
+                className: 'admin-btn-trigger',
+                onClick: () => {
+                    const code = prompt("Enter Admin Code:");
+                    if (code === 'yash') dispatch({ type: ACTIONS.ADMIN_TOGGLE, payload: true });
+                }
+            }, "⚙"),
 
-        // Modals
-        showInventory && React.createElement(InventoryModal, { onClose: () => setShowInventory(false) }),
-        showPassives && React.createElement(PassiveSkillManager, { onClose: () => setShowPassives(false) }),
-        showQuestBoard && React.createElement(QuestBoard, { onClose: () => setShowQuestBoard(false) }),
-        activeBuilding === 'blacksmith' && React.createElement(Blacksmith, { onClose: () => setActiveBuilding(null) }),
-        activeBuilding === 'guild' && React.createElement(GuildHall, { onClose: () => setActiveBuilding(null) })
-    );
+            // Modals
+            showInventory && React.createElement(InventoryModal, { onClose: () => setShowInventory(false) }),
+            showPassives && React.createElement(PassiveSkillManager, { onClose: () => setShowPassives(false) }),
+            showQuestBoard && React.createElement(QuestBoard, { onClose: () => setShowQuestBoard(false) }),
+            showAchievements && React.createElement(AchievementModal, { onClose: () => setShowAchievements(false) }),
+            activeBuilding === 'blacksmith' && React.createElement(Blacksmith, { onClose: () => setActiveBuilding(null) }),
+            activeBuilding === 'guild' && React.createElement(GuildHall, { onClose: () => setActiveBuilding(null) })
+        );
 };
 
 export default TownInterface;
