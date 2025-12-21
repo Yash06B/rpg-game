@@ -53,7 +53,14 @@ const ACTIONS = {
 function gameReducer(state, action) {
     switch (action.type) {
         case ACTIONS.INIT_GAME:
-            return { ...initialState };
+        case ACTIONS.INIT_GAME:
+            return {
+                ...initialState,
+                system: {
+                    ...initialState.system,
+                    view: "character_creation"
+                }
+            };
 
         case ACTIONS.SET_PLAYER_CLASS:
             return {
