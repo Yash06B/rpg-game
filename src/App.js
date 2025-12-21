@@ -6,6 +6,8 @@ import CombatInterface from './components/Combat/CombatInterface.js';
 import AdminPanel from './components/Admin/AdminPanel.js';
 import EvolutionModal from './components/Character/EvolutionModal.js';
 import QuestTracker from './components/Shared/QuestTracker.js';
+import StoryModal from './components/Shared/StoryModal.js';
+import VictoryScreen from './components/Shared/VictoryScreen.js';
 
 const GameContainer = () => {
     const { state } = useGame();
@@ -26,6 +28,8 @@ const GameContainer = () => {
         // Modular Overlays
         state.system.adminMode && React.createElement(AdminPanel),
         state.player.class && React.createElement(EvolutionModal),
+        React.createElement(StoryModal), // Narrative Controller
+        React.createElement(VictoryScreen), // Win State
         // Quest Tracker (shows in town/combat, not in char creation)
         state.system.view !== 'character_creation' && React.createElement(QuestTracker)
     );

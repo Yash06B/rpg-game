@@ -215,14 +215,24 @@ const CombatInterface = () => {
       addLog(`Found: ${randomLoot.replace('_', ' ')}`);
     }
 
+    // CHECK FOR DEMON LORD VICTORY
+    const demonLords = ['pride', 'greed', 'wrath', 'envy', 'lust', 'gluttony', 'sloth'];
+    let isDemonLord = false;
+
+    // Check if ID matches a demon lord ID
+    if (demonLords.includes(enemy.id)) {
+      isDemonLord = true;
+      addLog(`🔥 You have defeated the ${enemy.name.split(' - ')[0]} Demon Lord!`);
+    }
+
     setTimeout(() => {
       const newExp = state.player.exp + expGain;
       const newGold = state.player.gold + goldGain;
       const leveledUp = newExp >= state.player.maxExp;
 
-      dispatch({
-        type: ACTIONS.UPDATE_PLAYER_DATA,
-        payload: {
+      // Prepare updates
+      const updates = {
+        player: {
           ...state.player,
           exp: leveledUp ? newExp - state.player.maxExp : newExp,
           level: leveledUp ? state.player.level + 1 : state.player.level,
@@ -234,6 +244,22 @@ const CombatInterface = () => {
             mp: state.player.stats.maxMp
           }
         }
+      };
+
+      // If demon lord, update world flags
+      if (isDemonLord) {
+        updates.world = {
+          ...state.world,
+          questFlags: {
+            ...state.world.questFlags,
+            [`${enemy.id}_defeated`]: true
+          }
+        };
+      }
+
+      dispatch({
+        type: ACTIONS.UPDATE_PLAYER_DATA,
+        payload: updates
       });
 
       if (leveledUp) addLog(`LEVEL UP! You are now Level ${state.player.level + 1}!`);
