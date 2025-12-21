@@ -12,7 +12,9 @@ const initialState = {
         inventory: [], // [{ id, count }]
         gold: 0,
         equipment: { weapon: null, armor: null, accessory: null },
-        skills: [], // [{ id, level, exp }]
+        skills: [], // [{ id: 'fireball', level: 1, exp: 0, maxExp: 100 }]
+        equippedSkills: [], // Active skill slots (max 8)
+        passiveSkills: [], // Passive skill slots (max 4)
         tier: 0, // 0=Base, 1=Lv10, 2=Lv40, ...
         evolutionHistory: [], // ["Mage", "Pyromancer"]
     },

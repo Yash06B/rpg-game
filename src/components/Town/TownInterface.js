@@ -3,6 +3,7 @@ import { useGame } from '../../context/GameContext.js';
 import { TOWNS, BUILDINGS } from '../../data/towns.js';
 import InventoryModal from '../Shared/InventoryModal.js';
 import Blacksmith from './Blacksmith.js';
+import GuildHall from './GuildHall.js';
 
 const TownInterface = () => {
     const { state, dispatch, ACTIONS } = useGame();
@@ -18,6 +19,11 @@ const TownInterface = () => {
 
         if (bKey === 'blacksmith') {
             setActiveBuilding('blacksmith');
+            return;
+        }
+
+        if (bKey === 'guild') {
+            setActiveBuilding('guild');
             return;
         }
 
@@ -94,7 +100,8 @@ const TownInterface = () => {
 
         // Modals
         showInventory && React.createElement(InventoryModal, { onClose: () => setShowInventory(false) }),
-        activeBuilding === 'blacksmith' && React.createElement(Blacksmith, { onClose: () => setActiveBuilding(null) })
+        activeBuilding === 'blacksmith' && React.createElement(Blacksmith, { onClose: () => setActiveBuilding(null) }),
+        activeBuilding === 'guild' && React.createElement(GuildHall, { onClose: () => setActiveBuilding(null) })
     );
 };
 
