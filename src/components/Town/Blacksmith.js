@@ -252,7 +252,7 @@ const Blacksmith = ({ onClose }) => {
             }
             .enhance-actions { display: flex; gap: 20px; }
         `)
-    );  );
+    );
 };
 
 export default Blacksmith;
