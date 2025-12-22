@@ -38,128 +38,99 @@ const PassiveSkillManager = ({ onClose }) => {
     };
 
     return React.createElement('div', { className: 'modal-overlay fade-in' },
-        React.createElement('div', { className: 'modal-content passive-modal' },
-            React.createElement('div', { className: 'modal-header' },
-                React.createElement('h2', null, "⭐ Passive Skills"),
-                React.createElement('button', { className: 'close-btn', onClick: onClose }, "CLOSE")
+        React.createElement('div', { className: 'retro-modal-box' },
+            React.createElement('div', { className: 'retro-modal-header' },
+                React.createElement('h2', { className: 'retro-h2' }, "> PASSIVE AUGMENTATIONS"),
+                React.createElement('button', { className: 'retro-close-btn', onClick: onClose }, "[ X ] CLOSE")
             ),
 
-            React.createElement('div', { className: 'passive-content' },
-                React.createElement('p', { className: 'info' },
-                    `Equip up to 4 passive skills. They are always active. (${passiveSkills.length}/4 equipped)`
+            React.createElement('div', { className: 'retro-content-area' },
+                React.createElement('div', { className: 'retro-status-box' },
+                    React.createElement('p', { className: 'retro-text' }, `> ACTIVE SLOTS DEPLOYED: ${passiveSkills.length}/4`),
+                    React.createElement('p', { className: 'retro-text small' }, "> PASSIVE MODULES ARE ALWAYS ACTIVE ONCE EQUIPPED.")
                 ),
 
-                availablePassives.length === 0
-                    ? React.createElement('p', { className: 'no-passives' },
-                        "No passive skills learned yet. Level up to unlock more!"
-                    )
-                    : React.createElement('div', { className: 'passive-grid' },
-                        availablePassives.map(ps => {
+                React.createElement('div', { className: 'retro-list-container' },
+                    availablePassives.length === 0
+                        ? React.createElement('p', { className: 'retro-text' }, "> NO PASSIVE AUGMENTATIONS ACQUIRED.")
+                        : availablePassives.map((ps, idx) => {
                             const skillData = SKILLS[ps.id];
                             const isEquipped = passiveSkills.includes(ps.id);
 
                             return React.createElement('div', {
                                 key: ps.id,
-                                className: `passive-card ${isEquipped ? 'equipped' : ''}`,
+                                className: `retro-list-item ${isEquipped ? 'equipped' : ''} clickable`,
                                 onClick: () => handleTogglePassive(ps.id)
                             },
-                                React.createElement('div', { className: 'passive-header' },
-                                    React.createElement('h4', null, skillData.name),
-                                    isEquipped && React.createElement('span', { className: 'equipped-badge' }, "✓")
-                                ),
-                                React.createElement('p', { className: 'passive-desc' }, skillData.description),
-                                React.createElement('p', { className: 'passive-effect' },
-                                    `Effect: ${skillData.effect || 'Stat boost'}`
+                                React.createElement('div', { className: 'item-details' },
+                                    React.createElement('div', { className: 'skill-header-line' },
+                                        React.createElement('span', { className: 'skill-name' },
+                                            `> ${skillData.name.toUpperCase()}`
+                                        ),
+                                        isEquipped && React.createElement('span', { className: 'skill-meta' }, "[ ACTIVE ]")
+                                    ),
+                                    React.createElement('p', { className: 'skill-desc' }, skillData.description),
+                                    React.createElement('span', { className: 'skill-meta' }, `EFFECT: ${skillData.effect || 'STAT BOOST'}`)
                                 ),
                                 React.createElement('button', {
-                                    className: `equip-btn ${isEquipped ? 'equipped' : ''}`
-                                }, isEquipped ? "Equipped" : "Equip")
-                            );
+                                    className: `retro-action-btn small ${isEquipped ? 'highlight' : ''}`
+                                }, isEquipped ? "[ EQUIPPED ]" : "[ EQUIP ]")
+                            )
                         })
-                    )
-            )
-        ),
+                )
+            ),
 
-        React.createElement('style', null, `
-      .passive-modal { width: 700px; max-height: 80vh; }
-      .passive-content { padding: 20px; }
-      .info { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; text-align: center; }
-            .skill-list {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                gap: 15px;
-                overflow-y: auto;
-                flex: 1;
-                padding: 5px;
-                padding-bottom: 30px;
-            }
-      .passive-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
-      
-      .passive-card {
-        background: var(--bg-dark);
-        border: 2px solid var(--border);
-        border-radius: var(--radius-md);
-        padding: 15px;
-        cursor: pointer;
-        transition: all 0.2s;
-      }
-      .passive-card:hover { border-color: var(--primary); transform: translateY(-2px); }
-      .passive-card.equipped {
-        border-color: #a78bfa;
-        background: rgba(167, 139, 250, 0.1);
-        box-shadow: 0 0 15px rgba(167, 139, 250, 0.3);
-      }
-      
-      .passive-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
-      }
-      .passive-header h4 { margin: 0; color: var(--text-main); }
-      .equipped-badge {
-        background: #a78bfa;
-        color: white;
-        padding: 3px 8px;
-        border-radius: 10px;
-        font-size: 0.75rem;
-        font-weight: bold;
-      }
-      
-      .passive-desc {
-        font-size: 0.85rem;
-        color: var(--text-muted);
-        margin-bottom: 10px;
-        line-height: 1.4;
-      }
-      
-      .passive-effect {
-        font-size: 0.8rem;
-        color: #10b981;
-        font-weight: bold;
-        margin-bottom: 10px;
-      }
-      
-      .equip-btn {
-        width: 100%;
-        padding: 8px;
-        border: none;
-        border-radius: var(--radius-md);
-        background: var(--primary);
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.2s;
-      }
-      .equip-btn.equipped { background: #a78bfa; }
-      
-      .no-passives {
-        text-align: center;
-        color: var(--text-muted);
-        padding: 40px;
-        font-style: italic;
-      }
-    `)
+            React.createElement('style', null, `
+                .retro-modal-box {
+                    background: #000;
+                    border: 2px solid var(--primary);
+                    padding: 20px;
+                    width: 700px;
+                    max-width: 95vw;
+                    max-height: 80vh;
+                    display: flex; flex-direction: column;
+                    color: var(--primary);
+                    font-family: monospace;
+                    box-shadow: 0 0 0 1000px rgba(0,0,0,0.8);
+                }
+                .retro-modal-header {
+                    display: flex; justify-content: space-between; align-items: center;
+                    border-bottom: 2px solid var(--border);
+                    padding-bottom: 15px; margin-bottom: 20px;
+                }
+                .retro-h2 { margin: 0; color: var(--accent); }
+                .retro-close-btn { background: transparent; border: none; color: var(--danger); font-family: monospace; cursor: pointer; }
+                .retro-close-btn:hover { background: var(--danger); color: black; }
+
+                .retro-content-area { display: flex; flex-direction: column; gap: 20px; overflow-y: auto; padding-right: 10px; flex: 1; }
+                .retro-status-box { text-align: center; border: 1px dashed #333; padding: 10px; }
+                .retro-text { margin: 5px 0; color: #aaa; }
+                .retro-text.small { font-size: 0.8rem; color: #666; font-style: italic; }
+
+                .retro-list-container { display: flex; flex-direction: column; gap: 10px; }
+                .retro-list-item { 
+                    display: flex; justify-content: space-between; align-items: center; 
+                    border: 1px solid #333; padding: 12px; cursor: pointer;
+                }
+                .retro-list-item:hover { border-color: #555; background: #111; }
+                .retro-list-item.equipped { border-color: var(--accent); background: rgba(167, 139, 250, 0.1); }
+                
+                .item-details { flex: 1; margin-right: 15px; }
+                .skill-header-line { display: flex; justify-content: space-between; margin-bottom: 5px; }
+                .skill-name { font-weight: bold; color: var(--primary); }
+                .retro-list-item.equipped .skill-name { color: var(--accent); }
+                .skill-desc { font-size: 0.9rem; color: #aaa; margin: 0 0 5px 0; }
+                .skill-meta { font-size: 0.8rem; color: #666; font-weight: bold; }
+                .retro-list-item.equipped .skill-meta { color: var(--accent); }
+
+                .retro-action-btn.small { 
+                    padding: 5px 10px; border: 1px solid #444; background: transparent; 
+                    color: #888; cursor: pointer; font-family: monospace; min-width: 80px;
+                }
+                .retro-action-btn.small:hover { border-color: var(--primary); color: var(--primary); }
+                .retro-action-btn.small.highlight { border-color: var(--accent); background: var(--accent); color: black; }
+            `)
+        )
     );
 };
 
