@@ -105,104 +105,85 @@ const GuildHall = ({ onClose }) => {
     };
 
     return React.createElement('div', { className: 'modal-overlay fade-in' },
-        React.createElement('div', { className: 'modal-content guild-modal' },
-            React.createElement('div', { className: 'modal-header' },
-                React.createElement('h2', null, "🏛️ Adventurer's Guild"),
-                React.createElement('div', { className: 'tabs' },
-                    React.createElement('button', { className: tab === 'learn' ? 'active' : '', onClick: () => setTab('learn') }, "My Skills"),
-                    React.createElement('button', { className: tab === 'shop' ? 'active' : '', onClick: () => setTab('shop') }, "Skill Shop")
-                ),
-                React.createElement('button', { className: 'close-btn', onClick: onClose }, "CLOSE")
+        React.createElement('div', { className: 'retro-modal-box' },
+            React.createElement('div', { className: 'retro-modal-header' },
+                React.createElement('h2', { className: 'retro-h2' }, "> ADVENTURER'S GUILD"),
+                React.createElement('div', { className: 'retro-tabs' },
+                    React.createElement('button', { className: `retro-tab-btn ${tab === 'learn' ? 'active' : ''}`, onClick: () => setTab('learn') }, "[ 1 ] MY SKILLS"),
+                    React.createElement('button', { className: `retro-tab-btn ${tab === 'shop' ? 'active' : ''}`, onClick: () => setTab('shop') }, "[ 2 ] SKILL SHOP"),
+                    React.createElement('button', { className: 'retro-tab-btn', onClick: onClose }, "[ X ] EXIT")
+                )
             ),
 
-            React.createElement('div', { className: 'guild-content' },
+            React.createElement('div', { className: 'retro-content-area' },
 
                 // === MY SKILLS TAB ===
-                tab === 'learn' && React.createElement('div', { className: 'skills-panel' },
-                    React.createElement('h3', null, `${playerClass} Skills (${playerSkills.length})`),
-                    React.createElement('p', { className: 'info-text' }, "Skills auto-unlock as you level up. Use in combat to gain skill XP and evolve them!"),
+                tab === 'learn' && React.createElement('div', { className: 'retro-list-container' },
+                    React.createElement('h3', { className: 'retro-h3' }, `> CLASS: ${playerClass.toUpperCase()} | ABILITIES: ${playerSkills.length}`),
+                    React.createElement('p', { className: 'retro-text' }, "> USE ABILITIES IN COMBAT TO INCREASE PROFICIENCY."),
 
                     playerSkills.length === 0
-                        ? React.createElement('p', { className: 'no-skills' }, "No skills yet. Keep leveling up!")
-                        : React.createElement('div', { className: 'skill-list' },
-                            playerSkills.map(ps => {
-                                const skillData = SKILLS[ps.id];
-                                if (!skillData) return null;
+                        ? React.createElement('p', { className: 'retro-text' }, "> NO COMBAT DATA ACQUIRED.")
+                        : playerSkills.map((ps, idx) => {
+                            const skillData = SKILLS[ps.id];
+                            if (!skillData) return null;
 
-                                const evolvedSkill = getSkillAtLevel(ps.id, ps.level);
-                                const isEquipped = equippedSkills.includes(ps.id);
-                                const isPassive = skillData.type === 'passive';
+                            const evolvedSkill = getSkillAtLevel(ps.id, ps.level);
+                            const isEquipped = equippedSkills.includes(ps.id);
+                            const isPassive = skillData.type === 'passive';
 
-                                return React.createElement('div', {
-                                    key: ps.id,
-                                    className: `skill-card ${isEquipped ? 'equipped' : ''} ${isPassive ? 'passive' : ''}`
-                                },
-                                    React.createElement('div', { className: 'skill-header' },
-                                        React.createElement('h4', null, evolvedSkill.name || skillData.name),
-                                        React.createElement('span', { className: 'skill-level' }, `Lv.${ps.level}`)
+                            return React.createElement('div', {
+                                key: ps.id,
+                                className: `retro-list-item ${isEquipped ? 'equipped' : ''}`
+                            },
+                                React.createElement('div', { className: 'item-details' },
+                                    React.createElement('div', { className: 'skill-header-line' },
+                                        React.createElement('span', { className: 'skill-name' },
+                                            `[ ${idx + 1} ] ${evolvedSkill.name.toUpperCase()}`
+                                        ),
+                                        React.createElement('span', { className: 'skill-meta' }, `LV.${ps.level}`)
                                     ),
                                     React.createElement('p', { className: 'skill-desc' }, evolvedSkill.description || skillData.description),
-
-                                    // Stats
-                                    React.createElement('div', { className: 'skill-stats' },
-                                        skillData.baseDamage && React.createElement('span', null, `DMG: ${evolvedSkill.baseDamage || skillData.baseDamage}`),
-                                        skillData.mpCost && React.createElement('span', null, `MP: ${evolvedSkill.mpCost || skillData.mpCost}`),
-                                        skillData.type && React.createElement('span', { className: 'type-badge' }, skillData.type)
+                                    React.createElement('div', { className: 'skill-stats-line' },
+                                        React.createElement('span', null, `MP: ${evolvedSkill.mpCost || skillData.mpCost || 0}`),
+                                        React.createElement('span', null, `TYPE: ${skillData.type ? skillData.type.toUpperCase() : 'ACTIVE'}`),
+                                        React.createElement('span', null, `XP: ${ps.exp}/${ps.maxExp}`)
                                     ),
-
-                                    // XP Bar
-                                    React.createElement('div', { className: 'xp-bar' },
-                                        React.createElement('div', {
-                                            className: 'xp-fill',
-                                            style: { width: `${(ps.exp / ps.maxExp) * 100}%` }
-                                        }),
-                                        React.createElement('span', { className: 'xp-text' }, `${ps.exp}/${ps.maxExp} XP`)
-                                    ),
-
-                                    // Evolution Preview
+                                    // Evolution Hint
                                     ps.level < 10 && React.createElement('p', { className: 'evolution-hint' },
-                                        ps.level < 3 ? `→ Evolves at Lv.3` :
-                                            ps.level < 7 ? `→ Evolves at Lv.7` :
-                                                `→ Final form at Lv.10`
-                                    ),
-
-                                    // Equip Button (only for active skills)
-                                    !isPassive && React.createElement('button', {
-                                        className: `equip-btn ${isEquipped ? 'equipped' : ''}`,
-                                        onClick: () => handleEquipSkill(ps.id)
-                                    }, isEquipped ? "✓ Equipped" : "Equip")
-                                );
-                            })
-                        )
+                                        `> NEXT EVOLUTION: LV.${ps.level < 3 ? 3 : ps.level < 7 ? 7 : 10}`
+                                    )
+                                ),
+                                !isPassive ? React.createElement('button', {
+                                    className: `retro-action-btn ${isEquipped ? 'highlight' : ''}`,
+                                    onClick: () => handleEquipSkill(ps.id)
+                                }, isEquipped ? "[ EQUIPPED ]" : "[ EQUIP ]") : React.createElement('span', { className: 'retro-text small' }, "[ PASSIVE ]")
+                            );
+                        })
                 ),
 
                 // === SKILL SHOP TAB ===
                 tab === 'shop' && React.createElement('div', { className: 'shop-panel' },
-                    React.createElement('h3', null, "Universal Skills for Purchase"),
-                    React.createElement('p', { className: 'info-text' }, "These skills can be used by any class!"),
+                    React.createElement('h3', { className: 'retro-h3' }, "> UNIVERSAL SKILL IDATABASE"),
+                    React.createElement('p', { className: 'retro-text' }, "> AVAILABLE FOR PURCHASE WITH GOLD."),
 
-                    React.createElement('div', { className: 'skill-list' },
+                    React.createElement('div', { className: 'retro-list-container' },
                         purchasableSkills.map(skill => {
                             const owned = skill.owned;
                             return React.createElement('div', {
                                 key: skill.id,
-                                className: `skill-card shop-card ${owned ? 'owned' : ''}`
+                                className: `retro-list-item ${owned ? 'disabled' : ''}`
                             },
-                                React.createElement('div', { className: 'skill-header' },
-                                    React.createElement('h4', null, skill.name),
-                                    React.createElement('span', { className: 'price' }, `${skill.purchaseCost}g`)
-                                ),
-                                React.createElement('p', { className: 'skill-desc' }, skill.description),
-                                React.createElement('div', { className: 'skill-stats' },
-                                    skill.baseDamage && React.createElement('span', null, `DMG: ${skill.baseDamage}`),
-                                    skill.mpCost && React.createElement('span', null, `MP: ${skill.mpCost}`),
-                                    React.createElement('span', { className: 'type-badge' }, skill.type)
+                                React.createElement('div', { className: 'item-details' },
+                                    React.createElement('span', { className: 'skill-name' }, `> ${skill.name.toUpperCase()}`),
+                                    React.createElement('p', { className: 'skill-desc' }, skill.description),
+                                    React.createElement('span', { className: 'skill-meta' }, `COST: ${skill.purchaseCost}G`)
                                 ),
                                 React.createElement('button', {
-                                    className: 'purchase-btn',
+                                    className: 'retro-action-btn',
                                     disabled: owned || state.player.gold < skill.purchaseCost,
                                     onClick: () => handlePurchaseSkill(skill.id)
-                                }, owned ? "Owned" : "Purchase")
+                                }, owned ? "[ OWNED ]" : "[ LEARN ]")
                             );
                         })
                     )
@@ -212,63 +193,60 @@ const GuildHall = ({ onClose }) => {
 
         // Styles
         React.createElement('style', null, `
-      .guild-modal { width: 900px; max-height: 90vh; }
-      
-      .guild-content { padding: 20px; max-height: 70vh; overflow-y: auto; }
-      
-      .skills-panel h3, .shop-panel h3 { color: var(--primary); margin-bottom: 10px; }
-      .info-text { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px; font-style: italic; }
-      
-      .skill-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 15px; }
-      
-      .skill-card {
-        background: var(--bg-dark);
-        border: 2px solid var(--border);
-        border-radius: var(--radius-md);
-        padding: 15px;
-        padding-bottom: 30px;
-        transition: all 0.2s;
-      }
-      .skill-card:hover { border-color: var(--primary); }
-      .skill-card.equipped { border-color: #10b981; background: rgba(16, 185, 129, 0.1); }
-      .skill-card.passive { border-left: 4px solid #a78bfa; }
-      .skill-card.owned { opacity: 0.6; }
-      
-      .skill-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-      .skill-header h4 { margin: 0; color: var(--text-main); }
-      .skill-level { background: var(--primary); color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; }
-      .price { background: #fbbf24; color: black; padding: 3px 10px; border-radius: 12px; font-size: 0.85rem; font-weight: bold; }
-      
-      .skill-desc { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4; }
-      
-      .skill-stats { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
-      .skill-stats span { background: var(--bg-panel); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; }
-      .type-badge { background: var(--accent) !important; color: white; font-weight: bold; }
-      
-      .xp-bar { background: #222; height: 8px; border-radius: 4px; position: relative; margin: 10px 0; }
-      .xp-fill { background: linear-gradient(90deg, #10b981 0%, #34d399 100%); height: 100%; transition: width 0.3s; border-radius: 4px; }
-      .xp-text { position: absolute; top: -20px; right: 0; font-size: 0.7rem; color: var(--text-muted); }
-      
-      .evolution-hint { font-size: 0.75rem; color: #a78bfa; font-style: italic; margin: 5px 0; }
-      
-      .equip-btn, .purchase-btn {
-        width: 100%;
-        padding: 8px;
-        border: none;
-        border-radius: var(--radius-md);
-        background: var(--primary);
-        color: white;
-        cursor: pointer;
-        font-weight: bold;
-        margin-top: 10px;
-        transition: all 0.2s;
-      }
-      .equip-btn:hover, .purchase-btn:hover { transform: translateY(-1px); }
-      .equip-btn.equipped { background: #10b981; }
-      .equip-btn:disabled, .purchase-btn:disabled { background: var(--bg-panel); color: var(--text-muted); cursor: not-allowed; transform: none; }
-      
-      .no-skills { text-align: center; color: var(--text-muted); padding: 40px; font-style: italic; }
-    `)
+            .retro-modal-box {
+                background: #000;
+                border: 2px solid var(--primary);
+                padding: 20px;
+                width: 850px;
+                max-width: 95vw;
+                height: 85vh;
+                display: flex;
+                flex-direction: column;
+                color: var(--primary);
+                font-family: monospace;
+            }
+            .retro-modal-header {
+                display: flex; justify-content: space-between; align-items: center;
+                border-bottom: 2px solid var(--border);
+                padding-bottom: 15px; margin-bottom: 20px;
+            }
+            .retro-tabs { display: flex; gap: 15px; }
+            .retro-tab-btn {
+                background: transparent; border: none; color: var(--text-muted);
+                cursor: pointer; font-family: monospace; font-size: 1rem;
+            }
+            .retro-tab-btn:hover, .retro-tab-btn.active { color: var(--primary); text-decoration: underline; }
+            
+            .retro-content-area { flex: 1; overflow-y: auto; padding-right: 10px; }
+            .retro-list-container { display: flex; flex-direction: column; gap: 10px; }
+            .retro-h3 { color: var(--accent); margin-bottom: 10px; border-bottom: 1px dashed #333; padding-bottom: 5px; }
+            .retro-text { color: var(--text-muted); font-style: italic; margin-bottom: 15px; }
+            .retro-text.small { font-size: 0.8rem; }
+            
+            .retro-list-item {
+                display: flex; justify-content: space-between; align-items: center;
+                border: 1px solid #333; padding: 12px;
+            }
+            .retro-list-item.equipped { border-color: var(--primary); background: rgba(0, 255, 0, 0.05); }
+            .retro-list-item.disabled { border-color: #222; opacity: 0.6; }
+            
+            .item-details { display: flex; flex-direction: column; flex: 1; }
+            .skill-header-line { display: flex; justify-content: space-between; width: 100%; margin-bottom: 5px; }
+            .skill-name { font-weight: bold; color: var(--primary); }
+            .skill-meta { font-size: 0.9rem; color: var(--accent); }
+            .skill-desc { font-size: 0.9rem; color: #aaa; margin: 3px 0; max-width: 90%; }
+            .skill-stats-line { font-size: 0.8rem; color: #888; display: flex; gap: 10px; }
+            .evolution-hint { font-size: 0.8rem; color: #555; margin-top: 5px; }
+            
+            .retro-action-btn {
+                background: transparent; border: 1px solid var(--primary);
+                color: var(--primary); padding: 8px 15px; font-family: monospace;
+                cursor: pointer; margin-left: 15px; min-width: 100px;
+            }
+            .retro-action-btn:hover:not(:disabled) { background: var(--primary); color: black; }
+            .retro-action-btn:disabled { border-color: #444; color: #444; cursor: not-allowed; }
+            .retro-action-btn.highlight { background: var(--primary); color: black; }
+        `)
     );
 };
 
