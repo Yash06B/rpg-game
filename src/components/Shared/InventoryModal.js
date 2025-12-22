@@ -11,66 +11,90 @@ const InventoryModal = ({ onClose }) => {
   const inventory = state.player.inventory;
 
   return React.createElement('div', { className: 'modal-overlay fade-in' },
-    React.createElement('div', { className: 'modal-content' },
-      React.createElement('div', { className: 'modal-header' },
-        React.createElement('h2', null, "Inventory"),
-        React.createElement('button', { className: 'close-btn', onClick: onClose }, "X")
+    React.createElement('div', { className: 'retro-modal-box' },
+      React.createElement('div', { className: 'retro-modal-header' },
+        React.createElement('h2', { className: 'retro-h2' }, "> INVENTORY DATABASE"),
+        React.createElement('button', { className: 'retro-close-btn', onClick: onClose }, "[ X ] CLOSE")
       ),
 
-      React.createElement('div', { className: 'inv-grid' },
+      React.createElement('div', { className: 'retro-list-container' },
         inventory.length === 0
-          ? React.createElement('p', { style: { gridColumn: '1/-1', textAlign: 'center', color: '#666' } }, "Inventory Empty")
+          ? React.createElement('p', { className: 'retro-text' }, "> STORAGE EMPTY.")
           : inventory.map((item, idx) => {
             const itemData = ITEMS[item.id] || { label: item.id, type: 'unknown' };
-            return React.createElement('div', { key: idx, className: 'inv-slot' },
-              React.createElement('div', { className: 'inv-icon' }, itemData.label[0]),
-              React.createElement('div', { className: 'inv-info' },
-                React.createElement('span', { className: 'inv-name' }, itemData.label),
-                React.createElement('span', { className: 'inv-count' }, `x${item.count}`)
-              )
+            return React.createElement('div', { key: idx, className: 'retro-list-item' },
+              React.createElement('span', { className: 'item-name' }, `[ ${idx + 1} ] ${itemData.label.toUpperCase()}`),
+              React.createElement('span', { className: 'item-count' }, `x${item.count}`)
             );
           })
       )
     ),
     React.createElement('style', null, `
-      .modal-content {
-        background: var(--bg-card);
-        padding: 20px;
-        width: 500px;
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--border);
-        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-      }
-      .modal-header {
+      .modal-overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0.9);
         display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-        border-bottom: 1px solid var(--border);
-        padding-bottom: 10px;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
       }
-      .inv-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-        gap: 10px;
-        overflow-y: auto;
-        flex: 1;
-        padding-bottom: 30px; /* Reduced from 60px */
-      }
-      .inv-slot {
-        background: var(--bg-dark);
-        padding: 10px;
-        border-radius: var(--radius-md);
+      .retro-modal-box {
+        background: #000;
+        border: 2px solid var(--primary);
+        padding: 20px;
+        width: 600px;
+        max-width: 95vw;
+        max-height: 80vh;
         display: flex;
         flex-direction: column;
+        box-shadow: 0 0 0 1000px rgba(0,0,0,0.8); /* Focus attention */
+      }
+      .retro-modal-header {
+        display: flex;
+        justify-content: space-between;
         align-items: center;
-        border: 1px solid var(--border);
+        margin-bottom: 20px;
+        border-bottom: 1px dashed var(--border);
+        padding-bottom: 10px;
       }
-      .inv-icon {
-        font-size: 1.5rem;
-        margin-bottom: 5px;
+      .retro-h2 {
+        color: var(--primary);
+        margin: 0;
       }
-      .inv-name { font-size: 0.8rem; text-align: center; }
-      .inv-count { color: var(--accent); font-size: 0.9rem; font-weight: bold; }
+      .retro-close-btn {
+        background: transparent;
+        border: none;
+        color: var(--danger);
+        font-family: monospace;
+        cursor: pointer;
+        font-size: 1.1rem;
+      }
+      .retro-close-btn:hover {
+        background: var(--danger);
+        color: #000;
+      }
+      .retro-list-container {
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding-right: 10px;
+      }
+      .retro-list-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px;
+        border: 1px solid transparent;
+        cursor: pointer;
+      }
+      .retro-list-item:hover {
+        border-color: var(--primary);
+        background: rgba(51, 255, 0, 0.1);
+      }
+      .item-name { color: var(--primary); }
+      .item-count { color: var(--accent); }
+      .retro-text { color: var(--text-muted); font-style: italic; }
     `)
   );
 };
