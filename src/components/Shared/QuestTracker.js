@@ -28,34 +28,28 @@ const QuestTracker = ({ onClose }) => {
   );
 
   return React.createElement('div', { className: 'modal-overlay fade-in' },
-    React.createElement('div', { className: 'modal-content quest-modal' },
-      React.createElement('div', { className: 'modal-header' },
-        React.createElement('h2', null, "📜 Quest Log"),
-        React.createElement('button', { className: 'close-btn', onClick: onClose }, "×")
+    React.createElement('div', { className: 'retro-modal-box' },
+      React.createElement('div', { className: 'retro-modal-header' },
+        React.createElement('h2', { className: 'retro-h2' }, "> QUEST DATABASE"),
+        React.createElement('button', { className: 'retro-close-btn', onClick: onClose }, "[ X ] CLOSE")
       ),
 
-      React.createElement('div', { className: 'quest-list-container' },
+      React.createElement('div', { className: 'retro-list-container' },
         // Active Quests
         React.createElement('div', { className: 'quest-section' },
-          React.createElement('h3', { className: 'section-title' }, `Active (${activeQuests.length})`),
+          React.createElement('h3', { className: 'retro-h3' }, `> ACTIVE ASSIGNMENTS (${activeQuests.length})`),
           activeQuests.length === 0
-            ? React.createElement('p', { className: 'no-quests' }, "No active quests. Explore towns to find hidden questlines!")
+            ? React.createElement('p', { className: 'retro-text' }, "> NO ACTIVE MISSIONS DETECTED.")
             : activeQuests.map(q =>
-              React.createElement('div', { key: q.questId, className: 'quest-card active' },
-                React.createElement('div', { className: 'card-header' },
-                  React.createElement('span', { className: 'q-name' }, q.questName),
-                  React.createElement('span', { className: 'q-step' }, `Step ${q.step}/7`)
+              React.createElement('div', { key: q.questId, className: 'retro-quest-item' },
+                React.createElement('div', { className: 'quest-header' },
+                  React.createElement('span', { className: 'q-name' }, `>> ${q.questName.toUpperCase()}`),
+                  React.createElement('span', { className: 'q-step' }, `[ STEP ${q.step}/7 ]`)
                 ),
-                React.createElement('div', { className: 'card-body' },
-                  React.createElement('p', { className: 'q-title' }, q.title),
+                React.createElement('div', { className: 'quest-body' },
+                  React.createElement('p', { className: 'q-title' }, `OBJ: ${q.title}`),
                   React.createElement('p', { className: 'q-desc' }, q.description),
-                  q.npc && React.createElement('p', { className: 'q-npc' }, `→ Talk to: ${q.npc}`)
-                ),
-                React.createElement('div', { className: 'progress-track' },
-                  React.createElement('div', {
-                    className: 'progress-fill',
-                    style: { width: `${(q.step / 7) * 100}%` }
-                  })
+                  q.npc && React.createElement('p', { className: 'q-npc' }, `TARGET NPC: ${q.npc}`)
                 )
               )
             )
@@ -63,11 +57,12 @@ const QuestTracker = ({ onClose }) => {
 
         // Completed Quests
         completedQuests.length > 0 && React.createElement('div', { className: 'quest-section' },
-          React.createElement('h3', { className: 'section-title' }, `Completed (${completedQuests.length})`),
+          React.createElement('br', null),
+          React.createElement('h3', { className: 'retro-h3' }, `> COMPLETED ARCHIVE (${completedQuests.length})`),
           completedQuests.map(qId =>
-            React.createElement('div', { key: qId, className: 'quest-card completed' },
-              React.createElement('span', null, QUESTS[qId].name),
-              React.createElement('span', { className: 'check' }, "✓")
+            React.createElement('div', { key: qId, className: 'retro-quest-item completed' },
+              React.createElement('span', null, QUESTS[qId]?.name || qId),
+              React.createElement('span', { className: 'check' }, "[ COMPLETE ]")
             )
           )
         )
@@ -77,77 +72,70 @@ const QuestTracker = ({ onClose }) => {
       React.createElement('style', null, `
                 .modal-overlay {
                     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                    background: rgba(0, 0, 0, 0.8);
+                    background: rgba(0, 0, 0, 0.9);
                     display: flex; justify-content: center; align-items: center;
                     z-index: 2000;
-                    backdrop-filter: blur(5px);
                 }
-                .quest-modal {
-                    background: var(--bg-panel);
-                    width: 90%; max-width: 600px;
+                .retro-modal-box {
+                    background: #000;
+                    width: 700px; max-width: 95vw;
                     max-height: 85vh;
-                    border-radius: 12px;
-                    border: 1px solid var(--border);
-                    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+                    border: 2px solid var(--primary);
                     display: flex; flex-direction: column;
-                    overflow: hidden;
-                }
-                .modal-header {
                     padding: 20px;
-                    background: rgba(0,0,0,0.2);
-                    border-bottom: 1px solid var(--border);
+                    color: var(--primary);
+                    font-family: monospace;
+                    box-shadow: 0 0 0 1000px rgba(0,0,0,0.8);
+                }
+                .retro-modal-header {
                     display: flex; justify-content: space-between; align-items: center;
+                    border-bottom: 2px solid var(--border);
+                    padding-bottom: 15px;
+                    margin-bottom: 20px;
                 }
-                .modal-header h2 { margin: 0; color: var(--primary); }
-                .close-btn {
-                    background: none; border: none; color: var(--text-muted);
-                    font-size: 2rem; cursor: pointer;
+                .retro-h2 { margin: 0; color: var(--primary); }
+                .retro-close-btn {
+                    background: transparent; border: none; color: var(--danger);
+                    font-family: monospace; font-size: 1.1rem; cursor: pointer;
                 }
-                .close-btn:hover { color: white; }
+                .retro-close-btn:hover { background: var(--danger); color: black; }
 
-                .quest-list-container {
-                    padding: 20px;
+                .retro-list-container {
+                    padding-right: 10px;
                     overflow-y: auto;
                     flex: 1;
-                    padding-bottom: 30px;
                 }
-                .section-title {
-                    font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase;
-                    margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 5px;
-                }
-                
-                .quest-card {
-                    background: rgba(255,255,255,0.03);
-                    border: 1px solid var(--border);
-                    border-radius: 8px;
-                    margin-bottom: 15px;
-                    overflow: hidden;
-                }
-                .quest-card.active { border-left: 4px solid var(--primary); }
-                .quest-card.completed { 
-                    padding: 15px; display: flex; justify-content: space-between; 
-                    opacity: 0.6; background: rgba(0,0,0,0.2);
+                .retro-h3 { 
+                    border-bottom: 1px dashed var(--text-muted); 
+                    margin-bottom: 10px; color: var(--accent); 
                 }
                 
-                .card-header {
-                    background: rgba(0,0,0,0.2);
-                    padding: 10px 15px;
+                .retro-quest-item {
+                    border: 1px solid #333;
+                    padding: 10px;
+                    margin-bottom: 10px;
+                }
+                .retro-quest-item.completed {
+                    display: flex; justify-content: space-between;
+                    border-color: #222;
+                    color: #666;
+                }
+                
+                .quest-header {
                     display: flex; justify-content: space-between;
                     font-weight: bold;
+                    margin-bottom: 5px;
+                    color: var(--primary);
                 }
-                .q-name { color: white; }
-                .q-step { color: var(--accent); font-size: 0.8rem; }
+                .q-step { color: var(--accent); }
                 
-                .card-body { padding: 15px; }
-                .q-title { color: var(--primary); font-weight: bold; margin-bottom: 5px; }
-                .q-desc { font-size: 0.9rem; color: #ccc; line-height: 1.4; margin-bottom: 10px; }
-                .q-npc { font-size: 0.85rem; color: #fbbf24; font-style: italic; }
+                .quest-body { padding-left: 10px; border-left: 2px solid #333; }
+                .q-title { font-weight: bold; margin-bottom: 5px; color: #fff; }
+                .q-desc { font-size: 0.9rem; color: #ccc; margin-bottom: 5px; }
+                .q-npc { font-size: 0.9rem; color: #fbbf24; font-style: italic; }
                 
-                .progress-track { height: 4px; background: #222; }
-                .progress-fill { height: 100%; background: var(--primary); }
-                
-                .check { color: #10b981; font-weight: bold; }
-                .no-quests { text-align: center; padding: 20px; color: var(--text-muted); font-style: italic; }
+                .check { color: #10b981; }
+                .retro-text { font-style: italic; color: #555; }
             `)
     )
   );
