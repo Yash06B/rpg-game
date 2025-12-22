@@ -10,6 +10,9 @@ import QuestTracker from '../Shared/QuestTracker.js';
 import AchievementModal from '../Shared/AchievementModal.js';
 import NPCList from './NPCList.js';
 import TrainingGrounds from '../UniqueBuildings/TrainingGrounds.js';
+import Inn from './Inn.js';
+import GeneralStore from './GeneralStore.js';
+import AncientLibrary from '../UniqueBuildings/AncientLibrary.js';
 
 const TownInterface = () => {
     const { state, dispatch, ACTIONS } = useGame();
@@ -46,6 +49,21 @@ const TownInterface = () => {
 
         if (bKey === 'training') {
             setActiveBuilding('training');
+            return;
+        }
+
+        if (bKey === 'inn') {
+            setActiveBuilding('inn');
+            return;
+        }
+
+        if (bKey === 'shop') {
+            setActiveBuilding('shop');
+            return;
+        }
+
+        if (bKey === 'library') {
+            setActiveBuilding('library');
             return;
         }
 
@@ -132,6 +150,9 @@ const TownInterface = () => {
         activeBuilding === 'blacksmith' && React.createElement(Blacksmith, { onClose: () => setActiveBuilding(null) }),
         activeBuilding === 'guild' && React.createElement(GuildHall, { onClose: () => setActiveBuilding(null) }),
         activeBuilding === 'training' && React.createElement(TrainingGrounds, { onClose: () => setActiveBuilding(null) }),
+        activeBuilding === 'inn' && React.createElement(Inn, { onClose: () => setActiveBuilding(null) }),
+        activeBuilding === 'shop' && React.createElement(GeneralStore, { onClose: () => setActiveBuilding(null) }),
+        activeBuilding === 'library' && React.createElement(AncientLibrary, { onClose: () => setActiveBuilding(null) }),
 
         React.createElement('style', null, `
             .town-container {

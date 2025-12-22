@@ -42,75 +42,97 @@ const AncientLibrary = ({ onClose }) => {
     };
 
     return React.createElement('div', { className: 'modal-overlay fade-in' },
-        React.createElement('div', { className: 'modal-content library-modal' },
-            React.createElement('div', { className: 'modal-header' },
-                React.createElement('h2', null, "📚 Ancient Library"),
-                React.createElement('button', { className: 'close-btn', onClick: onClose }, "CLOSE")
+        React.createElement('div', { className: 'retro-modal-box library-modal' },
+            React.createElement('div', { className: 'retro-modal-header' },
+                React.createElement('h2', { className: 'retro-h2' }, "> ANCIENT LIBRARY"),
+                React.createElement('button', { className: 'retro-close-btn', onClick: onClose }, "[ X ] EXIT")
             ),
 
-            React.createElement('div', { className: 'library-content' },
-                React.createElement('div', { className: 'library-intro' },
-                    React.createElement('p', { className: 'intro-text' },
-                        "The Ancient Library holds knowledge of rebirth. Here, you may reset your character's stat allocations and start anew."
+            React.createElement('div', { className: 'retro-content-area' },
+                React.createElement('div', { className: 'retro-status-box' },
+                    React.createElement('p', { className: 'retro-text' },
+                        "The dusty tomes here contain forbidden knowledge of rebirth. You may purge your current form and reallocate your potential."
                     ),
-                    React.createElement('p', { className: 'warning' },
-                        "⚠️ This will reset all stat bonuses to base values. Equipment bonuses remain."
+                    React.createElement('p', { className: 'warning-text' },
+                        "WARNING: ALL STAT ALLOCATIONS WILL BE RESET TO BASE."
                     )
                 ),
 
-                React.createElement('div', { className: 'current-stats' },
-                    React.createElement('h3', null, "Current Stats"),
-                    React.createElement('div', { className: 'stat-grid' },
+                React.createElement('div', { className: 'library-split' },
+                    // Left Column: Stats
+                    React.createElement('div', { className: 'stats-column' },
+                        React.createElement('h3', { className: 'retro-h3' }, "> CURRENT FORM"),
                         Object.entries(currentStats).filter(([stat]) => !['hp', 'mp'].includes(stat)).map(([stat, value]) =>
-                            React.createElement('div', { key: stat, className: 'stat-row' },
-                                React.createElement('span', { className: 'stat-name' }, stat.toUpperCase()),
-                                React.createElement('span', { className: 'stat-value' }, value),
-                                React.createElement('span', { className: 'stat-base' },
-                                    `(Base: ${baseStats[stat] || 0})`
-                                )
+                            React.createElement('div', { key: stat, className: 'retro-stat-row' },
+                                React.createElement('span', { className: 'stat-label' }, stat.toUpperCase()),
+                                React.createElement('span', { className: 'dots' }, "...................."),
+                                React.createElement('span', { className: 'stat-val' }, value)
                             )
                         )
+                    ),
+
+                    // Right Column: Action
+                    React.createElement('div', { className: 'action-column' },
+                        React.createElement('h3', { className: 'retro-h3' }, "> RITUAL OF REBIRTH"),
+                        React.createElement('div', { className: 'cost-box' },
+                            React.createElement('p', null, `COST: ${respecCost}g`),
+                            React.createElement('p', null, `POINTS TO RETURN: ${allocatedPoints}`),
+                            React.createElement('p', { className: 'highlight-text' }, `YOUR GOLD: ${state.player.gold}g`)
+                        ),
+
+                        React.createElement('button', {
+                            className: 'retro-action-btn primary full-width',
+                            onClick: handleRespec,
+                            disabled: state.player.gold < respecCost
+                        }, `[ PERFORM RITUAL (-${respecCost}g) ]`)
                     )
-                ),
+                )
+            ),
 
-                React.createElement('div', { className: 'respec-info' },
-                    React.createElement('h3', null, "Respec Information"),
-                    React.createElement('p', null, `Cost: ${respecCost} Gold`),
-                    React.createElement('p', null, `Total Allocated Points: ${allocatedPoints}`),
-                    React.createElement('p', null, `Your Gold: ${state.player.gold}g`)
-                ),
+            React.createElement('style', null, `
+                .retro-modal-box {
+                    background: #000;
+                    border: 2px solid var(--primary);
+                    padding: 20px;
+                    width: 800px;
+                    max-width: 95vw;
+                    display: flex; flex-direction: column;
+                    color: var(--primary);
+                    font-family: monospace;
+                    box-shadow: 0 0 0 1000px rgba(0,0,0,0.8);
+                }
+                .retro-modal-header {
+                    display: flex; justify-content: space-between; align-items: center;
+                    border-bottom: 2px solid var(--border); padding-bottom: 15px; margin-bottom: 20px;
+                }
+                .retro-h2 { margin: 0; color: var(--primary); }
+                .retro-close-btn { background: transparent; border: none; color: var(--danger); font-family: monospace; cursor: pointer; }
+                
+                .retro-content-area { display: flex; flex-direction: column; gap: 20px; }
+                
+                .retro-status-box { border: 1px dashed var(--accent); padding: 15px; }
+                .retro-text { color: #ccc; margin-bottom: 10px; }
+                .warning-text { color: var(--danger); font-weight: bold; }
 
-                React.createElement('button', {
-                    className: 'respec-btn',
-                    onClick: handleRespec,
-                    disabled: state.player.gold < respecCost
-                }, `Reset Stats (${respecCost}g)`)
-            )
-        ),
+                .library-split { display: flex; gap: 30px; flex-wrap: wrap; }
+                .stats-column, .action-column { flex: 1; min-width: 300px; }
+                
+                .retro-h3 { color: var(--accent); border-bottom: 1px solid #333; margin-bottom: 15px; }
+                
+                .retro-stat-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-family: monospace; }
+                .stat-label { color: var(--primary); }
+                .dots { color: #444; overflow: hidden; white-space: nowrap; margin: 0 10px; }
+                .stat-val { color: #fff; font-weight: bold; }
 
-        React.createElement('style', null, `
-      .library-modal { width: 700px; max-height: 85vh; }
-      .library-content { padding: 25px; }
-      .library-intro { background: var(--bg-dark); padding: 20px; border-radius: var(--radius-md); margin-bottom: 20px; border-left: 4px solid var(--primary); }
-      .intro-text { color: var(--text-main); line-height: 1.6; margin-bottom: 10px; }
-      .warning { color: #f59e0b; font-weight: bold; margin: 0; }
-      
-      .current-stats { margin-bottom: 25px; }
-      .current-stats h3 { color: var(--primary); margin-bottom: 15px; }
-      .stat-grid { display: grid; gap: 10px; }
-      .stat-row { display: flex; justify-content: space-between; align-items: center; background: var(--bg-dark); padding: 12px 15px; border-radius: var(--radius-md); }
-      .stat-name { font-weight: bold; color: var(--accent); text-transform: uppercase; width: 100px; }
-      .stat-value { font-size: 1.3rem; font-weight: bold; color: var(--text-main); width: 60px; text-align: center; }
-      .stat-base { color: var(--text-muted); font-size: 0.85rem; }
-      
-      .respec-info { background: var(--bg-panel); padding: 20px; border-radius: var(--radius-md); margin-bottom: 20px; }
-      .respec-info h3 { color: var(--primary); margin-bottom: 10px; }
-      .respec-info p { margin: 8px 0; color: var(--text-main); }
-      
-      .respec-btn { width: 100%; padding: 18px; background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); color: white; border: none; border-radius: var(--radius-md); font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
-      .respec-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4); }
-      .respec-btn:disabled { opacity: 0.5; cursor: not-allowed; background: var(--bg-dark); }
-    `)
+                .cost-box { margin-bottom: 20px; border: 1px solid #333; padding: 15px; background: rgba(255,255,255,0.05); }
+                .highlight-text { color: #fdb931; margin-top: 10px; font-weight: bold; }
+
+                .retro-action-btn.full-width { width: 100%; padding: 20px; font-size: 1.1rem; font-family: monospace; cursor: pointer; border: none; font-weight: bold; }
+                .retro-action-btn.primary { background: var(--danger); color: black; } /* Red for dangerous action */
+                .retro-action-btn.primary:hover:not(:disabled) { background: #ff4444; color: white; }
+                .retro-action-btn:disabled { background: #333; color: #555; cursor: not-allowed; }
+            `)
+        )
     );
 };
 
