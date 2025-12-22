@@ -11,77 +11,96 @@ const AchievementModal = ({ onClose }) => {
     const progressPercent = Math.floor((unlockedCount / totalAchievements) * 100);
 
     return React.createElement('div', { className: 'modal-overlay fade-in' },
-        React.createElement('div', { className: 'modal-content achievement-modal' },
-            React.createElement('div', { className: 'modal-header' },
-                React.createElement('h2', null, "🏆 Achievements"),
-                React.createElement('button', { className: 'close-btn', onClick: onClose }, "×")
+        React.createElement('div', { className: 'retro-modal-box' },
+            React.createElement('div', { className: 'retro-modal-header' },
+                React.createElement('h2', { className: 'retro-h2' }, "> ACHIEVEMENT LOG"),
+                React.createElement('button', { className: 'retro-close-btn', onClick: onClose }, "[ X ] CLOSE")
             ),
 
-            React.createElement('div', { className: 'progress-bar-container' },
-                React.createElement('div', { className: 'progress-text' },
-                    `Progress: ${unlockedCount} / ${totalAchievements} (${progressPercent}%)`
-                ),
-                React.createElement('div', { className: 'progress-track' },
+            React.createElement('div', { className: 'retro-progress-section' },
+                React.createElement('p', { className: 'retro-text' }, `> SYSTEM COMPLETION: ${unlockedCount}/${totalAchievements} [${progressPercent}%]`),
+                React.createElement('div', { className: 'retro-progress-bar' },
                     React.createElement('div', {
-                        className: 'progress-fill',
+                        className: 'retro-progress-fill',
                         style: { width: `${progressPercent}%` }
                     })
                 )
             ),
 
-            React.createElement('div', { className: 'achievements-list' },
-                Object.values(ACHIEVEMENTS).map(achievement => {
+            React.createElement('div', { className: 'retro-list-container' },
+                Object.values(ACHIEVEMENTS).map((achievement, idx) => {
                     const isUnlocked = unlockedIds.includes(achievement.id);
                     return React.createElement('div', {
                         key: achievement.id,
-                        className: `achievement-card ${isUnlocked ? 'unlocked' : 'locked'}`
+                        className: `retro-list-item ${isUnlocked ? 'unlocked' : 'locked'}`
                     },
-                        React.createElement('div', { className: 'achievement-icon' },
-                            isUnlocked ? achievement.icon : "🔒"
+                        React.createElement('div', { className: 'ach-header' },
+                            React.createElement('span', { className: 'ach-title' },
+                                isUnlocked ? `[ ${achievement.icon} ] ${achievement.title.toUpperCase()}` : `[ ${idx + 1} ] ???`
+                            ),
+                            isUnlocked && React.createElement('span', { className: 'check' }, "[ UNLOCKED ]")
                         ),
-                        React.createElement('div', { className: 'achievement-info' },
-                            React.createElement('h4', null, achievement.title),
-                            React.createElement('p', null, achievement.description)
-                        ),
-                        isUnlocked && React.createElement('div', { className: 'check-mark' }, "✓")
+                        React.createElement('p', { className: 'ach-desc' },
+                            isUnlocked ? achievement.description : "Decrypting data..."
+                        )
                     );
                 })
             ),
 
             React.createElement('style', null, `
-                .achievement-modal { width: 600px; max-height: 80vh; display: flex; flex-direction: column; background: #1a1a2e; color: #fff; border: 2px solid #ffd700; }
-                .modal-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; border-bottom: 1px solid #444; margin-bottom: 15px; }
-                .close-btn { background: none; border: none; color: #fff; font-size: 2rem; cursor: pointer; }
-                
-                .progress-bar-container { margin-bottom: 20px; text-align: center; }
-                .progress-text { margin-bottom: 5px; font-weight: bold; color: #ffd700; }
-                .progress-track { background: #333; height: 10px; border-radius: 5px; overflow: hidden; }
-                .progress-fill { background: linear-gradient(90deg, #ffd700, #ffaa00); height: 100%; transition: width 0.5s; }
+                .modal-overlay {
+                    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(0, 0, 0, 0.9);
+                    display: flex; justify-content: center; align-items: center;
+                    z-index: 2000;
+                }
+                .retro-modal-box {
+                    background: #000;
+                    width: 600px; max-width: 95vw;
+                    max-height: 80vh;
+                    border: 2px solid var(--primary);
+                    padding: 20px;
+                    display: flex; flex-direction: column;
+                    color: var(--primary);
+                    font-family: monospace;
+                    box-shadow: 0 0 0 1000px rgba(0,0,0,0.8);
+                }
+                .retro-modal-header {
+                    display: flex; justify-content: space-between; align-items: center;
+                    border-bottom: 2px solid var(--border);
+                    padding-bottom: 15px;
+                    margin-bottom: 20px;
+                }
+                .retro-h2 { margin: 0; color: var(--accent); }
+                .retro-close-btn {
+                    background: transparent; border: none; color: var(--danger);
+                    font-family: monospace; font-size: 1.1rem; cursor: pointer;
+                }
+                .retro-close-btn:hover { background: var(--danger); color: black; }
 
-                .ach-list {
-                    flex: 1;
+                .retro-progress-section { margin-bottom: 20px; text-align: center; }
+                .retro-progress-bar { background: #222; height: 15px; border: 1px solid #444; margin-top: 5px; }
+                .retro-progress-fill { background: var(--accent); height: 100%; }
+
+                .retro-list-container {
+                    padding-right: 10px;
                     overflow-y: auto;
-                    padding: 10px;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 10px;
-                    padding-bottom: 30px;
+                    flex: 1;
+                    display: flex; flex-direction: column; gap: 10px;
                 }
                 
-                .achievement-card { 
-                    display: flex; align-items: center; gap: 15px; padding: 15px; 
-                    background: #232342; margin-bottom: 10px; border-radius: 8px; border: 1px solid #333;
-                    transition: all 0.2s;
+                .retro-list-item { 
+                    border: 1px solid #333; padding: 10px; 
                 }
-                .achievement-card.unlocked { border-color: #ffd700; background: linear-gradient(90deg, #2a2a50, #232342); }
-                .achievement-card.locked { opacity: 0.6; grayscale: 1; }
+                .retro-list-item.locked { color: #555; border-style: dashed; }
+                .retro-list-item.unlocked { border-color: var(--accent); background: rgba(255, 176, 0, 0.05); }
+
+                .ach-header { display: flex; justify-content: space-between; margin-bottom: 5px; font-weight: bold; }
+                .ach-title { color: var(--primary); }
+                .retro-list-item.unlocked .ach-title { color: var(--accent); }
+                .ach-desc { font-size: 0.9rem; color: #aaa; margin: 0; }
                 
-                .achievement-icon { font-size: 2rem; width: 50px; text-align: center; }
-                .achievement-info h4 { margin: 0 0 5px 0; color: #e0e0e0; }
-                .achievement-card.unlocked .achievement-info h4 { color: #ffd700; }
-                .achievement-info p { margin: 0; font-size: 0.9rem; color: #aaa; }
-                
-                .check-mark { color: #ffd700; font-weight: bold; font-size: 1.5rem; margin-left: auto; }
+                .check { color: var(--primary); }
             `)
         )
     );
