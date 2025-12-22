@@ -41,42 +41,52 @@ const MainMenu = () => {
 
     return React.createElement('div', { className: 'main-menu fade-in' },
         React.createElement('div', { className: 'menu-content' },
-            React.createElement('h1', { className: 'game-title' }, "SINS OF THE DEMON LORDS"),
-            React.createElement('p', { className: 'subtitle' }, "An RPG powered by React & AI"),
+            React.createElement('pre', { className: 'ascii-title' }, `
+   _____ _____ _   _  _____ 
+  / ____|_   _| \\ | |/ ____|
+ | (___   | | |  \\| | (___  
+  \\___ \\  | | | . \` |\\___ \\ 
+  ____) |_| |_| |\\  |____) |
+ |_____/|_____|_| \\_|_____/ 
+ OF THE DEMON LORDS
+ v1.0 (1980)
+            `),
+            React.createElement('p', { className: 'subtitle' }, "> SYSTEM READY. AWAITING INPUT..."),
 
-            React.createElement('div', { className: 'menu-buttons' },
+            React.createElement('div', { className: 'menu-actions' },
                 React.createElement('button', {
-                    className: 'menu-btn primary',
+                    className: 'retro-btn',
                     onClick: handleNewGameClick
-                }, "New Game"),
+                }, "[ N ] NEW GAME"),
 
                 React.createElement('button', {
-                    className: 'menu-btn',
-                    onClick: handleContinue,
-                    disabled: !hasSave
-                }, "Continue Journey"),
+                    className: 'retro-btn',
+                    disabled: !hasSave,
+                    onClick: handleContinue
+                }, hasSave ? "[ C ] CONTINUE JOURNEY" : "[ X ] NO SAVE DATA"),
 
                 React.createElement('button', {
-                    className: 'menu-btn',
-                    onClick: () => alert("Credits:\nCreated by Yash & Antigravity (Google DeepMind)\nMusic: None yet :(")
-                }, "Credits")
+                    className: 'retro-btn',
+                    onClick: () => alert("CREDITS:\nPROGRAMMED BY YASH & ANTIGRAVITY\nCOPYRIGHT (C) 2025")
+                }, "[ ? ] CREDITS")
             )
         ),
 
-        // Custom Confirmation Modal
+        // Retro Confirmation Modal
         showConfirmModal && React.createElement('div', { className: 'modal-overlay' },
-            React.createElement('div', { className: 'confirm-modal' },
-                React.createElement('h2', null, "Start a New Journey?"),
-                React.createElement('p', null, "Existing progress will be lost forever."),
+            React.createElement('div', { className: 'confirm-modal retro-box' },
+                React.createElement('h2', null, "WARNING: DATA OVERWRITE"),
+                React.createElement('p', null, "> STARTING A NEW GAME WILL ERASE CURRENT MEMORY."),
+                React.createElement('p', null, "> PROCEED? (Y/N)"),
                 React.createElement('div', { className: 'modal-actions' },
                     React.createElement('button', {
-                        className: 'modal-btn cancel',
+                        className: 'retro-btn',
                         onClick: () => setShowConfirmModal(false)
-                    }, "Cancel"),
+                    }, "[ N ] CANCEL"),
                     React.createElement('button', {
-                        className: 'modal-btn confirm',
+                        className: 'retro-btn danger',
                         onClick: startNewGame
-                    }, "Yes, Erase & Start")
+                    }, "[ Y ] ERASE & START")
                 )
             )
         ),
@@ -88,149 +98,78 @@ const MainMenu = () => {
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-                color: white;
-                text-align: center;
+                background: #000;
+                color: var(--primary);
+                font-family: monospace;
             }
-            .game-title {
-                font-size: 4rem;
-                background: linear-gradient(to right, #ef4444, #f59e0b, #ec4899);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                margin-bottom: 10px;
-                text-transform: uppercase;
-                letter-spacing: 5px;
-                filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.5));
+            .ascii-title {
+                font-family: monospace;
+                white-space: pre;
+                color: var(--primary);
+                text-shadow: 0 0 5px var(--primary);
+                margin-bottom: 20px;
+                line-height: 1;
+                font-size: 14px; /* Default small for safety */
+            }
+            @media (min-width: 800px) {
+                .ascii-title { font-size: 1.2rem; }
             }
             .subtitle {
-                font-size: 1.5rem;
-                color: #94a3b8;
-                margin-bottom: 50px;
+                color: var(--text-muted);
+                margin-bottom: 40px;
+                border-bottom: 1px dashed var(--border);
+                padding-bottom: 10px;
+                width: 100%;
+                text-align: center;
             }
-            .menu-buttons {
+            .menu-actions {
                 display: flex;
                 flex-direction: column;
-                gap: 20px;
-                width: 300px;
+                gap: 15px;
+                align-items: flex-start;
+                width: 100%;
+                max-width: 400px;
             }
-            .menu-btn {
-                padding: 15px 30px;
+            .retro-btn {
+                background: transparent;
+                border: none;
+                color: var(--primary);
+                font-family: monospace;
                 font-size: 1.2rem;
-                border: 2px solid #334155;
-                background: rgba(30, 41, 59, 0.8);
-                color: #e2e8f0;
                 cursor: pointer;
-                transition: all 0.3s;
-                text-transform: uppercase;
-                letter-spacing: 2px;
-                border-radius: 4px;
+                text-align: left;
+                width: 100%;
+                padding: 5px;
             }
-            .menu-btn:hover:not(:disabled) {
-                background: rgba(51, 65, 85, 0.9);
-                border-color: #fbbf24;
-                color: #fbbf24;
-                transform: scale(1.05);
-                box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
+            .retro-btn:hover:not(:disabled) {
+                background: var(--primary);
+                color: #000;
             }
-            .menu-btn.primary {
-                border-color: #ef4444;
-                box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
-            }
-            .menu-btn.primary:hover {
-                background: #ef4444;
-                color: white;
-                box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
-            }
-            .menu-btn:disabled {
-                opacity: 0.3;
+            .retro-btn:disabled {
+                color: var(--text-muted);
                 cursor: not-allowed;
-                border-color: transparent;
             }
-
-            /* Modal Styles */
+            
             .modal-overlay {
                 position: fixed;
                 top: 0; left: 0; right: 0; bottom: 0;
-                background: rgba(0, 0, 0, 0.7);
+                background: rgba(0, 0, 0, 0.9);
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                backdrop-filter: blur(5px);
-                z-index: 1000;
+                z-index: 100;
             }
-            .confirm-modal {
-                background: #1e293b;
-                border: 2px solid #ef4444;
-                padding: 30px;
-                border-radius: 10px;
-                max-width: 400px;
-                text-align: center;
-                box-shadow: 0 0 30px rgba(239, 68, 68, 0.3);
-                animation: popIn 0.3s ease;
+            .retro-box {
+                border: 2px solid var(--primary);
+                padding: 20px;
+                background: #000;
+                max-width: 500px;
+                width: 90%;
             }
-            .confirm-modal h2 {
-                color: #ef4444;
-                margin-bottom: 15px;
-            }
-            .confirm-modal p {
-                margin-bottom: 25px;
-                color: #cbd5e1;
-            }
-            .modal-actions {
+            .menu-content {
                 display: flex;
-                justify-content: space-around;
-                gap: 15px;
-            }
-            .modal-btn {
-                padding: 10px 20px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                font-weight: bold;
-                transition: transform 0.1s;
-            }
-            .modal-btn.cancel {
-                background: #475569;
-                color: white;
-            }
-            .modal-btn.confirm {
-                background: #ef4444;
-                color: white;
-            }
-            .modal-btn:hover {
-                transform: scale(1.05);
-            }
-            @keyframes popIn {
-                from { transform: scale(0.8); opacity: 0; }
-                to { transform: scale(1); opacity: 1; }
-            }
-
-            /* MOBILE RESPONSIVENESS */
-            @media (max-width: 768px) {
-                .game-title {
-                    font-size: 2.5rem;
-                    letter-spacing: 2px;
-                    line-height: 1.2;
-                }
-                .subtitle {
-                    font-size: 1rem;
-                    margin-bottom: 30px;
-                }
-                .menu-content {
-                    width: 90%;
-                    padding: 20px;
-                }
-                .menu-buttons {
-                    width: 100%;
-                }
-                .menu-btn {
-                    padding: 12px 20px;
-                    font-size: 1rem;
-                }
-                .confirm-modal {
-                    width: 90%;
-                    padding: 20px;
-                }
+                flex-direction: column;
+                align-items: center;
             }
         `)
     );
