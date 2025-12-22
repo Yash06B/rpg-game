@@ -122,61 +122,97 @@ const NPCInteractionModal = ({ npc, onClose }) => {
     };
 
     return React.createElement('div', { className: 'modal-overlay fade-in' },
-        React.createElement('div', { className: 'modal-content npc-modal' },
-            React.createElement('div', { className: 'npc-header' },
-                React.createElement('span', { className: 'npc-sprite-large' }, npc.sprite),
-                React.createElement('div', null,
-                    React.createElement('h2', null, npc.name),
-                    React.createElement('p', { className: 'npc-personality' }, npc.personality)
+        React.createElement('div', { className: 'retro-modal-box' },
+            React.createElement('div', { className: 'retro-modal-header' },
+                React.createElement('div', { className: 'header-left' },
+                    React.createElement('span', { className: 'npc-sprite' }, npc.sprite),
+                    React.createElement('h2', { className: 'retro-h2' }, `> ${npc.name.toUpperCase()}`)
                 ),
-                React.createElement('button', { className: 'close-btn', onClick: onClose }, "CLOSE")
+                React.createElement('button', { className: 'retro-close-btn', onClick: onClose }, "[ X ] END COMMS")
             ),
 
-            React.createElement('div', { className: 'dialogue-box' },
-                React.createElement('p', null, `"${npc.dialogue[dialogueIndex]}"`),
-                dialogueIndex < npc.dialogue.length - 1 &&
-                React.createElement('button', { className: 'next-btn', onClick: handleNextDialogue }, "Next ▶")
-            ),
+            React.createElement('div', { className: 'retro-content-area' },
+                React.createElement('div', { className: 'retro-dialogue-box' },
+                    React.createElement('p', { className: 'retro-text typing' }, `"${npc.dialogue[dialogueIndex]}"`),
+                    dialogueIndex < npc.dialogue.length - 1 &&
+                    React.createElement('button', { className: 'retro-action-btn small', onClick: handleNextDialogue }, "[ NEXT ]")
+                ),
 
-            npc.quest && React.createElement('div', { className: 'npc-quest-section' },
-                React.createElement('h3', null, questStatus === 'completed' ? "Quest Completed" : "Quest Available"),
-                React.createElement('div', { className: 'quest-card' },
-                    React.createElement('h4', null, npc.quest.name),
-                    React.createElement('p', null, npc.quest.objective),
-                    React.createElement('div', { className: 'rewards' },
-                        React.createElement('span', null, `${npc.quest.reward.exp} XP`),
-                        React.createElement('span', null, `${npc.quest.reward.gold} Gold`),
-                        npc.quest.reward.race && React.createElement('span', { className: 'rare-reward' }, `Race: ${npc.quest.reward.race}`)
+                npc.quest && React.createElement('div', { className: 'retro-quest-section' },
+                    React.createElement('div', { className: 'retro-divider' }),
+                    React.createElement('h3', { className: 'retro-h3' }, questStatus === 'completed' ? "> QUEST COMPLETE" : "> QUEST AVAILABLE"),
+
+                    React.createElement('div', { className: 'retro-status-box' },
+                        React.createElement('h4', { className: 'retro-h4' }, npc.quest.name),
+                        React.createElement('p', { className: 'retro-text' }, npc.quest.objective),
+                        React.createElement('div', { className: 'retro-rewards' },
+                            React.createElement('span', null, `REWARD: ${npc.quest.reward.exp} XP | ${npc.quest.reward.gold} G`),
+                            npc.quest.reward.race && React.createElement('span', { className: 'highlight-text' }, ` [ RACE: ${npc.quest.reward.race} ]`)
+                        )
                     ),
 
                     questStatus === 'available' && React.createElement('button', {
-                        className: 'quest-btn accept',
+                        className: 'retro-action-btn primary full-width',
                         onClick: handleAcceptQuest
-                    }, "Accept Quest"),
+                    }, "[ ACCEPT ASSIGNMENT ]"),
 
                     questStatus === 'active' && React.createElement('button', {
-                        className: 'quest-btn complete',
-                        onClick: handleCompleteQuest // In real game, verify conditions first
-                    }, "Complete Quest")
+                        className: 'retro-action-btn success full-width',
+                        onClick: handleCompleteQuest
+                    }, "[ COMPLETE ASSIGNMENT ]")
                 )
             ),
 
             React.createElement('style', null, `
-                .npc-modal { max-width: 600px; background: var(--bg-panel); border: 2px solid var(--primary); }
-                .npc-header { display: flex; gap: 20px; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
-                .npc-sprite-large { font-size: 3rem; }
-                .npc-personality { font-style: italic; color: var(--text-muted); }
-                .dialogue-box { background: var(--bg-dark); padding: 20px; border-radius: var(--radius-md); border-left: 4px solid var(--accent); margin-bottom: 20px; position: relative; }
-                .dialogue-box p { font-size: 1.1rem; line-height: 1.6; font-family: 'Georgia', serif; }
-                .next-btn { position: absolute; bottom: 10px; right: 10px; background: none; border: none; color: var(--primary); cursor: pointer; font-weight: bold; }
+                .retro-modal-box {
+                    background: #000;
+                    border: 2px solid var(--primary);
+                    padding: 20px;
+                    width: 600px;
+                    max-width: 95vw;
+                    display: flex; flex-direction: column;
+                    color: var(--primary);
+                    font-family: monospace;
+                    box-shadow: 0 0 0 1000px rgba(0,0,0,0.8);
+                }
+                .retro-modal-header {
+                    display: flex; justify-content: space-between; align-items: center;
+                    border-bottom: 2px solid var(--border);
+                    padding-bottom: 15px; margin-bottom: 20px;
+                }
+                .header-left { display: flex; align-items: center; gap: 15px; }
+                .npc-sprite { font-size: 2rem; }
+                .retro-h2 { margin: 0; color: var(--primary); }
+                .retro-close-btn { background: transparent; border: none; color: var(--danger); font-family: monospace; cursor: pointer; }
+                .retro-close-btn:hover { background: var(--danger); color: black; }
+
+                .retro-content-area { display: flex; flex-direction: column; gap: 20px; }
                 
-                .npc-quest-section { margin-top: 20px; }
-                .quest-card { background: rgba(0,0,0,0.2); padding: 15px; border-radius: var(--radius-md); border: 1px solid var(--border); }
-                .quest-card h4 { color: #fbbf24; margin-bottom: 5px; }
-                .quest-btn { width: 100%; padding: 10px; margin-top: 10px; border-radius: var(--radius-sm); border: none; cursor: pointer; font-weight: bold; }
-                .quest-btn.accept { background: var(--primary); color: white; }
-                .quest-btn.complete { background: #10b981; color: white; }
-                .rare-reward { color: #ec4899; }
+                .retro-dialogue-box { 
+                    border: 1px solid #333; padding: 15px; min-height: 100px; 
+                    display: flex; flex-direction: column; justify-content: space-between;
+                }
+                .retro-text.typing { color: #fff; font-size: 1.1rem; line-height: 1.5; margin: 0; }
+                
+                .retro-action-btn.small { 
+                    align-self: flex-end; padding: 5px 10px; margin-top: 10px;
+                    background: transparent; border: 1px solid #444; color: var(--primary); cursor: pointer;
+                }
+                .retro-action-btn.small:hover { border-color: var(--primary); background: var(--primary); color: black; }
+
+                .retro-divider { height: 1px; background: #333; margin: 15px 0; }
+                .retro-h3 { color: var(--accent); margin-bottom: 10px; }
+                
+                .retro-status-box { border: 1px dashed #444; padding: 15px; margin-bottom: 20px; }
+                .retro-h4 { color: #fff; margin: 0 0 5px 0; }
+                .retro-rewards { margin-top: 10px; font-weight: bold; color: var(--accent); }
+                .highlight-text { color: #ec4899; }
+                
+                .retro-action-btn.full-width { width: 100%; padding: 15px; font-size: 1.1rem; font-family: monospace; cursor: pointer; border: none; font-weight: bold; }
+                .retro-action-btn.primary { background: var(--primary); color: black; }
+                .retro-action-btn.primary:hover { background: var(--accent); }
+                .retro-action-btn.success { background: var(--accent); color: black; }
+                .retro-action-btn.success:hover { background: #fff; }
             `)
         )
     );
