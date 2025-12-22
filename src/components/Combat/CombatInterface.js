@@ -356,124 +356,144 @@ const CombatInterface = () => {
   }).filter(Boolean);
 
   return React.createElement('div', { className: 'combat-container fade-in' },
-    React.createElement('h2', { style: { textAlign: 'center', marginBottom: '10px' } },
-      `Turn ${turn}`
+    // Status Header
+    React.createElement('div', { className: 'retro-status-bar' },
+      React.createElement('span', null, `HERO: ${state.player.name} [LVL ${state.player.level}]`),
+      React.createElement('span', { className: state.player.stats.hp < state.player.stats.maxHp * 0.3 ? 'danger-text' : '' },
+        `HP: ${state.player.stats.hp}/${state.player.stats.maxHp}`
+      ),
+      React.createElement('span', null, `MP: ${state.player.stats.mp}/${state.player.stats.maxMp}`),
+      React.createElement('span', null, `TURN: ${turn}`)
     ),
 
-    // Battlefield
-    React.createElement('div', { className: 'battlefield' },
-      React.createElement('div', { className: 'combat-card enemy' },
-        React.createElement('div', { className: 'sprite' }, enemy.level >= 80 ? "🐉" : enemy.level >= 60 ? "🐲" : enemy.level >= 30 ? "👹" : "👺"),
-        React.createElement('h3', null, enemy.name),
-        React.createElement('p', { className: 'level-badge' }, `Lv. ${enemy.level}`),
-        React.createElement('div', { className: 'hp-bar' },
-          React.createElement('div', {
-            className: 'hp-fill',
-            style: { width: `${(enemy.hp / enemy.maxHp) * 100}%` }
-          })
-        ),
-        React.createElement('p', null, `${enemy.hp} / ${enemy.maxHp} HP`)
-      ),
+    // Log Area
+    React.createElement('div', { className: 'retro-log-area' },
+      combatLog.map((line, i) => React.createElement('p', { key: i, className: 'log-line' }, `> ${line}`))
+    ),
 
-      React.createElement('div', { className: 'vs' }, "⚔️"),
-
-      React.createElement('div', { className: 'combat-card player' },
-        React.createElement('div', { className: 'sprite' }, "🛡️"),
-        React.createElement('h3', null, state.player.name),
-        React.createElement('p', { className: 'level-badge' }, `Lv. ${state.player.level} ${state.player.class}`),
-        React.createElement('div', { className: 'hp-bar' },
-          React.createElement('div', {
-            className: 'hp-fill player-fill',
-            style: { width: `${(state.player.stats.hp / state.player.stats.maxHp) * 100}%` }
-          })
-        ),
-        React.createElement('p', null, `${state.player.stats.hp} / ${state.player.stats.maxHp} HP`),
-        React.createElement('p', { style: { fontSize: '0.85rem', marginTop: '5px' } }, `MP: ${state.player.stats.mp}/${state.player.stats.maxMp}`)
+    // Enemy Status (Text)
+    React.createElement('div', { className: 'retro-enemy-status' },
+      React.createElement('h3', null, `TARGET: ${enemy.name.toUpperCase()} (Lv.${enemy.level})`),
+      React.createElement('p', null, `STATUS: ${enemy.hp > 0 ? 'HOSTILE' : 'DEFEATED'} [ HP: ${enemy.hp}/${enemy.maxHp} ]`),
+      React.createElement('div', { style: { marginTop: '5px', fontSize: '2rem' } },
+        enemy.level >= 80 ? "🐉" : enemy.level >= 60 ? "🐲" : enemy.level >= 30 ? "👹" : "👺"
       )
     ),
 
-    // Combat Log
-    React.createElement('div', { className: 'combat-log' },
-      combatLog.map((line, i) => React.createElement('p', { key: i, className: 'log-line fade-in' }, `> ${line}`))
-    ),
-
-    // Skill Selection
-    selectedSkill && React.createElement('div', { className: 'skill-selector' },
-      React.createElement('h4', null, "Select Skill:"),
-      React.createElement('div', { className: 'skill-buttons' },
-        equippedSkills.map(skill =>
+    // Skill Selection Sub-Menu
+    selectedSkill && React.createElement('div', { className: 'retro-command-box' },
+      React.createElement('h3', { className: 'retro-h3' }, "-- SELECT SKILL --"),
+      React.createElement('div', { className: 'command-list' },
+        equippedSkills.map((skill, idx) =>
           React.createElement('button', {
             key: skill.id,
-            className: 'skill-btn',
+            className: 'retro-command-btn',
             disabled: state.player.stats.mp < (skill.data.mpCost || 0),
             onClick: () => handleSkillAttack(skill.id)
-          },
-            React.createElement('span', { className: 'skill-name' }, skill.data.name),
-            React.createElement('span', { className: 'skill-mp' }, `${skill.data.mpCost || 0} MP`)
-          )
-        )
-      ),
-      React.createElement('button', { className: 'cancel-btn', onClick: () => setSelectedSkill(null) }, "Cancel")
+          }, `[ ${idx + 1} ] ${skill.data.name.toUpperCase()} (${skill.data.mpCost} MP)`)
+        ),
+        React.createElement('button', { className: 'retro-command-btn', onClick: () => setSelectedSkill(null) }, "[ X ] CANCEL")
+      )
     ),
 
-    // Controls
-    !selectedSkill && React.createElement('div', { className: 'combat-controls' },
-      React.createElement('button', {
-        className: 'combat-btn attack',
-        onClick: handleAttack,
-        disabled: !playerTurn || combatState !== 'active'
-      }, "⚔️ Attack"),
-      React.createElement('button', {
-        className: 'combat-btn skill',
-        onClick: () => setSelectedSkill(true),
-        disabled: !playerTurn || combatState !== 'active' || equippedSkills.length === 0
-      }, "✨ Skill"),
-      React.createElement('button', {
-        className: 'combat-btn item',
-        disabled: true
-      }, "🧪 Item"),
-      React.createElement('button', {
-        className: 'combat-btn flee',
-        onClick: handleFlee,
-        disabled: !playerTurn || combatState !== 'active'
-      }, "🏃 Flee")
+    // Main Actions
+    !selectedSkill && React.createElement('div', { className: 'retro-command-box' },
+      React.createElement('h3', { className: 'retro-h3' }, "-- COMBAT ACTIONS --"),
+      React.createElement('div', { className: 'command-list' },
+        React.createElement('button', {
+          className: 'retro-command-btn',
+          onClick: handleAttack,
+          disabled: !playerTurn || combatState !== 'active'
+        }, "[ 1 ] ATTACK"),
+        React.createElement('button', {
+          className: 'retro-command-btn',
+          onClick: () => setSelectedSkill(true),
+          disabled: !playerTurn || combatState !== 'active' || equippedSkills.length === 0
+        }, "[ 2 ] SKILL"),
+        React.createElement('button', {
+          className: 'retro-command-btn',
+          disabled: true
+        }, "[ 3 ] ITEM (EMPTY)"),
+        React.createElement('button', {
+          className: 'retro-command-btn',
+          onClick: handleFlee,
+          disabled: !playerTurn || combatState !== 'active'
+        }, "[ 4 ] FLEE")
+      )
     ),
 
-    // Styles (extended)
     React.createElement('style', null, `
-      .combat-container { padding: 20px; max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; height: 100vh; background: linear-gradient(180deg, #0a0a12 0%, #1a0a0a 100%); }
-      .battlefield { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex: 1; padding: 20px; }
-      .combat-card { background: var(--bg-card); padding: 20px; border-radius: var(--radius-lg); border: 2px solid var(--border); width: 35%; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-      .combat-card.enemy { border-color: var(--accent); animation: enemyPulse 2s infinite; }
-      @keyframes enemyPulse { 0%, 100% { box-shadow: 0 0 10px var(--accent-glow); } 50% { box-shadow: 0 0 20px var(--accent-glow); } }
-      .sprite { font-size: 5rem; margin-bottom: 10px; }
-      .level-badge { background: var(--bg-dark); padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; display: inline-block; margin: 5px 0; color: var(--text-muted); }
-      .hp-bar { background: #222; height: 15px; border-radius: 10px; margin: 15px 0; overflow: hidden; border: 1px solid #444; }
-      .hp-fill { background: linear-gradient(90deg, #ef4444 0%, #f87171 100%); height: 100%; transition: width 0.5s; }
-      .player-fill { background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%); }
-      .vs { font-weight: bold; font-size: 3rem; color: var(--text-muted); text-shadow: 0 0 10px rgba(255,255,255,0.3); }
-      
-      .combat-log { background: rgba(0,0,0,0.7); padding: 15px; height: 180px; overflow-y: auto; margin-bottom: 20px; border-radius: var(--radius-md); font-family: 'Courier New', monospace; border: 1px solid var(--border); }
-      .log-line { margin: 5px 0; color: #0f0; text-shadow: 0 0 5px #0f0; animation: fadeIn 0.3s; }
-      
-      .skill-selector { background: var(--bg-panel); padding: 20px; margin-bottom: 20px; border-radius: var(--radius-lg); border: 2px solid var(--primary); }
-      .skill-selector h4 { margin-bottom: 15px; color: var(--primary); }
-      .skill-buttons { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 10px; }
-      .skill-btn { background: var(--bg-dark); border: 2px solid var(--primary); color: var(--text-main); padding: 15px; border-radius: var(--radius-md); cursor: pointer; display: flex; flex-direction: column; gap: 5px; transition: all 0.2s; }
-      .skill-btn:hover:not(:disabled) { background: var(--primary); color: white; transform: translateY(-2px); }
-      .skill-btn:disabled { opacity: 0.3; cursor: not-allowed; border-color: var(--border); }
-      .skill-name { font-weight: bold; }
-      .skill-mp { font-size: 0.8rem; color: #60a5fa; }
-      .cancel-btn { background: #ef4444; color: white; border: none; padding: 10px 20px; border-radius: var(--radius-md); cursor: pointer; font-weight: bold; }
-      
-      .combat-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding-bottom: 20px; }
-      .combat-btn { padding: 18px; border: none; border-radius: var(--radius-md); font-weight: bold; cursor: pointer; color: white; font-size: 1.2rem; transition: transform 0.1s, opacity 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-      .combat-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.4); }
-      .combat-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-      .attack { background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%); }
-      .skill { background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%); }
-      .item { background: linear-gradient(135deg, #059669 0%, #10b981 100%); }
-      .flee { background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%); }
+      .combat-container { 
+        height: 100vh;
+        display: flex; 
+        flex-direction: column; 
+        padding: 10px;
+        background: #000;
+        color: var(--primary);
+        font-family: monospace;
+      }
+      .retro-status-bar {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 2px solid var(--border);
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+      .retro-log-area {
+        flex: 1;
+        overflow-y: auto;
+        border: 1px solid #333;
+        padding: 10px;
+        margin-bottom: 10px;
+        background: #050505;
+        font-family: 'Courier New', monospace;
+      }
+      .log-line {
+        margin: 5px 0;
+        color: #33ff00;
+        text-shadow: 0 0 2px #00ff00;
+      }
+      .retro-enemy-status {
+        border: 1px solid var(--danger);
+        padding: 10px;
+        margin-bottom: 10px;
+        text-align: center;
+        color: var(--danger);
+      }
+      .retro-command-box {
+        border-top: 1px solid var(--border);
+        padding-top: 10px;
+      }
+      .retro-h3 {
+        color: var(--accent);
+        margin-bottom: 10px;
+      }
+      .command-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .retro-command-btn {
+        background: transparent;
+        border: 1px solid #333;
+        color: var(--primary);
+        padding: 10px;
+        font-family: monospace;
+        text-align: left;
+        cursor: pointer;
+        font-size: 1.1rem;
+      }
+      .retro-command-btn:hover:not(:disabled) {
+        background: var(--primary);
+        color: #000;
+      }
+      .retro-command-btn:disabled {
+        color: #555;
+        border-color: #222;
+        cursor: not-allowed;
+      }
+      .danger-text { color: var(--danger); animation: flicker 1s infinite; }
     `)
   );
 };
