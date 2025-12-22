@@ -76,171 +76,142 @@ const QuestBoard = ({ onClose }) => {
     };
 
     return React.createElement('div', { className: 'modal-overlay fade-in' },
-        React.createElement('div', { className: 'modal-content quest-board-modal' },
-            React.createElement('div', { className: 'modal-header' },
-                React.createElement('h2', null, "📋 Quest Board"),
-                React.createElement('button', { className: 'close-btn', onClick: onClose }, "CLOSE")
+        React.createElement('div', { className: 'retro-modal-box' },
+            React.createElement('div', { className: 'retro-modal-header' },
+                React.createElement('h2', { className: 'retro-h2' }, "> QUEST BOUNTY BOARD"),
+                React.createElement('button', { className: 'retro-close-btn', onClick: onClose }, "[ X ] CLOSE")
             ),
 
-            React.createElement('div', { className: 'quest-board-content' },
+            React.createElement('div', { className: 'retro-content-area' },
+
                 // Category Filter
-                React.createElement('div', { className: 'category-tabs' },
+                React.createElement('div', { className: 'retro-tabs' },
                     React.createElement('button', {
-                        className: selectedCategory === 'all' ? 'active' : '',
+                        className: `retro-tab-btn ${selectedCategory === 'all' ? 'active' : ''}`,
                         onClick: () => setSelectedCategory('all')
-                    }, "All"),
+                    }, "[ ALL ]"),
                     Object.keys(QUEST_CATEGORIES).map(cat =>
                         React.createElement('button', {
                             key: cat,
-                            className: selectedCategory === cat.toLowerCase() ? 'active' : '',
+                            className: `retro-tab-btn ${selectedCategory === cat.toLowerCase() ? 'active' : ''}`,
                             onClick: () => setSelectedCategory(cat.toLowerCase())
-                        }, QUEST_CATEGORIES[cat])
+                        }, `[ ${QUEST_CATEGORIES[cat].toUpperCase()} ]`)
                     )
                 ),
 
-                // Quest List
-                React.createElement('div', { className: 'quest-list-panel' },
-                    React.createElement('h3', null, `Available Quests (${displayQuests.length})`),
-                    React.createElement('div', { className: 'quest-grid' },
+                React.createElement('div', { className: 'retro-split-view' },
+                    // List
+                    React.createElement('div', { className: 'retro-list-section' },
                         displayQuests.map(quest => {
                             const isActive = activeQuests.find(q => q.id === quest.id);
-                            const isCompleted = completedQuests.includes(quest.id);
-
                             return React.createElement('div', {
                                 key: quest.id,
-                                className: `quest-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`,
+                                className: `retro-list-item clickable ${selectedQuest?.id === quest.id ? 'active' : ''} ${isActive ? 'highlight' : ''}`,
                                 onClick: () => setSelectedQuest(quest)
                             },
-                                React.createElement('div', { className: 'quest-type' }, quest.type.toUpperCase()),
-                                React.createElement('h4', null, quest.name),
-                                React.createElement('p', { className: 'quest-short-desc' }, quest.description),
-                                React.createElement('div', { className: 'quest-rewards' },
-                                    React.createElement('span', null, `${quest.rewards.exp || 0} XP`),
-                                    React.createElement('span', null, `${quest.rewards.gold || 0}g`)
+                                React.createElement('div', { className: 'item-details' },
+                                    React.createElement('span', { className: 'item-name' }, `> ${quest.name.toUpperCase()}`),
+                                    React.createElement('span', { className: 'item-meta' }, `LV.${quest.level} ${quest.type}`)
                                 ),
-                                isActive && React.createElement('div', { className: 'active-badge' }, "ACTIVE"),
-                                isCompleted && !quest.repeatable && React.createElement('div', { className: 'completed-badge' }, "✓")
-                            );
+                                isActive && React.createElement('span', { className: 'item-status' }, "[ ACTIVE ]")
+                            )
                         })
-                    )
-                ),
+                    ),
 
-                // Quest Details
-                selectedQuest && React.createElement('div', { className: 'quest-details' },
-                    React.createElement('h2', null, selectedQuest.name),
-                    React.createElement('p', { className: 'type-badge' }, selectedQuest.type.toUpperCase()),
-                    React.createElement('p', { className: 'description' }, selectedQuest.description),
-                    React.createElement('div', { className: 'objective' },
-                        React.createElement('h4', null, "Objective:"),
-                        React.createElement('p', null, selectedQuest.objective)
-                    ),
-                    React.createElement('div', { className: 'rewards-detail' },
-                        React.createElement('h4', null, "Rewards:"),
-                        React.createElement('p', null, `EXP: ${selectedQuest.rewards.exp || 0}`),
-                        React.createElement('p', null, `Gold: ${selectedQuest.rewards.gold || 0}`),
-                        selectedQuest.rewards.items && React.createElement('p', null,
-                            `Items: ${selectedQuest.rewards.items.join(', ')}`
+                    // Details
+                    React.createElement('div', { className: 'retro-details-section' },
+                        selectedQuest ? React.createElement(React.Fragment, null,
+                            React.createElement('div', { className: 'details-header' },
+                                React.createElement('h3', { className: 'retro-h3' }, `> ${selectedQuest.name.toUpperCase()}`),
+                                React.createElement('span', { className: 'retro-text' }, `TYPE: ${selectedQuest.type.toUpperCase()}`)
+                            ),
+                            React.createElement('div', { className: 'retro-divider' }),
+                            React.createElement('p', { className: 'retro-text large' }, selectedQuest.description),
+                            React.createElement('p', { className: 'retro-text' }, `> OBJECTIVE: ${selectedQuest.objective}`),
+
+                            React.createElement('div', { className: 'retro-status-box' },
+                                React.createElement('p', null, "REWARD DATA:"),
+                                React.createElement('p', { className: 'highlight-text' }, `XP: ${selectedQuest.rewards.exp || 0} | GOLD: ${selectedQuest.rewards.gold || 0}`)
+                            ),
+
+                            React.createElement('button', {
+                                className: 'retro-action-btn primary full-width',
+                                onClick: () => handleAcceptQuest(selectedQuest),
+                                disabled: activeQuests.find(q => q.id === selectedQuest.id) || (!selectedQuest.repeatable && completedQuests.includes(selectedQuest.id))
+                            }, activeQuests.find(q => q.id === selectedQuest.id) ? "[ QUEST ACTIVE ]" :
+                                completedQuests.includes(selectedQuest.id) ? "[ COMPLETED ]" : "[ ACCEPT BOUNTY ]")
+
+                        ) : React.createElement('div', { className: 'empty-state align-center' },
+                            React.createElement('p', { className: 'retro-text' }, "> SELECT A BOUNTY TO VIEW DETAILS.")
                         )
-                    ),
-                    React.createElement('div', { className: 'quest-meta' },
-                        React.createElement('p', null, `Level Requirement: ${selectedQuest.level}`),
-                        React.createElement('p', null, `${selectedQuest.repeatable === 'daily' ? 'Daily Quest' : selectedQuest.repeatable ? 'Repeatable' : 'One-time Quest'}`)
-                    ),
-                    React.createElement('button', {
-                        className: 'accept-btn',
-                        onClick: () => handleAcceptQuest(selectedQuest),
-                        disabled: activeQuests.find(q => q.id === selectedQuest.id) ||
-                            (!selectedQuest.repeatable && completedQuests.includes(selectedQuest.id))
-                    },
-                        activeQuests.find(q => q.id === selectedQuest.id) ? "Active" :
-                            completedQuests.includes(selectedQuest.id) ? "Completed" : "Accept Quest"
                     )
                 )
-            )
-        ),
+            ),
 
-        // Styles
-        React.createElement('style', null, `
-      .quest-board-modal { width: 95vw; max-width: 1200px; height: 90vh; }
-      .quest-board-content { display: flex; flex-direction: column; height: calc(100% - 60px); padding: 20px; }
-      
-      .category-tabs { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid var(--border); }
-      .category-tabs button { background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-muted); padding: 8px 15px; border-radius: var(--radius-md); cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
-      .category-tabs button:hover { border-color: var(--primary); }
-      .category-tabs button.active { background: var(--primary); color: white; border-color: var(--primary); }
-      
-      .quest-list-panel { flex: 1; overflow-y: auto; margin-bottom: 20px; }
-      .quest-list-panel h3 { color: var(--primary); margin-bottom: 15px; }
-      
-      .quest-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
-      
-      .quest-item {
-        background: var(--bg-dark);
-        border: 2px solid var(--border);
-        border-radius: var(--radius-md);
-        padding: 15px;
-        cursor: pointer;
-        transition: all 0.2s;
-        position: relative;
-      }
-      .quest-item:hover { border-color: var(--primary); transform: translateY(-2px); }
-      .quest-item.active { border-color: #10b981; background: rgba(16, 185, 129, 0.1); }
-      .quest-item.completed { opacity: 0.6; }
-      
-      .quest-type {
-        background: var(--accent);
-        color: white;
-        padding: 3px 10px;
-        border-radius: 12px;
-        font-size: 0.7rem;
-        font-weight: bold;
-        display: inline-block;
-        margin-bottom: 8px;
-      }
-      
-      .quest-item h4 { margin: 5px 0; color: var(--text-main); font-size: 1rem; }
-      .quest-short-desc { font-size: 0.85rem; color: var(--text-muted); margin: 8px 0; line-height: 1.3; }
-      
-      .quest-rewards { display: flex; gap: 10px; margin-top: 10px; }
-      .quest-rewards span { background: var(--bg-panel); padding: 4px 10px; border-radius: 8px; font-size: 0.8rem; color: #fbbf24; font-weight: bold; }
-      
-      .active-badge { position: absolute; top: 10px; right: 10px; background: #10b981; color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.7rem; font-weight: bold; }
-      .completed-badge { position: absolute; top: 10px; right: 10px; background: #6b7280; color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.9rem; font-weight: bold; }
-      
-      .quest-details {
-        background: var(--bg-panel);
-        padding: 25px;
-        border-radius: var(--radius-lg);
-        border: 2px solid var(--primary);
-        max-height: 400px;
-        overflow-y: auto;
-      }
-      .quest-details h2 { color: var(--primary); margin-bottom: 10px; }
-      .quest-details .description { color: var(--text-muted); margin: 15px 0; line-height: 1.6; }
-      .quest-details .objective { background: var(--bg-dark); padding: 15px; border-radius: var(--radius-md); margin: 15px 0; }
-      .quest-details .objective h4 { color: var(--accent); margin-bottom: 8px; }
-      .quest-details .rewards-detail { margin: 15px 0; }
-      .quest-details .rewards-detail h4 { color: #10b981; margin-bottom: 8px; }
-      .quest-details .rewards-detail p { margin: 5px 0; color: var(--text-main); }
-      .quest-details .quest-meta { margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border); }
-      .quest-details .quest-meta p { color: var(--text-muted); font-size: 0.85rem; margin: 5px 0; }
-      
-      .accept-btn {
-        width: 100%;
-        padding: 15px;
-        background: var(--primary);
-        color: white;
-        border: none;
-        border-radius: var(--radius-md);
-        font-weight: bold;
-        font-size: 1.1rem;
-        cursor: pointer;
-        margin-top: 20px;
-        transition: all 0.2s;
-      }
-      .accept-btn:hover:not(:disabled) { background: var(--accent); transform: translateY(-2px); }
-      .accept-btn:disabled { background: var(--bg-dark); color: var(--text-muted); cursor: not-allowed; }
-    `)
+            // Styles
+            React.createElement('style', null, `
+                .retro-modal-box {
+                    background: #000;
+                    border: 2px solid var(--primary);
+                    padding: 20px;
+                    width: 1000px;
+                    max-width: 95vw;
+                    height: 85vh;
+                    display: flex; flex-direction: column;
+                    color: var(--primary);
+                    font-family: monospace;
+                    box-shadow: 0 0 0 1000px rgba(0,0,0,0.8);
+                }
+                .retro-modal-header {
+                    display: flex; justify-content: space-between; align-items: center;
+                    border-bottom: 2px solid var(--border);
+                    padding-bottom: 15px; margin-bottom: 20px;
+                }
+                .retro-h2 { margin: 0; color: var(--primary); }
+                .retro-close-btn { background: transparent; border: none; color: var(--danger); font-family: monospace; cursor: pointer; }
+                .retro-close-btn:hover { background: var(--danger); color: black; }
+
+                .retro-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+                .retro-tab-btn {
+                    background: transparent; border: 1px solid transparent; color: #666;
+                    cursor: pointer; font-family: monospace; padding: 5px 10px;
+                }
+                .retro-tab-btn:hover { color: var(--primary); }
+                .retro-tab-btn.active { border: 1px solid var(--primary); color: var(--primary); background: rgba(0, 255, 0, 0.1); }
+
+                .retro-split-view { display: flex; flex: 1; overflow: hidden; gap: 20px; }
+                
+                .retro-list-section { flex: 1; overflow-y: auto; padding-right: 10px; border-right: 1px solid #333; }
+                .retro-details-section { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; }
+                
+                .retro-list-item { 
+                    border: 1px solid #222; padding: 10px; margin-bottom: 8px; cursor: pointer;
+                    display: flex; justify-content: space-between; align-items: center;
+                }
+                .retro-list-item:hover { border-color: #555; background: #111; }
+                .retro-list-item.active { border-color: var(--primary); background: rgba(0, 255, 0, 0.05); }
+                .retro-list-item.highlight { border-left: 3px solid var(--accent); }
+                
+                .item-name { font-weight: bold; display: block; }
+                .item-meta { font-size: 0.8rem; color: #666; }
+                .item-status { font-size: 0.8rem; color: var(--accent); }
+
+                .retro-h3 { color: var(--accent); margin-bottom: 10px; }
+                .retro-text { color: #aaa; margin-bottom: 10px; line-height: 1.4; }
+                .retro-text.large { font-size: 1.1rem; color: #fff; margin-bottom: 20px; }
+                .retro-divider { height: 1px; background: #333; margin: 15px 0; }
+                
+                .retro-status-box { border: 1px dashed #444; padding: 15px; margin: 20px 0; }
+                .highlight-text { color: var(--accent); font-weight: bold; font-size: 1.1rem; }
+                
+                .retro-action-btn.full-width { width: 100%; margin-top: auto; padding: 15px; font-size: 1.1rem; }
+                .retro-action-btn.primary { background: var(--primary); color: black; border: none; font-weight: bold; cursor: pointer; }
+                .retro-action-btn.primary:hover:not(:disabled) { background: var(--accent); }
+                .retro-action-btn:disabled { background: #333; color: #666; cursor: not-allowed; }
+                
+                .align-center { display: flex; justify-content: center; align-items: center; height: 100%; }
+            `)
+        )
     );
 };
 
