@@ -55,99 +55,112 @@ const TrainingGrounds = ({ onClose }) => {
     const allocatableStats = ['maxHp', 'maxMp', 'atk', 'mag', 'def', 'spd'];
 
     return React.createElement('div', { className: 'modal-overlay fade-in' },
-        React.createElement('div', { className: 'modal-content training-modal' },
-            React.createElement('div', { className: 'modal-header' },
-                React.createElement('h2', null, "⚔️ Training Grounds"),
-                React.createElement('button', { className: 'close-btn', onClick: onClose }, "CLOSE")
+        React.createElement('div', { className: 'retro-modal-box' },
+            React.createElement('div', { className: 'retro-modal-header' },
+                React.createElement('h2', { className: 'retro-h2' }, "> TRAINING SIMULATION"),
+                React.createElement('button', { className: 'retro-close-btn', onClick: onClose }, "[ X ] ABORT")
             ),
 
-            React.createElement('div', { className: 'training-content' },
-                React.createElement('div', { className: 'points-display' },
-                    React.createElement('h3', null, "Available Points:"),
-                    React.createElement('span', { className: 'points-count' }, pointsRemaining)
+            React.createElement('div', { className: 'retro-content-area' },
+                React.createElement('div', { className: 'retro-status-box' },
+                    React.createElement('h3', { className: 'retro-h3' }, "> STAT ALLOCATION PROTOCOL"),
+                    React.createElement('p', { className: 'retro-text' }, `> UNALLOCATED POINTS: ${pointsRemaining}`),
+                    pointsRemaining <= 0 && React.createElement('p', { className: 'retro-text warning' }, "> ALERT: NO POINTS AVAILABLE FOR UPGRADE.")
                 ),
 
-                React.createElement('p', { className: 'instruction' },
-                    pointsRemaining > 0
-                        ? "Allocate your stat points to customize your character's strengths."
-                        : "No points available. Level up or use the Ancient Library to respec."
-                ),
-
-                React.createElement('div', { className: 'stat-allocation' },
+                React.createElement('div', { className: 'retro-list-container' },
                     allocatableStats.map(stat =>
-                        React.createElement('div', { key: stat, className: 'alloc-row' },
-                            React.createElement('span', { className: 'stat-label' },
-                                stat === 'maxHp' ? 'MAX HP' :
-                                    stat === 'maxMp' ? 'MAX MP' :
-                                        stat.toUpperCase()
-                            ),
+                        React.createElement('div', { key: stat, className: 'retro-stat-row' },
+                            React.createElement('span', { className: 'stat-label' }, `> ${stat === 'maxHp' ? 'MAX HP' : stat === 'maxMp' ? 'MAX MP' : stat.toUpperCase()}`),
                             React.createElement('div', { className: 'stat-controls' },
                                 React.createElement('button', {
-                                    className: 'stat-btn decrease',
+                                    className: 'retro-command-btn small',
                                     onClick: () => handleDecrease(stat),
                                     disabled: tempStats[stat] <= baseStats[stat]
-                                }, "−"),
-                                React.createElement('span', { className: 'stat-display' },
-                                    `${tempStats[stat]} (${tempStats[stat] - baseStats[stat] > 0 ? '+' : ''}${tempStats[stat] - baseStats[stat]})`
+                                }, "[-]"),
+                                React.createElement('span', { className: 'stat-value' },
+                                    `${tempStats[stat]} [${tempStats[stat] - baseStats[stat] > 0 ? '+' : ''}${tempStats[stat] - baseStats[stat]}]`
                                 ),
                                 React.createElement('button', {
-                                    className: 'stat-btn increase',
+                                    className: 'retro-command-btn small',
                                     onClick: () => handleIncrease(stat),
                                     disabled: pointsRemaining <= 0
-                                }, "+")
+                                }, "[+]")
                             )
                         )
                     )
                 ),
 
-                React.createElement('div', { className: 'action-buttons' },
+                React.createElement('div', { className: 'retro-action-bar' },
                     React.createElement('button', {
-                        className: 'reset-btn',
+                        className: 'retro-action-btn',
                         onClick: handleReset
-                    }, "Reset Changes"),
+                    }, "[ RESET ]"),
                     React.createElement('button', {
-                        className: 'apply-btn',
+                        className: 'retro-action-btn primary',
                         onClick: handleApply,
                         disabled: pointsRemaining === (state.player.unallocatedStats || 0)
-                    }, "Apply Stats")
+                    }, "[ CONFIRM UPGRADES ]")
                 )
-            )
-        ),
+            ),
 
-        React.createElement('style', null, `
-      .training-modal { width: 600px; }
-      .tg-content { flex: 1; overflow-y: auto; padding-right: 10px; padding-bottom: 30px; }
-      
-      .points-display { text-align: center; background: var(--bg-dark); padding: 20px; border-radius: var(--radius-lg); margin-bottom: 20px; border: 2px solid var(--primary); }
-      .points-display h3 { margin: 0 0 10px 0; color: var(--text-muted); font-size: 1rem; }
-      .points-count { font-size: 3rem; font-weight: bold; color: var(--primary); text-shadow: 0 0 20px var(--primary); }
-      
-      .instruction { text-align: center; color: var(--text-muted); margin-bottom: 25px; font-style: italic; }
-      
-      .stat-allocation { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
-      .alloc-row { display: flex; justify-content: space-between; align-items: center; background: var(--bg-dark); padding: 15px 20px; border-radius: var(--radius-md); transition: all 0.2s; }
-      .alloc-row:hover { background: var(--bg-panel); }
-      
-      .stat-label { font-weight: bold; color: var(--accent); width: 100px; }
-      .stat-controls { display: flex; align-items: center; gap: 15px; }
-      .stat-btn { width: 40px; height: 40px; border: 2px solid var(--border); background: var(--bg-panel); color: var(--text-main); border-radius: var(--radius-md); font-size: 1.5rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
-      .stat-btn:hover:not(:disabled) { border-color: var(--primary); background: var(--primary); color: white; transform: scale(1.1); }
-      .stat-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-      .stat-btn.increase { border-color: #10b981; }
-      .stat-btn.increase:hover:not(:disabled) { background: #10b981; border-color: #10b981; }
-      .stat-btn.decrease { border-color: #ef4444; }
-      .stat-btn.decrease:hover:not(:disabled) { background: #ef4444; border-color: #ef4444; }
-      
-      .stat-display { min-width: 120px; text-align: center; font-weight: bold; color: var(--text-main); font-size: 1.1rem; }
-      
-      .action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-      .reset-btn, .apply-btn { padding: 15px; border: none; border-radius: var(--radius-md); font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: all 0.2s; }
-      .reset-btn { background: #6b7280; color: white; }
-      .reset-btn:hover { background: #4b5563; transform: translateY(-2px); }
-      .apply-btn { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; }
-      .apply-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4); }
-      .apply-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    `)
+            // Styles
+            React.createElement('style', null, `
+                .retro-modal-box {
+                    background: #000;
+                    border: 2px solid var(--primary);
+                    padding: 20px;
+                    width: 600px;
+                    max-width: 95vw;
+                    display: flex; flex-direction: column;
+                    color: var(--primary);
+                    font-family: monospace;
+                    box-shadow: 0 0 0 1000px rgba(0,0,0,0.8);
+                }
+                .retro-modal-header {
+                    display: flex; justify-content: space-between; align-items: center;
+                    border-bottom: 2px solid var(--border);
+                    padding-bottom: 15px; margin-bottom: 20px;
+                }
+                .retro-h2 { margin: 0; color: var(--primary); }
+                .retro-close-btn { background: transparent; border: none; color: var(--danger); font-family: monospace; cursor: pointer; }
+                .retro-close-btn:hover { background: var(--danger); color: black; }
+
+                .retro-content-area { display: flex; flex-direction: column; gap: 20px; }
+                .retro-status-box { text-align: center; border: 1px dashed #333; padding: 10px; }
+                .retro-h3 { color: var(--accent); margin: 0 0 5px 0; }
+                .retro-text { margin: 5px 0; color: #aaa; }
+                .retro-text.warning { color: var(--danger); }
+
+                .retro-list-container { display: flex; flex-direction: column; gap: 10px; }
+                .retro-stat-row { 
+                    display: flex; justify-content: space-between; align-items: center; 
+                    border: 1px solid #222; padding: 10px; 
+                }
+                .retro-stat-row:hover { border-color: #444; }
+                .stat-label { font-weight: bold; color: var(--primary); }
+                
+                .stat-controls { display: flex; align-items: center; gap: 15px; }
+                .stat-value { min-width: 80px; text-align: center; color: white; }
+                
+                .retro-command-btn.small {
+                    background: #111; border: 1px solid #444; color: var(--primary);
+                    width: 30px; height: 30px; cursor: pointer;
+                }
+                .retro-command-btn.small:hover:not(:disabled) { background: var(--primary); color: black; }
+                .retro-command-btn.small:disabled { opacity: 0.3; cursor: not-allowed; }
+
+                .retro-action-bar { display: flex; justify-content: space-between; gap: 20px; margin-top: 10px; }
+                .retro-action-btn { 
+                    flex: 1; padding: 10px; background: transparent; border: 1px solid #444; 
+                    color: #888; cursor: pointer; font-family: monospace;
+                }
+                .retro-action-btn:hover { border-color: var(--primary); color: var(--primary); }
+                .retro-action-btn.primary { border-color: var(--primary); color: var(--primary); font-weight: bold; }
+                .retro-action-btn.primary:hover:not(:disabled) { background: var(--primary); color: black; }
+                .retro-action-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+            `)
+        )
     );
 };
 
