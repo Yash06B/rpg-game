@@ -102,173 +102,157 @@ const Blacksmith = ({ onClose }) => {
     const enhanceRate = ENHANCEMENT.successRates[currentEnhance];
 
     return React.createElement('div', { className: 'modal-overlay fade-in' },
-        React.createElement('div', { className: 'modal-content blacksmith-modal' },
-            React.createElement('div', { className: 'modal-header' },
-                React.createElement('h2', null, "⚒️ Blacksmith"),
-                React.createElement('div', { className: 'tabs' },
-                    React.createElement('button', { className: tab === 'craft' ? 'active' : '', onClick: () => setTab('craft') }, "Craft"),
-                    React.createElement('button', { className: tab === 'enhance' ? 'active' : '', onClick: () => setTab('enhance') }, "Enhance")
-                ),
-                React.createElement('button', { className: 'close-btn', onClick: onClose }, "CLOSE")
+        React.createElement('div', { className: 'retro-modal-box' },
+            React.createElement('div', { className: 'retro-modal-header' },
+                React.createElement('h2', { className: 'retro-h2' }, "> BLACKSMITH WORKSHOP"),
+                React.createElement('div', { className: 'retro-tabs' },
+                    React.createElement('button', { className: `retro-tab-btn ${tab === 'craft' ? 'active' : ''}`, onClick: () => setTab('craft') }, "[ 1 ] CRAFT"),
+                    React.createElement('button', { className: `retro-tab-btn ${tab === 'enhance' ? 'active' : ''}`, onClick: () => setTab('enhance') }, "[ 2 ] ENHANCE"),
+                    React.createElement('button', { className: 'retro-tab-btn', onClick: onClose }, "[ X ] EXIT")
+                )
             ),
 
-            React.createElement('div', { className: 'bs-content' },
+            React.createElement('div', { className: 'retro-content-area' },
 
                 // === CRAFTING TAB ===
-                tab === 'craft' && React.createElement('div', { className: 'recipe-list' },
+                tab === 'craft' && React.createElement('div', { className: 'retro-list-container' },
+                    React.createElement('p', { className: 'retro-text' }, "> SELECT BLUEPRINT TO FABRICATE:"),
                     RECIPES.map((r, idx) => {
                         const item = ITEMS[r.result];
                         const canCraft = hasMaterials(r.materials) && state.player.gold >= r.cost;
-                        return React.createElement('div', { key: idx, className: 'recipe-card' },
-                            React.createElement('div', { className: 'r-icon' }, item.type === 'weapon' ? "⚔️" : item.type === 'armor' ? "🛡️" : "🧪"),
-                            React.createElement('div', { className: 'r-info' },
-                                React.createElement('h3', null, item.label),
-                                React.createElement('p', { className: 'cost' }, `${r.cost}g`),
-                                React.createElement('div', { className: 'mats' },
-                                    Object.entries(r.materials).map(([k, v]) =>
-                                        React.createElement('span', { key: k }, `${ITEMS[k]?.label || k}: ${v} `)
-                                    )
-                                )
+                        return React.createElement('div', { key: idx, className: 'retro-list-item' },
+                            React.createElement('div', { className: 'item-details' },
+                                React.createElement('span', { className: 'item-name' }, `${item.label.toUpperCase()}`),
+                                React.createElement('span', { className: 'item-cost' }, `COST: ${r.cost}g | STATUS: ${canCraft ? 'READY' : 'INSUFFICIENT'}`)
                             ),
                             React.createElement('button', {
-                                className: 'craft-btn',
+                                className: 'retro-action-btn',
                                 disabled: !canCraft,
                                 onClick: () => handleCraft(r)
-                            }, "Craft")
+                            }, "[ CRAFT ]")
                         );
                     })
                 ),
 
                 // === ENHANCE TAB ===
-                tab === 'enhance' && React.createElement('div', { className: 'enhance-panel' },
-                    React.createElement('h3', null, "Select Equipment to Enhance"),
-
-                    playerEquipment.length === 0
-                        ? React.createElement('p', { className: 'no-items' }, "No equipment in inventory!")
-                        : React.createElement('div', { className: 'equip-list' },
-                            playerEquipment.map(item => {
-                                const itemData = ITEMS[item.id];
-                                const enhanceLvl = item.enhance || 0;
-                                return React.createElement('button', {
-                                    key: item.id,
-                                    className: `equip-item ${selectedEquipment === item.id ? 'selected' : ''}`,
-                                    onClick: () => setSelectedEquipment(item.id)
-                                },
-                                    React.createElement('span', null, getItemDisplayName(itemData, enhanceLvl)),
-                                    enhanceLvl > 0 && React.createElement('span', { className: 'enhance-badge' }, `+${enhanceLvl}`)
-                                );
-                            })
-                        ),
-
-                    selectedItemData && React.createElement('div', { className: 'enhance-details' },
-                        React.createElement('h3', null, getItemDisplayName(selectedItemData, currentEnhance)),
-                        React.createElement('div', { className: 'stats-display' },
-                            React.createElement('div', { className: 'stat-col' },
-                                React.createElement('h4', null, "Current Stats"),
-                                Object.entries(getEnhancedStats(selectedItemData, currentEnhance)).map(([stat, val]) =>
-                                    React.createElement('p', { key: stat }, `${stat.toUpperCase()}: ${val}`)
-                                )
-                            ),
-                            React.createElement('div', { className: 'arrow' }, "→"),
-                            React.createElement('div', { className: 'stat-col' },
-                                React.createElement('h4', null, "Next Level"),
-                                currentEnhance < 15
-                                    ? Object.entries(getEnhancedStats(selectedItemData, currentEnhance + 1)).map(([stat, val]) =>
-                                        React.createElement('p', { key: stat, className: 'upgrade' }, `${stat.toUpperCase()}: ${val}`)
-                                    )
-                                    : React.createElement('p', null, "MAX LEVEL")
-                            )
-                        ),
-
-                        currentEnhance < 15 && React.createElement('div', { className: 'enhance-info' },
-                            React.createElement('p', null, `Cost: ${nextEnhanceCost} Gold`),
-                            React.createElement('p', null, `Success Rate: ${(enhanceRate * 100).toFixed(1)}%`),
-                            React.createElement('div', { className: 'rate-bar' },
-                                React.createElement('div', {
-                                    className: 'rate-fill',
-                                    style: { width: `${enhanceRate * 100}%`, background: enhanceRate > 0.5 ? '#10b981' : '#ef4444' }
+                tab === 'enhance' && React.createElement('div', { className: 'retro-enhance-panel' },
+                    !selectedEquipment ? React.createElement(React.Fragment, null,
+                        React.createElement('p', { className: 'retro-text' }, "> SELECT ITEM TO UPGRADE:"),
+                        React.createElement('div', { className: 'retro-list-container' },
+                            playerEquipment.length === 0
+                                ? React.createElement('p', { className: 'retro-text' }, "> NO ELIGIBLE EQUIPMENT FOUND.")
+                                : playerEquipment.map(item => {
+                                    const itemData = ITEMS[item.id];
+                                    const enhanceLvl = item.enhance || 0;
+                                    return React.createElement('button', {
+                                        key: item.id,
+                                        className: 'retro-list-item selectable',
+                                        onClick: () => setSelectedEquipment(item.id)
+                                    }, `> ${getItemDisplayName(itemData, enhanceLvl).toUpperCase()}`);
                                 })
-                            ),
-                            React.createElement('button', {
-                                className: 'enhance-btn',
-                                onClick: handleEnhance,
-                                disabled: state.player.gold < nextEnhanceCost
-                            }, `Enhance to +${currentEnhance + 1}`)
                         )
+                    ) : React.createElement('div', { className: 'enhance-view' },
+                        React.createElement('h3', { className: 'retro-h3' }, `> UPGRADING: ${getItemDisplayName(selectedItemData, currentEnhance).toUpperCase()}`),
+
+                        currentEnhance < 15 ? React.createElement(React.Fragment, null,
+                            React.createElement('div', { className: 'retro-stats-box' },
+                                React.createElement('p', null, `COST: ${nextEnhanceCost}G`),
+                                React.createElement('p', null, `CHANCE: ${(enhanceRate * 100).toFixed(0)}%`),
+                            ),
+                            React.createElement('div', { className: 'enhance-actions' },
+                                React.createElement('button', {
+                                    className: 'retro-action-btn primary',
+                                    onClick: handleEnhance,
+                                    disabled: state.player.gold < nextEnhanceCost
+                                }, "[ ATTEMPT UPGRADE ]"),
+                                React.createElement('button', {
+                                    className: 'retro-action-btn',
+                                    onClick: () => setSelectedEquipment(null)
+                                }, "[ BACK ]")
+                            )
+                        ) : React.createElement('p', { className: 'retro-text' }, "> ITEM IS MAX LEVEL.")
                     )
                 )
             )
         ),
         React.createElement('style', null, `
-      .blacksmith-modal { width: 850px; max-height: 90vh; display: flex; flex-direction: column; }
-      .tabs { display: flex; gap: 10px; }
-      .tabs button { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 8px 20px; cursor: pointer; border-radius: var(--radius-md); }
-      .tabs button.active { background: var(--primary); color: white; border-color: var(--primary); }
-      
-      .bs-content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 30px; }
-      
-      .recipe-card {
-        background: var(--bg-dark);
-        padding: 15px;
-        margin-bottom: 10px;
-        border-radius: var(--radius-md);
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        border: 1px solid var(--border);
-      }
-      .r-icon { font-size: 2rem; }
-      .r-info { flex: 1; }
-      .cost { color: #fbbf24; font-weight: bold; }
-      .mats { font-size: 0.85rem; color: var(--text-muted); }
-      
-      .craft-btn, .enhance-btn {
-        background: var(--primary);
-        color: white;
-        border: none;
-        padding: 12px 24px;
-        border-radius: var(--radius-md);
-        cursor: pointer;
-        font-weight: bold;
-        font-size: 1rem;
-      }
-      .craft-btn:disabled, .enhance-btn:disabled { background: var(--bg-panel); color: var(--text-muted); cursor: not-allowed; }
-
-      /* Enhancement Styles */
-      .enhance-panel h3 { margin-bottom: 15px; color: var(--primary); }
-      .equip-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 20px; }
-      .equip-item {
-        background: var(--bg-dark);
-        border: 2px solid var(--border);
-        padding: 12px;
-        border-radius: var(--radius-md);
-        cursor: pointer;
-        text-align: left;
-        color: var(--text-main);
-        transition: all 0.2s;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .equip-item:hover { border-color: var(--primary); }
-      .equip-item.selected { background: var(--primary); color: white; border-color: var(--primary); }
-      .enhance-badge { background: #fbbf24; color: black; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; }
-
-      .enhance-details { background: var(--bg-panel); padding: 20px; border-radius: var(--radius-lg); margin-top: 20px; }
-      .stats-display { display: flex; gap: 30px; justify-content: center; margin: 20px 0; }
-      .stat-col { background: var(--bg-dark); padding: 15px; border-radius: var(--radius-md); min-width: 150px; }
-      .stat-col h4 { margin-bottom: 10px; font-size: 0.9rem; color: var(--text-muted); }
-      .stat-col p { margin: 5px 0; }
-      .stat-col p.upgrade { color: #10b981; font-weight: bold; }
-      .arrow { font-size: 2rem; color: var(--primary); align-self: center; }
-
-      .enhance-info { margin-top: 20px; text-align: center; }
-      .enhance-info p { margin: 8px 0; }
-      .rate-bar { background: #222; height: 20px; border-radius: 10px; margin: 15px 0; overflow: hidden; }
-      .rate-fill { height: 100%; transition: width 0.3s; }
-      .no-items { text-align: center; color: var(--text-muted); padding: 40px; font-style: italic; }
-    `)
-    );
+            .retro-modal-box {
+                background: #000;
+                border: 2px solid var(--primary);
+                padding: 20px;
+                width: 800px;
+                max-width: 95vw;
+                height: 80vh;
+                display: flex;
+                flex-direction: column;
+                color: var(--primary);
+                font-family: monospace;
+            }
+            .retro-modal-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 2px solid var(--border);
+                padding-bottom: 15px;
+                margin-bottom: 20px;
+            }
+            .retro-tabs { display: flex; gap: 15px; }
+            .retro-tab-btn {
+                background: transparent;
+                border: none;
+                color: var(--text-muted);
+                cursor: pointer;
+                font-family: monospace;
+                font-size: 1rem;
+            }
+            .retro-tab-btn:hover, .retro-tab-btn.active {
+                color: var(--primary);
+                text-decoration: underline;
+            }
+            .retro-content-area { flex: 1; overflow-y: auto; }
+            .retro-list-container { display: flex; flex-direction: column; gap: 10px; }
+            .retro-list-item { 
+                display: flex; 
+                justify-content: space-between; 
+                align-items: center; 
+                padding: 10px; 
+                border: 1px solid #333; 
+            }
+            .retro-list-item.selectable:hover {
+                border-color: var(--primary);
+                background: rgba(0, 255, 0, 0.1);
+                cursor: pointer;
+            }
+            .item-details { display: flex; flex-direction: column; }
+            .item-name { color: var(--primary); font-weight: bold; }
+            .item-cost { font-size: 0.8rem; color: var(--text-muted); }
+            
+            .retro-action-btn {
+                background: transparent;
+                border: 1px solid var(--primary);
+                color: var(--primary);
+                font-family: monospace;
+                padding: 5px 15px;
+                cursor: pointer;
+            }
+            .retro-action-btn:hover:not(:disabled) {
+                background: var(--primary);
+                color: #000;
+            }
+            .retro-action-btn:disabled {
+                border-color: #555;
+                color: #555;
+                cursor: not-allowed;
+            }
+            .retro-stats-box {
+                border: 1px dashed var(--accent);
+                padding: 15px;
+                margin: 20px 0;
+                color: var(--accent);
+            }
+            .enhance-actions { display: flex; gap: 20px; }
+        `)
+    );  );
 };
 
 export default Blacksmith;
