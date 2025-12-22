@@ -125,31 +125,33 @@ const CombatInterface = () => {
   const handleAttack = () => {
     if (!playerTurn || combatState !== 'active' || !enemy) return;
 
+    let currentEnemyHp = enemy.hp;
     const dmg = calculateDamage(state.player.stats, enemy, true);
 
     // Check for miss (10% chance base)
     if (Math.random() < 0.1) {
       addLog(getFlavorText('miss', { enemyName: enemy.name }));
     } else {
-      const newEnemyHp = Math.max(0, enemy.hp - dmg);
-      setEnemy(prev => ({ ...prev, hp: newEnemyHp }));
+      currentEnemyHp = Math.max(0, enemy.hp - dmg);
+      setEnemy(prev => ({ ...prev, hp: currentEnemyHp }));
 
       const flavorType = dmg > 50 ? 'player_strong' : dmg > 20 ? 'player_normal' : 'player_weak';
       addLog(`${getFlavorText(flavorType, { enemyName: enemy.name })} (${dmg} dmg)`);
 
-      if (newEnemyHp <= 0) {
+      if (currentEnemyHp <= 0) {
         handleVictory();
         return;
       }
     }
 
-    if (newEnemyHp <= 0) {
+    if (currentEnemyHp <= 0) {
+      // Redundant check, but safe
       handleVictory();
       return;
     }
 
     setPlayerTurn(false);
-    setTimeout(() => handleEnemyTurn(newEnemyHp), 1200);
+    setTimeout(() => handleEnemyTurn(currentEnemyHp), 1200);
   };
 
   const handleSkillAttack = (skillId) => {
