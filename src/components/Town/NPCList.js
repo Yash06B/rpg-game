@@ -48,26 +48,21 @@ const NPCList = () => {
 
 
     return React.createElement('div', { className: 'npc-list-container' },
-        React.createElement('div', { className: 'npc-grid' },
-            filteredNpcs.map(npc => {
-                // Check if this specific NPC has an available quest matching current state
-                // (Simple check: is it the active one? yes, we just filtered for it)
+        React.createElement('div', { className: 'retro-npc-list' },
+            filteredNpcs.map((npc, index) => {
                 const hasQuest = npc.quest && !state.world.completedQuests.includes(npc.quest.id);
                 const isAccepted = state.world.activeCommonQuests.some(q => q.id === npc.quest?.id);
 
-                return React.createElement('div', {
+                // Retro marker
+                let marker = "";
+                if (hasQuest && !isAccepted) marker = " [ ! ]";
+                if (isAccepted) marker = " [ ? ]";
+
+                return React.createElement('button', {
                     key: npc.id,
-                    className: `npc-card ${hasQuest && !isAccepted ? 'has-quest' : ''}`,
+                    className: `retro-command-btn ${hasQuest ? 'highlight' : ''}`,
                     onClick: () => setSelectedNPC(npc)
-                },
-                    React.createElement('span', { className: 'npc-sprite' }, npc.sprite),
-                    React.createElement('div', { className: 'npc-info' },
-                        React.createElement('span', { className: 'npc-name' }, npc.name),
-                        // Show "!" if quest available and not accepted
-                        // Show "?" if accepted and ready to turn in? (That logic is in Modal, keeping it simple here)
-                        (hasQuest && !isAccepted) && React.createElement('span', { className: 'quest-marker' }, "!")
-                    )
-                );
+                }, `> [ TALK ] ${npc.name.toUpperCase()} ${npc.sprite}${marker}`);
             })
         ),
 
@@ -78,46 +73,34 @@ const NPCList = () => {
 
         React.createElement('style', null, `
             .npc-list-container {
-                height: 100%;
                 display: flex;
                 flex-direction: column;
             }
-            .npc-grid { 
+            .retro-npc-list { 
                 display: grid; 
-                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
-                gap: 12px; 
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+                gap: 10px; 
+            }
+            .retro-command-btn {
+                background: transparent;
+                border: none;
+                color: var(--primary);
+                font-family: monospace;
+                text-align: left;
+                cursor: pointer;
+                font-size: 1rem;
                 padding: 5px;
             }
-            
-            .npc-card { 
-                background: rgba(30, 41, 59, 0.6); 
-                padding: 12px; 
-                border-radius: 8px; 
-                cursor: pointer; 
-                display: flex; 
-                align-items: center; 
-                gap: 12px; 
-                border: 1px solid #475569; 
-                transition: all 0.2s; 
+            .retro-command-btn:hover {
+                background: var(--primary);
+                color: #000;
             }
-            .npc-card:hover { 
-                background: rgba(51, 65, 85, 0.8);
-                border-color: #94a3b8; 
-                transform: translateY(-2px); 
+            .retro-command-btn.highlight {
+                color: var(--accent);
             }
-            .npc-card.has-quest {
-                border-color: #fbbf24;
-                box-shadow: 0 0 5px rgba(251, 191, 36, 0.2);
-            }
-            
-            .npc-sprite { font-size: 1.8rem; }
-            .npc-info { display: flex; flex-direction: column; }
-            .npc-name { font-size: 0.95rem; font-weight: 600; color: #e2e8f0; }
-            .quest-marker { color: #fbbf24; font-weight: bold; font-size: 1rem; animation: bounce 1s infinite; }
-
-            @keyframes bounce {
-                0%, 100% { transform: translateY(0); }
-                50% { transform: translateY(-3px); }
+            .retro-command-btn.highlight:hover {
+                background: var(--accent);
+                color: #000;
             }
         `)
     );
