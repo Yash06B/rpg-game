@@ -5,10 +5,20 @@ const Inn = ({ onClose }) => {
     const { state, dispatch, ACTIONS } = useGame();
     const COST = 10;
     const [message, setMessage] = useState(null);
+    const [chatHistory, setChatHistory] = useState([
+        { sender: 'AI', text: "The tavern is dim, lit only by the neon glow of the synthesisers. Old Greg looks up from his datapad." },
+        { sender: 'Greg', text: "Welcome to my place. It's safe here. The Baileys is... simulated, but the relief is real." }
+    ]);
+
+    const addMessage = (sender, text) => {
+        setChatHistory(prev => [...prev, { sender, text }]);
+        // Keep only last 4 messages to prevent overflow in fixed height
+        if (chatHistory.length > 4) setChatHistory(prev => prev.slice(1));
+    };
 
     const handleRest = () => {
         if (state.player.gold < COST) {
-            alert("NOT ENOUGH GOLD. OLD GREG NEEDS HIS BAILEYS MONEY.");
+            addMessage('System', "ERROR: Insufficient Credits.");
             return;
         }
 
@@ -25,103 +35,148 @@ const Inn = ({ onClose }) => {
             }
         });
 
-        setMessage("Mmm... creamy. Soft. Beige. You feel restored.");
-        setTimeout(() => setMessage(null), 3000);
+        addMessage('System', "Restorative sequence initiated... Vital signs normalizing.");
+        setTimeout(() => addMessage('Greg', "Feel better? The shoe never lies."), 1000);
     };
 
-    const handleLove = () => {
-        setMessage("COULD YOU LEARN TO LOVE ME?");
-        setTimeout(() => setMessage(null), 3000);
-    }
-
-    const handleWatercolors = () => {
-        setMessage("It's Baileys... a bit bigger. And that one's as close as you can get to Baileys without your eyes gettin' wet.");
-        setTimeout(() => setMessage(null), 4000);
-    }
+    const handleChat = (topic) => {
+        if (topic === 'love') addMessage('Greg', "Love? It's a complex algorithm. Could you learn to love... me?");
+        if (topic === 'watercolors') addMessage('Greg', "I call this one 'Baileys Up Close'. It's a bit bigger than the last one.");
+    };
 
     return React.createElement('div', { className: 'modal-overlay fade-in' },
-        React.createElement('div', { className: 'retro-modal-box' },
-            React.createElement('div', { className: 'retro-modal-header' },
-                React.createElement('h2', { className: 'retro-h2' }, "> OLD GREG'S PLACE"),
-                React.createElement('button', { className: 'retro-close-btn', onClick: onClose }, "[ X ] LEAVE")
+        React.createElement('div', { className: 'modern-modal-box' },
+            // Modern Header
+            React.createElement('div', { className: 'modern-header' },
+                React.createElement('div', { className: 'header-title' },
+                    React.createElement('span', { className: 'status-dot' }),
+                    React.createElement('h2', null, "Old Greg's Tavern")
+                ),
+                React.createElement('button', { className: 'modern-close-btn', onClick: onClose }, "✕")
             ),
 
-            React.createElement('div', { className: 'retro-content-area' },
-                React.createElement('p', { className: 'retro-text' },
-                    "You're in a cave. It's dark. A scaly man-fish offers you a shoe filled with beige liquid."
-                ),
-                React.createElement('p', { className: 'retro-text' },
-                    "\"Easy now, fuzzy little man-peach. You ever drunk Baileys from a shoe?\""
-                ),
+            // Content Area - Split View
+            React.createElement('div', { className: 'modern-body' },
 
-                React.createElement('div', { className: 'retro-divider' }),
-
-                message && React.createElement('div', { className: 'retro-status-box message-box' },
-                    React.createElement('p', { className: 'highlight-text' }, `> ${message}`)
-                ),
-
-                !message && React.createElement('div', { className: 'retro-status-box' },
-                    React.createElement('h3', { className: 'retro-h3' }, "YOUR STATUS"),
-                    React.createElement('p', null, `HP: ${state.player.stats.hp}/${state.player.stats.maxHp}`),
-                    React.createElement('p', null, `MP: ${state.player.stats.mp}/${state.player.stats.maxMp}`),
-                    React.createElement('p', { className: 'highlight-text' }, `GOLD: ${state.player.gold}g`)
+                // Left: Chat Log
+                React.createElement('div', { className: 'chat-log' },
+                    chatHistory.map((msg, i) =>
+                        React.createElement('div', { key: i, className: `chat-entry ${msg.sender === 'System' ? 'system' : ''}` },
+                            React.createElement('span', { className: 'sender-name' }, msg.sender),
+                            React.createElement('p', { className: 'message-text' }, msg.text)
+                        )
+                    )
                 ),
 
-                React.createElement('div', { className: 'actions-grid' },
-                    React.createElement('button', {
-                        className: 'retro-action-btn primary full-width',
-                        onClick: handleRest
-                    }, `[ DRINK BAILEYS (${COST}g) ]`),
+                // Right: Status & Actions
+                React.createElement('div', { className: 'controls-panel' },
+                    React.createElement('div', { className: 'status-card' },
+                        React.createElement('h3', null, "PLAYER STATUS"),
+                        React.createElement('div', { className: 'stat-row' },
+                            React.createElement('span', null, "HP"),
+                            React.createElement('div', { className: 'bar-bg' },
+                                React.createElement('div', { className: 'bar-fill hp', style: { width: `${(state.player.stats.hp / state.player.stats.maxHp) * 100}%` } })
+                            )
+                        ),
+                        React.createElement('div', { className: 'stat-row' },
+                            React.createElement('span', null, "MP"),
+                            React.createElement('div', { className: 'bar-bg' },
+                                React.createElement('div', { className: 'bar-fill mp', style: { width: `${(state.player.stats.mp / state.player.stats.maxMp) * 100}%` } })
+                            )
+                        ),
+                        React.createElement('div', { className: 'gold-display' },
+                            React.createElement('span', null, "CREDITS"),
+                            React.createElement('span', { className: 'gold-val' }, `${state.player.gold}`)
+                        )
+                    ),
 
-                    React.createElement('button', {
-                        className: 'retro-action-btn',
-                        onClick: handleLove
-                    }, `[ DO YOU LOVE ME? ]`),
-
-                    React.createElement('button', {
-                        className: 'retro-action-btn',
-                        onClick: handleWatercolors
-                    }, `[ SEE WATERCOLORS ]`)
+                    React.createElement('div', { className: 'action-buttons' },
+                        React.createElement('button', { className: 'modern-btn primary', onClick: handleRest },
+                            React.createElement('span', null, "REST (10c)"),
+                            React.createElement('span', { className: 'btn-sub' }, "Full Recover")
+                        ),
+                        React.createElement('button', { className: 'modern-btn secondary', onClick: () => handleChat('love') }, "ASK ABOUT LOVE"),
+                        React.createElement('button', { className: 'modern-btn secondary', onClick: () => handleChat('watercolors') }, "VIEW ART")
+                    )
                 )
             ),
 
             React.createElement('style', null, `
-                .retro-modal-box {
-                    background: #000;
-                    border: 2px solid #33ff00;
-                    padding: 20px;
-                    width: 600px;
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+                .modern-modal-box {
+                    background: #050505;
+                    border: 1px solid #333;
+                    border-radius: 12px;
+                    width: 800px;
                     max-width: 95vw;
+                    height: 500px;
                     display: flex; flex-direction: column;
-                    color: #33ff00;
-                    font-family: monospace;
-                    box-shadow: 0 0 20px rgba(51, 255, 0, 0.2);
+                    box-shadow: 0 0 30px rgba(139, 92, 246, 0.15); /* Soft Violet Glow */
+                    font-family: 'Inter', sans-serif;
+                    overflow: hidden;
                 }
-                .retro-modal-header {
+
+                .modern-header {
                     display: flex; justify-content: space-between; align-items: center;
-                    border-bottom: 2px solid #33ff00; padding-bottom: 15px; margin-bottom: 20px;
+                    padding: 15px 25px;
+                    border-bottom: 1px solid #222;
+                    background: #0a0a0a;
                 }
-                .retro-h2 { margin: 0; color: #33ff00; text-shadow: 0 0 5px #33ff00; }
-                .retro-close-btn { background: transparent; border: none; color: #ff0000; font-family: monospace; cursor: pointer; }
-                
-                .retro-content-area { display: flex; flex-direction: column; gap: 15px; }
-                .retro-text { color: #ccffcc; line-height: 1.4; }
-                .retro-divider { height: 1px; background: #004400; margin: 10px 0; }
-                
-                .retro-status-box { border: 1px dashed #008800; padding: 15px; margin-bottom: 10px; }
-                .message-box { border: 1px solid #33ff00; background: #001100; }
-                .retro-h3 { margin-top: 0; color: #33ff00; border-bottom: none; }
-                .highlight-text { color: #ffff00; font-weight: bold; }
+                .header-title { display: flex; align-items: center; gap: 10px; }
+                .status-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981; }
+                .modern-header h2 { margin: 0; font-size: 1.1rem; color: #fff; font-weight: 600; letter-spacing: 0.5px; }
+                .modern-close-btn { background: none; border: none; color: #666; font-size: 1.2rem; cursor: pointer; transition: color 0.2s; }
+                .modern-close-btn:hover { color: #fff; }
 
-                .actions-grid { display: flex; flex-direction: column; gap: 10px; }
+                .modern-body { display: flex; flex: 1; }
+                
+                /* Chat Log */
+                .chat-log { flex: 2; padding: 25px; display: flex; flex-direction: column; gap: 20px; border-right: 1px solid #222; overflow-y: auto; }
+                .chat-entry { display: flex; flex-direction: column; gap: 4px; animation: fadeIn 0.3s ease; }
+                .sender-name { font-size: 0.75rem; font-weight: 700; color: #8b5cf6; text-transform: uppercase; letter-spacing: 1px; }
+                .message-text { margin: 0; color: #e5e7eb; font-size: 0.95rem; line-height: 1.5; }
+                .chat-entry.system .sender-name { color: #ef4444; }
+                .chat-entry.system .message-text { color: #fca5a5; font-family: monospace; }
 
-                .retro-action-btn { 
-                    padding: 15px; font-size: 1.1rem; font-family: monospace; 
-                    cursor: pointer; border: 1px solid #33ff00; background: #000; color: #33ff00;
-                    transition: all 0.2s;
+                /* Controls */
+                .controls-panel { flex: 1.2; padding: 25px; display: flex; flex-direction: column; gap: 25px; background: #080808; }
+                
+                .status-card { background: #111; padding: 15px; border-radius: 8px; border: 1px solid #222; }
+                .status-card h3 { color: #6b7280; font-size: 0.7rem; margin: 0 0 15px 0; letter-spacing: 1px; }
+                
+                .stat-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+                .stat-row span { color: #fff; font-size: 0.8rem; width: 25px; font-weight: bold; }
+                .bar-bg { flex: 1; height: 6px; background: #222; border-radius: 3px; overflow: hidden; }
+                .bar-fill { height: 100%; border-radius: 3px; }
+                .bar-fill.hp { background: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+                .bar-fill.mp { background: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.4); }
+
+                .gold-display { display: flex; justify-content: space-between; margin-top: 15px; padding-top: 10px; border-top: 1px solid #222; }
+                .gold-display span { color: #9ca3af; font-size: 0.8rem; }
+                .gold-display .gold-val { color: #fbbf24; font-weight: bold; font-family: monospace; font-size: 0.9rem; }
+
+                .action-buttons { display: flex; flex-direction: column; gap: 10px; }
+                .modern-btn {
+                    padding: 12px; border: none; border-radius: 6px; cursor: pointer;
+                    display: flex; flex-direction: column; align-items: center; justify-content: center;
+                    transition: all 0.2s; font-family: 'Inter', sans-serif;
                 }
-                .retro-action-btn:hover { background: #33ff00; color: #000; }
-                .retro-action-btn.primary { font-weight: bold; border: 2px solid #33ff00; }
+                .modern-btn.primary {
+                    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+                    color: white; font-weight: 600;
+                    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+                }
+                .modern-btn.primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4); }
+                
+                .modern-btn.secondary {
+                    background: #1f2937; color: #d1d5db; font-size: 0.85rem; font-weight: 500;
+                }
+                .modern-btn.secondary:hover { background: #374151; color: #fff; }
+
+                .btn-sub { font-size: 0.7rem; font-weight: 400; opacity: 0.8; margin-top: 2px; }
+
+                @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
             `)
         )
     );
