@@ -5,7 +5,7 @@ const initialState = {
     player: {
         name: "",
         class: null,
-        race: "Human", // Default Race
+        race: null, // No default race, forces selection
         level: 1,
         exp: 0,
         maxExp: 100,
@@ -109,14 +109,30 @@ function gameReducer(state, action) {
             };
 
         case ACTIONS.SET_RACE:
-            // Calculate new stats based on race bonuses?
-            // For simplicity, we just update the race tag and maybe apply a one-time boost
-            // OR we can make stats dynamic. Let's make it a permanent state change.
+            // Calculate new stats based on race bonuses
+            // We assume this is called BEFORE class selection or during init
+            const raceBonuses = action.payload.bonuses || {};
+            const currentStats = state.player.stats;
+
+            // Apply bonuses to base stats
+            const newStats = { ...currentStats };
+            Object.keys(raceBonuses).forEach(key => {
+                if (newStats[key] !== undefined) {
+                    newStats[key] += raceBonuses[key];
+                    if (key === 'hp') newStats.maxHp += raceBonuses[key];
+                    if (key === 'mp') newStats.maxMp += raceBonuses[key];
+                }
+            });
+
             return {
                 ...state,
                 player: {
                     ...state.player,
-                    race: action.payload
+                    race: action.payload.name,
+                    raceId: action.payload.id,
+                    stats: newStats,
+                    // Store passive description for reference
+                    passives: [...state.player.passiveSkills, { name: action.payload.passive, id: `race_passive_${action.payload.id}` }]
                 }
             };
 
